@@ -20,7 +20,7 @@
         <section class="section">
             <!-- [header-------------------------] -->
                 <div class="section-header">
-                    <h1>Payment Server test</h1>
+                    <h1>Payment Server</h1>
                     <div class="section-header-breadcrumb">
                         <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
                         <div class="breadcrumb-item"><a href="#">Dashboard</a></div>
