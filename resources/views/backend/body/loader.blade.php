@@ -1,6 +1,6 @@
 <!--[Loading]-->
 
-<div class="loading">
+<div class="loading" style="position: fixed; width: 100%; height: 100%; background: white; z-index: 1000;">
 <div aria-label="Loading..." role="status" class="loader">
   <svg class="icon" viewBox="0 0 256 256">
     <line x1="128" y1="32" x2="128" y2="64" stroke-linecap="round" stroke-linejoin="round" stroke-width="24"></line>

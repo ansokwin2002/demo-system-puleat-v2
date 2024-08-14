@@ -20,7 +20,7 @@
         <section class="section">
             <!-- [header-------------------------] -->
             <div class="section-header">
-                <h1>Service</h1>
+                <h1>List Service</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
                     <div class="breadcrumb-item"><a href="#">Service</a></div>
@@ -30,46 +30,55 @@
             <!-- [header-------------------------] -->
 
             <!-- [Service_table-------------------------] -->
-            <div class="row mt-4">
-                <div class="col-12">
-                    <div class="card p-4">
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped dataTable" id="table_service">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Service</th>
-                                            <th>Unit</th>
-                                            <th>Price</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    @php 
-                                       $services = App\Models\Service::all();
-                                    @endphp
-                                    @foreach ($services as $index => $item)
-                                        <tr>
-                                            <td>{{ $item->id}}</td>
-                                            <td>{{ $item->name }}</td>
-                                            <td>{{ $item->unit }}</td>
-                                            <td>{{ $item->price }}</td>
-                                            <td>
-                                                <button class="btn btn-warning" data-toggle="modal" data-target="#fire-modal-4">
-                                                    <i class="fa fa-edit"></i> Edit
-                                                </button> 
-                                                <button class="btn btn-danger"><i class="fa fa-trash"></i> Delete</button>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                    </tbody>
-                                </table>
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card p-4">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped dataTable" id="table_service">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Service</th>
+                                                <th>Unit</th>
+                                                <th>Price</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        @php 
+                                            $services = App\Models\Service::all();
+                                        @endphp
+                                        @foreach ($services as $item)
+                                            <tr>
+                                                <td>{{ $item->id }}</td>
+                                                <td>{{ $item->name }}</td>
+                                                <td>{{ $item->unit }}</td>
+                                                <td>{{ $item->price }}</td>
+                                                <td>
+                                                    <button class="btn btn-warning" 
+                                                            data-toggle="modal" 
+                                                            data-target="#fire-modal-4-{{$item->id}}"
+                                                            data-id="{{ $item->id }}"
+                                                            data-name="{{ $item->name }}"
+                                                            data-unit="{{ $item->unit }}"
+                                                            data-price="{{ $item->price }}">
+                                                        <i class="fa fa-edit"></i> Edit
+                                                    </button>
+                                                    <button class="btn btn-danger"><i class="fa fa-trash"></i> Delete</button>
+                                                </td>
+                                            </tr>
+                                            @include('backend.service.edit_Model')
+
+
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             <!-- [Service_table-------------------------] -->
 
         </section>
@@ -83,6 +92,6 @@
     <!-- [footer------------------------------] -->
 </div>
 
-@include('backend.service.edit_Model')
+
 
 @endsection

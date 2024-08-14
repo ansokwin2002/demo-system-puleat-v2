@@ -20,7 +20,7 @@
         <section class="section">
             <!-- [header-------------------------] -->
                 <div class="section-header">
-                    <h1>Service</h1>
+                    <h1>Add Service</h1>
                     <div class="section-header-breadcrumb">
                         <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
                         <div class="breadcrumb-item"><a href="#">Service</a></div>
@@ -39,7 +39,7 @@
                                     <form action="{{ route('create_Service') }}" method="post">
                                         @csrf
                                         <div class="form-group row">
-                                            <h6 class="col-sm-3 col-form-label">Service Name :</h6>
+                                            <h6 class="col-sm-3 col-form-label">Service's Name :</h6>
                                             <div class="col-sm-9">
                                             <div class="input-group">
                                                 <div class="input-group-prepend">

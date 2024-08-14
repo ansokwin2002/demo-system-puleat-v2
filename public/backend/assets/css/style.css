@@ -2885,3 +2885,17 @@ body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li.active ul.dropdown-men
   /* background-color: red; */
 }
 
+.custom-modal-service-detail {
+  max-width: 50%;
+}
+
+
+.table tbody tr.row_service_detail {
+    transition: background-color 0.01s ease;
+}
+
+.table tbody tr.row_service_detail:hover {
+    background-color: #6777ef; /* Light red background color */
+    cursor: pointer;
+    color:white;
+}
