@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Dashbaord\DashboardController;
+use App\Http\Controllers\Invoice\InvoiceController;
 use App\Http\Controllers\Patient\PatientController;
 use App\Http\Controllers\PatientHistory\PatientHistoryController;
 use App\Http\Controllers\Payment\PaymentController;
@@ -19,17 +20,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('backend.dashboard');
-})->middleware(['auth', 'verified'])->name('backend.dashboard');
+// [Admin---------------------------------]
+    Route::get('/', function () {
+        return view('backend.dashboard');
+    })->middleware(['auth', 'verified'])->name('backend.dashboard');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+    Route::middleware('auth')->group(function () {
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    });
+    require __DIR__.'/auth.php';
+// [Admin---------------------------------]
 
-require __DIR__.'/auth.php';
 
 // [dashboard_controller----------------------------]
     Route::controller(DashboardController::class)->group(function(){
@@ -37,16 +40,12 @@ require __DIR__.'/auth.php';
     });
 // [dashboard_controller----------------------------]
 
-
 // [payment_controller----------------------------]
-
     Route::controller(PaymentController::class)->group(function(){
         Route::get('/view-payment','view_Payment')->name('view_Payment');
         Route::post('/create-patient','create_Patient')->name('create_Patient');
 
     });
-
-
 // [payment_controller----------------------------]
 
 // [service_controller----------------------------]
@@ -76,6 +75,15 @@ require __DIR__.'/auth.php';
         Route::post('/patient-save-history', 'savePatientHistory')->name('savePatientHistory'); 
         Route::get('/patient-service-history','patientServiceHistory')->name('patient_service_history');
         Route::get('/patient-details/{id}','getPatientDetails')->name('get_patient_details');
+        Route::get('/invoice/{invoiceId}','showInvoice')->name('show_invoice');
     });
 // [patient_history_controller----------------------------]
+
+// // [Invoice------------------------------------]
+//     Route::controller(InvoiceController::class)->group(function(){
+//         Route::post('/create-invoice','createInvoice')->name('create_invoice');
+//         Route::get('/show-invoice/{invoice_id}','showInvoice')->name('invoice_show');
+//     });
+// // [Invoice------------------------------------]
+
 

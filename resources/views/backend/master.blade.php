@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-  <title>General Dashboard &mdash; Stisla</title>
+  <title>Clinic System Puleat V2</title>
 
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <!-- [font khmer-------------------------] -->
@@ -319,6 +319,7 @@
                     _token: csrfToken, // Include the CSRF token
                     patient_id: patientId,
                     patient_payment: {
+                        patientId:patientId,
                         date: date,
                         doctor: doctor,
                         customer: customer,
@@ -343,7 +344,8 @@
                     method: 'POST',
                     data: paymentData,
                     success: function(response) {
-                        alert('Patient history saved successfully!');
+                        // window.location.href = '/patient-service-history';
+                        window.location.href = `/invoice/${response.invoice_id}`;
                     },
                     error: function(xhr) {
                         if (xhr.status === 419) { // CSRF token mismatch
@@ -355,7 +357,6 @@
                     }
                 });
             });
-
 
         // [Submit_Patient_history------------------------------]
 
@@ -376,7 +377,10 @@
         // [Button Paid---------------------------]
 
         // [Detail_Patient_Service--------------------------]
-            $('#table_service').on('click', 'i.fa-eye , .row_service_detail', function() {
+            $('#table_service').on('click', '.row_service_detail', function(event) {
+                if ($(event.target).closest('.td-action').length > 0) {
+                    return; // Exit the function if an action td-action was clicked
+                }
                 const patientId = $(this).data('id');
                 
                 // Fetch the patient details using AJAX
@@ -390,10 +394,12 @@
                         $('#modalServiceDetails tbody').empty();
 
                         // Populate the modal with service details
+                        let i = 1;
                         if (paymentData && paymentData.services) {
                             paymentData.services.forEach(service => {
                                 $('#modalServiceDetails tbody').append(`
                                     <tr>
+                                        <td>${i++}</td>
                                         <td>${service.service_name}</td>
                                         <td>${service.service_unit}</td>
                                         <td>${service.service_price}</td>
@@ -412,11 +418,25 @@
                     }
                 });
             });
+            $('#table_service').on('click', '.td-action', function(event) {
+                event.stopPropagation(); // Prevent the click event from reaching the row
+            });
         // [Detail_Patient_Service--------------------------]
 
 
       });
 
+
+      function printSection(id) {
+            var printContent = document.getElementById(id).innerHTML;
+            var originalContent = document.body.innerHTML;
+
+            document.body.innerHTML = printContent;
+
+            window.print();
+
+            document.body.innerHTML = originalContent;
+        }
   </script>
 
   <!-- Template JS File -->

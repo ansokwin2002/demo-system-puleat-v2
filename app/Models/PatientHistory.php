@@ -9,7 +9,7 @@ class PatientHistory extends Model
 {
     use HasFactory;
     
-    protected $fillable = ['patient_id', 'patient_payment'];
+    protected $fillable = ['patient_id', 'patient_payment','invoice_id'];
 
     protected $casts = [
         'patient_payment' => 'array',

@@ -60,12 +60,9 @@
                                                     <td>{{ $paymentData['grand_total'] ?? '' }}</td>
                                                     <td>{{ $paymentData['amount_paid'] ?? '' }}</td>
                                                     <td>{{ $paymentData['amount_unpaid'] ?? '' }}</td>
-                                                    <td>
-                                                        <i style="cursor: pointer;" class="fa fa-eye" 
-                                                        data-toggle="modal" 
-                                                        data-target="#fire-modal-4"
-                                                        data-id="{{ $patientHistory->id }}">
-                                                        </i>
+                                                    <td class="td-action">
+                                                        <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                                                        <button class="btn btn-warning"><i class="fa fa-edit"></i></button>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -100,15 +97,16 @@
                     </div>
                     <div class="modal-body">
                         <div class="table-responsive">
-                            <table class="table table-striped" id="modalServiceDetails">
-                                <thead>
+                            <table class="table table-striped table-bordered" id="modalServiceDetails">
+                                <thead class="bg-primary">
                                     <tr>
-                                        <th>Service Name</th>
-                                        <th>Service Unit</th>
-                                        <th>Service Price</th>
-                                        <th>Subtotal</th>
-                                        <th>Discount (%)</th>
-                                        <th>Discount ($)</th>
+                                        <th class="text-white">#</th>
+                                        <th class="text-white">Service Name</th>
+                                        <th class="text-white">Service Unit</th>
+                                        <th class="text-white">Service Price</th>
+                                        <th class="text-white">Subtotal</th>
+                                        <th class="text-white">Discount (%)</th>
+                                        <th class="text-white">Discount ($)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -118,7 +116,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>

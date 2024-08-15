@@ -2899,3 +2899,10 @@ body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li.active ul.dropdown-men
     cursor: pointer;
     color:white;
 }
+
+.main_invoice {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 60px;
+}

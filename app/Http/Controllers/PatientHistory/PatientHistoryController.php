@@ -35,13 +35,26 @@ class PatientHistoryController extends Controller
             'patient_payment' => 'required|array',
         ]);
 
+        // Generate a unique invoice ID
+        do {
+            $invoiceId = rand(1000, 9999);
+            $exists = PatientHistory::where('invoice_id', $invoiceId)->exists();
+        } while ($exists);
+
         $patientHistory = new PatientHistory();
         $patientHistory->patient_id = $validated['patient_id'];
         $patientHistory->patient_payment = $validated['patient_payment'];
+        $patientHistory->invoice_id = $invoiceId; // Set the invoice ID
         $patientHistory->save();
 
-        toastr()->success('Patient history saved successfully !');
-        return redirect()->route('patient_service_history');
+        return response()->json(['invoice_id' => $invoiceId]);
+    }
+
+    public function showInvoice($invoiceId) {
+        // Retrieve the patient history that matches the invoice ID
+        $patientHistory = PatientHistory::where('invoice_id', $invoiceId)->firstOrFail();
+        // Pass the patient history to the view
+        return view('backend.invoice.index', ['data' => $patientHistory]);
     }
 
     /**
