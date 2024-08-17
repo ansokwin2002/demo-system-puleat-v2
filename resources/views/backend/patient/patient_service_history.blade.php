@@ -38,9 +38,10 @@
                                     <table class="table table-striped dataTable" id="table_service">
                                         <thead class="bg-primary">
                                             <tr>
+                                                <th class="text-white">Invoice ID</th>
                                                 <th class="text-white">Date</th>
                                                 <th class="text-white">Doctor</th>
-                                                <th class="text-white">Customer</th>
+                                                <th class="text-white">Patient</th>
                                                 <th class="text-white">Grand Total</th>
                                                 <th class="text-white">Amount Paid</th>
                                                 <th class="text-white">Amount Unpaid</th>
@@ -54,6 +55,7 @@
                                                 @endphp
                                                 <tr class="row_service_detail" data-toggle="modal" 
                                                 data-target="#fire-modal-4" data-id="{{ $patientHistory->id }}">
+                                                    <td>{{ $patientHistory->invoice_id }}</td>
                                                     <td>{{ $paymentData['date'] ?? '' }}</td>
                                                     <td>{{ $paymentData['doctor'] ?? '' }}</td>
                                                     <td>{{ $paymentData['customer'] ?? '' }}</td>

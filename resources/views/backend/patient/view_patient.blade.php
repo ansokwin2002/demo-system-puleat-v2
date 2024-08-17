@@ -33,8 +33,53 @@
                 <div class="row mt-4">
                     <div class="col-12">
                         <div class="card p-4">
-                            <div class="card_title">
-                                <h1>test</h1>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped dataTable" id="table_service">
+                                        <thead class="bg-primary">
+                                            <tr>
+                                                <th class="text-white">Patient's ID</th>
+                                                <th class="text-white">Patient's Name</th>
+                                                <th class="text-white">Age</th>
+                                                <th class="text-white">Sex</th>
+                                                <th class="text-white">Address</th>
+                                                <th class="text-white">Telephone</th>
+                                                <th class="text-white">Date</th>
+                                                <th class="text-white">Image</th>
+                                                <th class="text-white">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php 
+                                                $patients = App\Models\Patient::all();
+                                            @endphp
+                                            @foreach ($patients as $patient)
+                                                <tr>
+                                                    <td>{{ $patient->id }}</td>
+                                                    <td>{{ $patient->date }}</td>
+                                                    <td>{{ $patient->name }}</td>
+                                                    <td>{{ $patient->age }}</td>
+                                                    <td>{{ $patient->sex }}</td>
+                                                    <td>{{ $patient->address }}</td>
+                                                    <td>{{ $patient->telephone }}</td>
+                                                    <td>image...</td>
+
+
+                                                    <td>
+                                                        <button class="btn btn-danger">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                        <button class="btn btn-warning">
+                                                            <i class="fa fa-edit"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+
+
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>

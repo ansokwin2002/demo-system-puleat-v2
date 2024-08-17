@@ -3,44 +3,61 @@
 
 <div class="main-wrapper main-wrapper-1">
 
-    <!-- [main_content------------------------------] -->
+    <!-- [main_content------------------------------]-->
     <div class="main_invoice">
-       <center>
-            <section class="section" id="part_to_print">
-                <h1>Invoice ID: {{ $data['invoice_id'] ?? 'N/A' }}</h1>
-                
-                @if(isset($data['patient_payment']))
-                    <h1>Invoice for {{ $data['patient_payment']['customer'] }}</h1>
-                    <p>Patient ID: {{ $data['patient_payment']['patientId'] }}</p>
-                    <p>Date: {{ $data['patient_payment']['date'] }}</p>
-                    <p>Doctor: {{ $data['patient_payment']['doctor'] }}</p>
-                    <p>Grand Total: ${{ $data['patient_payment']['grand_total'] }}</p>
-                    <p>Amount Paid: ${{ $data['patient_payment']['amount_paid'] }}</p>
-                    <p>Amount Unpaid: ${{ $data['patient_payment']['amount_unpaid'] }}</p>
-
-                    <h2>Services</h2>
-                    <table class="table table-bordered table-striped">
-                        <thead class="bg-primary">
-                            <tr>
-                                <th class="text-white">No.</th>
-                                <th class="text-white">Service Name</th>
-                                <th class="text-white">Service Unit</th>
-                                <th class="text-white">Service Price</th>
-                                <th class="text-white">Discount Percent</th>
-                                <th class="text-white">Discount Dollar</th>
-                                <th class="text-white">Subtotal</th>
+       <div class="box_invoice" id="invoice">
+            <div class="box_logo">
+                <div class="box_1">
+                    <p class="invoice_title">គ្លីនិក ល្អប្រណិត</p>
+                    <center><img class="invoice_logo" src="{{ asset('backend/assets/img/invoice/logo.png') }}" alt=""></center>
+                </div>
+            </div>
+            <div class="box_street">
+                <p class="invoice_text">
+                    #1A, Street 57, Sangkat Boeng Keng Kang 1, Khan Chamkarmon, Phnom Penh
+                    ផ្ទះលេខ 1A ផ្លូវលេខ 57 សង្កាត់បឹងកេងកង១ ខណ្ឌចំការមន រាជធានីភ្នំពេញ
+                    Tel : 096 888 3388 / 085 200 244
+                </p>
+            </div>
+            <div class="box_3">
+                <div class="box_left">
+                    <p style="color: black;"><span class="doctor">Doctor :</span> {{ $data['patient_payment']['doctor'] }}</p>
+                    <p style="color: black;" class="date_box"><span class="date">Date :</span> {{ $data['patient_payment']['date'] }}</p>
+                </div>
+                <div class="box_right">
+                    <p style="color: black;"><span class="patient">Patient :</span> {{ $data['patient_payment']['customer'] }}</p>
+                    <!-- <p><span class="patient_id">Patient ID :</span> {{ $data['patient_payment']['patientId'] }}</p> -->
+                    <p style="color: black;" class="box_invoice_id"><span class="invoice_id">Invoice ID :</span> {{ $data['invoice_id'] ?? '' }}</p>
+                </div>
+            </div>
+            <div class="box_table">
+            @if(isset($data['patient_payment']))
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr style="border-top: 3px solid black;border-bottom: 3px solid black;">
+                                <th style="width: 5%; color:black;">No.</th>
+                                <th style="width: 40%; color:black;">Service Name</th>
+                                <th style="width: 5%; color:black;">Unit</th>
+                                <th style="width: 15%; color:black;">Price</th>
+                                <th style="width: 5%; color:black;">Discount(%)</th>
+                                <th style="width: 5%; color:black;">Discount($)</th>
+                                <th style="width: 40%; color:black;">Subtotal</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($data['patient_payment']['services'] as $index => $service)
                             <tr>
-                                <td>{{ $index + 1 }}</td> <!-- Display row number starting from 1 -->
-                                <td>{{ $service['service_name'] }}</td>
+                                <td>{{ $index + 1 }}</td> 
+                                <td style="width: 100px;">{{ $service['service_name'] }}</td>
                                 <td>{{ $service['service_unit'] }}</td>
-                                <td>${{ $service['service_price'] }}</td>
-                                <td>{{ $service['discount_percent'] }}%</td>
-                                <td>${{ $service['discount_dollar'] }}</td>
-                                <td>${{ $service['subtotal'] }}</td>
+                                <td>$ {{ $service['service_price'] }}</td>
+                                <td>
+                                    {{ $service['discount_percent'] ? $service['discount_percent'] . ' %' : '' }}
+                                </td>
+                                <td>
+                                    {{ $service['discount_dollar'] ? '$ ' . $service['discount_dollar'] : '' }}
+                                </td>
+                                <td>$ {{ $service['subtotal'] }}</td>
                             </tr>
                             @empty
                             <tr>
@@ -48,16 +65,71 @@
                             </tr>
                             @endforelse
                         </tbody>
+                        <tbody>
+                            <tr>
+                                <td colspan="6" style="color: black;"><strong><span class="float-right">Grand Total (USD)</span></strong></td>
+                                <td><strong id="grand_total">$ {{ $data['patient_payment']['grand_total'] }}</strong></td>
+                            </tr>
+                            <tr>
+                                <td colspan="6" style="color: black;"><strong><span class="float-right">Amount paid </span></strong></td>
+                                <td><strong id="amount_paid">$ {{ $data['patient_payment']['amount_paid'] }}</strong></td>
+                            </tr>
+                            <tr>
+                                <td colspan="6" style="color: black;"><strong><span class="float-right" id="unpaid">Unpaid amount</span></strong></td>
+                                <td><strong id="amount_unpaid">$ {{ $data['patient_payment']['amount_unpaid'] }}</strong></td>
+                            </tr>
+                        </tbody>
                     </table>
                 @else
                     <p>There was an error retrieving the patient payment data.</p>
                 @endif
 
-                <button onclick="printSection('part_to_print')">Print Invoice</button>
-            </section>
-       </center>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <button class="btn btn-warning" id="printButton" style="width: 100%;"><i class="fa fa-print"></i> Print</button>
+                </div>
+                <div class="row mt-1">
+                    <a href="{{ route('add_Patient') }}" style="width: 100%;">
+                        <button class="btn btn-success" id="printButton" style="width: 100%;"><i class="fa fa-arrow-left"></i> Back Add Patient</button>
+                    </a>
+                </div>
+            </div>
+       </div>
     </div>
     <!-- [main_content------------------------------] -->
 </div>
+
+<style>
+@media print {
+    #printButton {
+        display: none;
+    }
+
+    body * {
+        visibility: hidden;
+    }
+
+    #invoice, #invoice * {
+        visibility: visible;
+    }
+
+    #invoice {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+}
+</style>
+
+<script>
+    window.onload = function() {
+        window.print();
+    }
+    document.getElementById('printButton').addEventListener('click', function() {
+        window.print();
+    });
+</script>
 
 @endsection

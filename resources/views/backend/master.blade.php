@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bayon&family=Khmer&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@100..900&display=swap" rel="stylesheet">
 
   <!-- General CSS Files -->
   <link rel="stylesheet" href=" {{ asset('backend/assets/modules/bootstrap/css/bootstrap.min.css') }}">
@@ -38,15 +39,15 @@
 </style>
 
 <body>
+    <!-- [loading-----------------------] -->
+        <!-- @include('backend.body.loader') -->
+    <!-- [loading-----------------------] -->
   <div id="app">
      @yield('content')
   </div>
   <script>
     axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 </script>
-    <!-- [loading-----------------------] -->
-        <!-- @include('backend.body.loader') -->
-    <!-- [loading-----------------------] -->
 
   <!-- General JS Scripts -->
   <script src="{{ asset('backend/assets/modules/jquery.min.js') }}"></script>
@@ -65,6 +66,16 @@
   <script src="{{ asset('backend/assets/modules/datatables/datatables.min.js') }}"></script>
   
   <!-- Initialize DataTable -->
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById('loader').style.display = 'none';
+        });
+
+        window.addEventListener('beforeunload', function () {
+            document.getElementById('loader').style.display = 'block';
+        });
+    </script>
   
   <script>
       $(document).ready(function() {
@@ -83,7 +94,7 @@
 
         // [dataTable_Service---------------------]
             $('#table_service').DataTable({
-                "pageLength": 50
+                "pageLength": 50,
             });
         // [dataTable_Service---------------------]
 
@@ -425,18 +436,6 @@
 
 
       });
-
-
-      function printSection(id) {
-            var printContent = document.getElementById(id).innerHTML;
-            var originalContent = document.body.innerHTML;
-
-            document.body.innerHTML = printContent;
-
-            window.print();
-
-            document.body.innerHTML = originalContent;
-        }
   </script>
 
   <!-- Template JS File -->
