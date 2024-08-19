@@ -94,7 +94,7 @@
                                                             <option value="" disabled>Select a Patient</option>
                                                             @foreach ($patients as $patient)
                                                                 <option value="{{ $patient->id }}" {{ $patient->id == $selectedPatientId ? 'selected' : '' }}>
-                                                                    {{ $patient->name }}
+                                                                    {{ $patient->name }} ({{ $patient->telephone }})
                                                                 </option>
                                                             @endforeach
                                                         </select>

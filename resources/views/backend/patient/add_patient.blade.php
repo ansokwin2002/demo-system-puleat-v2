@@ -100,7 +100,7 @@
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
                                                         <div class="input-group-text">
-                                                            <i class="fa fa-tags"></i>
+                                                            <i class="fa fa-map-marker"></i>
                                                         </div>
                                                     </div>
                                                     <input type="text" name="address" class="form-control" required="">
@@ -117,7 +117,7 @@
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
                                                         <div class="input-group-text">
-                                                            <i class="fa fa-tags"></i>
+                                                            <i class="fa fa-phone"></i>
                                                         </div>
                                                     </div>
                                                     <input type="text" name="telephone" class="form-control" required="">
@@ -148,24 +148,62 @@
                                             </div>
 
                                             <div class="form-group row">
-                                                <h6 class="col-sm-3 col-form-label">Upload Image :</h6>
+                                                <h6 class="col-sm-3 col-form-label">Type Service :</h6>
                                                 <div class="col-sm-9">
                                                 <div class="flex-grow-1">
                                                     <div class="input-group">
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text">
-                                                                <i class="fas fa-calendar"></i>
+                                                                <i class="fas fa-heart"></i>
                                                             </div>
                                                         </div>
-                                                        <input type="file" name="image" class="form-control">
+                                                        <select name="type_service" class="form-control">
+                                                            <option>General</option>
+                                                            <option>Implant</option>
+                                                            <option>Ortho</option>
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <div class="invalid-feedback">
-                                                    Please fill Patient image !
+                                                    Please fill Type Service !
                                                 </div>
                                                 </div>
                                             </div>
-                                            
+
+                                            <div class="form-group row">
+                                                <h6 class="col-sm-3 col-form-label">Type Patient :</h6>
+                                                <div class="col-sm-9">
+                                                    <div class="flex-grow-1">
+                                                        <div class="input-group" id="type-patient-wrapper">
+                                                            <div class="input-group-prepend">
+                                                                <div class="input-group-text" id="type-patient-icon">
+                                                                    <i class="fas fa-user"></i>
+                                                                </div>
+                                                            </div>
+                                                            <select name="type_patient" class="form-control" id="type-patient-select">
+                                                                <option value="Walk-in">Walk-in</option>
+                                                                <option value="Customize">Customize</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="invalid-feedback">
+                                                        Please fill Type Patient!
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <h6 class="col-sm-3 col-form-label">Patient's Noted :</h6>
+                                                <div class="col-sm-9">
+                                                    <div class="flex-grow-1">
+                                                        <textarea name="patient_noted" class="summernote"></textarea>
+                                                    </div>
+                                                    <div class="invalid-feedback">
+                                                        Please fill Type Patient!
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        
                                             <div class="form-group mb-0 row">
                                                 <label class="col-sm-3 col-form-label"></label>
                                                 <div class="col-sm-9">

@@ -19,7 +19,9 @@ return new class extends Migration
             $table->string('address');
             $table->integer('telephone');
             $table->date('date');
-            $table->text('image')->nullable();
+            $table->string('type_service');
+            $table->string('type_patient');
+            $table->text('patient_noted')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('patients');
+        //
     }
 };

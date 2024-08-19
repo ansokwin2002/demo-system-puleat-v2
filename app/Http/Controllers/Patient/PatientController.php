@@ -22,13 +22,15 @@ class PatientController extends Controller
     public function create_Patient(Request $request)
     {
         $request = $request->validate([
-            'name'       => 'required|string|max:255',
-            'age'        => 'required|integer|min:0',
-            'sex'        => 'required|string|max:15',
-            'address'    => 'required|string|max:255',
-            'telephone'  => 'required|string|max:15',
-            'date'       => 'required|date',
-            'image'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'name'         => 'required|string|max:255',
+            'age'          => 'required|integer|min:0',
+            'sex'          => 'required|string|max:15',
+            'address'      => 'required|string|max:255',
+            'telephone'    => 'required|string|max:15',
+            'date'         => 'required|date',
+            'type_service' => 'required|string|max:255',
+            'type_patient' => 'required|string|max:255',
+            'patient_noted'=> 'nullable|string|max:10000'
         ]);
         
         $patient = Patient::create([
@@ -38,7 +40,9 @@ class PatientController extends Controller
             'address' => $request['address'],
             'telephone' => $request['telephone'],
             'date' => $request['date'],
-            // 'image' => $request->file('image')->store('images', 'public'), // Uncomment if you handle image upload
+            'type_service' => $request['type_service'],
+            'type_patient' => $request['type_patient'],
+            'patient_noted' => $request['patient_noted']
         ]);
         
         toastr()->success('Add Patient Successfully!');

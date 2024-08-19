@@ -24,6 +24,14 @@
   <link rel="stylesheet" href="{{ asset('backend/assets/modules/bootstrap-timepicker/css/bootstrap-timepicker.min.css') }}">
   <link rel="stylesheet" href="{{ asset('backend/assets/modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.css') }}">
 
+  <!-- [editor-------------------------------] -->
+    <link rel="stylesheet" href="{{ asset('backend/assets/modules/summernote/summernote-bs4.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/assets/modules/codemirror/lib/codemirror.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/assets/modules/codemirror/theme/duotone-dark.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/assets/modules/jquery-selectric/selectric.css') }}">
+  <!-- [editor-------------------------------] -->
+
+
   <link rel="stylesheet" href="{{ asset('backend/assets/modules/datatables/datatables.min.css') }}">
 
   <!-- Template CSS -->
@@ -40,7 +48,7 @@
 
 <body>
     <!-- [loading-----------------------] -->
-        <!-- @include('backend.body.loader') -->
+        @include('backend.body.loader')
     <!-- [loading-----------------------] -->
   <div id="app">
      @yield('content')
@@ -65,6 +73,13 @@
   <script src="{{ asset('backend/assets/modules/select2/dist/js/select2.full.min.js') }}"></script>
   <script src="{{ asset('backend/assets/modules/datatables/datatables.min.js') }}"></script>
   
+  <!-- [editor--------------------------------------] -->
+    <script src="{{ asset('backend/assets/modules/summernote/summernote-bs4.js') }}"></script>
+    <script src="{{ asset('backend/assets/modules/codemirror/lib/codemirror.js') }}"></script>
+    <script src="{{ asset('backend/assets/modules/codemirror/mode/javascript/javascript.js') }}"></script>
+    <script src="{{ asset('backend/assets/modules/jquery-selectric/jquery.selectric.min.js') }}"></script>
+  <!-- [editor--------------------------------------] -->
+
   <!-- Initialize DataTable -->
 
     <script>
@@ -292,6 +307,11 @@
             $('#save_patient_history').click(function(e) {
                 e.preventDefault();
 
+                if ($('#serviceTableBody tr').length === 0) {
+                    swal('Cannot submit', 'Please add at least one service first.', 'error');
+                    return; // Stop the function if no rows are found
+                }
+
                 // Get the CSRF token directly from the meta tag
                 let csrfToken = $('meta[name="csrf-token"]').attr('content');
 
@@ -360,10 +380,10 @@
                     },
                     error: function(xhr) {
                         if (xhr.status === 419) { // CSRF token mismatch
-                            alert('There was an issue with your session. Please try again.');
+                            swal('Error', 'There was an issue with your session. Please try again.', 'error');
                         } else {
-                            console.error('Error saving patient history:', xhr.responseJSON.message);
-                            alert('Error: ' + xhr.responseJSON.message);
+                            console.error('Error saving patient history: ', xhr.responseJSON.message);
+                            swal('Error','Error saving patient history ' + xhr.responseJSON.message, 'error');
                         }
                     }
                 });
@@ -435,8 +455,65 @@
         // [Detail_Patient_Service--------------------------]
 
 
+
+        
+        // [page-add-pateint---------------------------]
+
+            // [type-patient----------------------------]
+                // Function to replace select with text input
+                function switchToTextInput() {
+                    $('#type-patient-wrapper').html(`
+                        <div class="input-group-prepend">
+                            <div class="input-group-text" id="type-patient-icon">
+                                <i class="fas fa-user-md"></i>
+                            </div>
+                        </div>
+                        <input type="text" name="type_patient" class="form-control">
+                    `);
+                }
+
+                // Function to replace text input with select
+                function switchToSelect() {
+                    $('#type-patient-wrapper').html(`
+                        <div class="input-group-prepend">
+                            <div class="input-group-text" id="type-patient-icon">
+                                <i class="fas fa-user-md"></i>
+                            </div>
+                        </div>
+                        <select name="type_patient" class="form-control" id="type-patient-select">
+                            <option value="Walk-in">Walk-in</option>
+                            <option value="Customize">Customize</option>
+                        </select>
+                    `);
+
+                    // Reattach event listener to the select element
+                    $('#type-patient-select').on('change', function() {
+                        if ($(this).val() === 'Customize') {
+                            switchToTextInput();
+                        }
+                    });
+                }
+
+                // Initial event listener for select change
+                $('#type-patient-select').on('change', function() {
+                    if ($(this).val() === 'Customize') {
+                        switchToTextInput();
+                    }
+                });
+
+                // Event listener for switching back to select when clicking the icon
+                $(document).on('click', '#type-patient-icon', function() {
+                    switchToSelect();
+                });
+            // [type-patient----------------------------]
+
+        // [page-add-pateint---------------------------]
+
+
       });
   </script>
+  <script src="{{ asset('backend/assets/modules/sweetalert/sweetalert.min.js')  }}"></script>
+  <script src="{{ asset('backend/assets/js/page/modules-sweetalert.js') }}"></script>
 
   <!-- Template JS File -->
   <script src="{{ asset('backend/assets/js/scripts.js') }}"></script>
