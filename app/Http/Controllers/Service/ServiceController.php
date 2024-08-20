@@ -63,16 +63,47 @@ class ServiceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function serviceUpdate(Request $request, string $id)
     {
-        //
+        $validatedData = $request->validate([
+            'name'  => 'required|string|max:255',
+            'unit'  => 'required|string|max:255',
+            'price' => 'required|numeric|min:0',
+        ]);
+    
+        $service = Service::find($id);
+    
+        if (!$service) {
+            toastr()->error('Service not found!');
+            return redirect()->back();
+        }
+    
+        $service->name  = $validatedData['name'];
+        $service->unit  = $validatedData['unit'];
+        $service->price = $validatedData['price'];
+        $service->save();
+        
+        toastr()->success('Service updated successfully!');
+        return redirect()->back();
     }
+    
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function serviceDelete(string $id)
     {
-        //
+        $service = Service::find($id);
+
+        if (!$service) {
+            toastr()->error('Service not found!');
+            return redirect()->back();
+        }
+
+        $service->delete();
+
+        toastr()->success('Service deleted successfully!');
+        return redirect()->back();
     }
+
 }

@@ -61,9 +61,15 @@ class PatientController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function getPatientNoted(Request $request)
     {
-        //
+        $patient = Patient::find($request->id);
+
+        if ($patient) {
+            return response()->json(['patient_noted' => $patient->patient_noted]);
+        } else {
+            return response()->json(['patient_noted' => 'No notes found.']);
+        }
     }
 
     /**

@@ -39,13 +39,14 @@
                                         <thead class="bg-primary">
                                             <tr>
                                                 <th class="text-white">Patient's ID</th>
+                                                <th class="text-white">Date</th>
                                                 <th class="text-white">Patient's Name</th>
                                                 <th class="text-white">Age</th>
                                                 <th class="text-white">Sex</th>
                                                 <th class="text-white">Address</th>
                                                 <th class="text-white">Telephone</th>
-                                                <th class="text-white">Date</th>
-                                                <th class="text-white">Image</th>
+                                                <th class="text-white">Type Service</th>
+                                                <th class="text-white">Type Patient</th>
                                                 <th class="text-white">Action</th>
                                             </tr>
                                         </thead>
@@ -54,7 +55,8 @@
                                                 $patients = App\Models\Patient::all();
                                             @endphp
                                             @foreach ($patients as $patient)
-                                                <tr>
+                                                <tr class="row_patient_detail" data-toggle="modal" 
+                                                data-target="#fire-modal-4" data-id="{{ $patient->id }}">
                                                     <td>{{ $patient->id }}</td>
                                                     <td>{{ $patient->date }}</td>
                                                     <td>{{ $patient->name }}</td>
@@ -62,10 +64,10 @@
                                                     <td>{{ $patient->sex }}</td>
                                                     <td>{{ $patient->address }}</td>
                                                     <td>{{ $patient->telephone }}</td>
-                                                    <td>image...</td>
+                                                    <td><span class="badge badge-dark">{{ $patient->type_service }}</span></td>
+                                                    <td><span class="badge badge-secondary">{{ $patient->type_patient }}</td>
 
-
-                                                    <td>
+                                                    <td class="td-action">
                                                         <button class="btn btn-danger">
                                                             <i class="fa fa-trash"></i>
                                                         </button>
@@ -74,7 +76,6 @@
                                                         </button>
                                                     </td>
                                                 </tr>
-
 
                                             @endforeach
                                         </tbody>
@@ -95,6 +96,27 @@
         @include('backend.body.footer')
     </footer>
     <!-- [footer------------------------------] -->
+
+    <!-- [Model Detail Patient Service-------------------------] -->
+        <div class="modal fade" id="fire-modal-4" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog custom-modal-service-detail">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Patients's Noted</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                    <textarea class="summernote" name="" id="patientsNotedContent"></textarea> 
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- [Model Detail Patient Service-------------------------] -->
 
 </div>
 

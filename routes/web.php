@@ -67,6 +67,7 @@ use Illuminate\Support\Facades\Route;
         Route::get('/add-patient','add_Patient')->name('add_Patient');
         Route::get('/view-patient','view_Patient')->name('view_Patient');
         Route::post('/create-patient','create_Patient')->name('create_Patient');
+        Route::get('/get-patient-noted','getPatientNoted')->name('patient_noted');
     });
 // [patient_controller----------------------------]
 

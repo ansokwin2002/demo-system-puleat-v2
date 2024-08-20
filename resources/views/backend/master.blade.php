@@ -113,17 +113,11 @@
             });
         // [dataTable_Service---------------------]
 
-            $('[data-toggle="modal"]').on('click', function () {
-                var id = $(this).data('id');
-                var name = $(this).data('name');
-                var unit = $(this).data('unit');
-                var price = $(this).data('price');
-
-                // Set the values in the modal form fields
-                $('#fire-modal-4-' + id).find('#name-' + id).val(name);
-                $('#fire-modal-4-' + id).find('#unit-' + id).val(unit);
-                $('#fire-modal-4-' + id).find('#price-' + id).val(price);
+        // [summernote-------------------------------]
+            $('.summernote').summernote({
+                height: 200 
             });
+        // [summernote-------------------------------]
 
 
         // [Select_Service---------------------]
@@ -509,6 +503,83 @@
 
         // [page-add-pateint---------------------------]
 
+        // [page-list-patient-------------------------------]
+
+            // [patient-detail-------------------------]
+
+                $('#table_service').on('click', '.row_patient_detail', function(event) {
+                    if ($(event.target).closest('.td-action').length > 0) {
+                        return; // Exit the function if an action td-action was clicked
+                    }
+
+                    const patientId = $(this).data('id');
+
+                    // Make an AJAX call to fetch the patient's noted data
+                    $.ajax({
+                        url: '/get-patient-noted', // Define this route in your web.php
+                        method: 'GET',
+                        data: { id: patientId },
+                        success: function(response) {
+                            console.log(response);
+                            // Populate the modal with the patient's noted information
+                            $('#patientsNotedContent').summernote('code', response.patient_noted);
+                            // Show the modal
+                            $('#fire-modal-4').modal('show');
+                        },
+                        error: function() {
+                            alert('Failed to fetch patient notes.');
+                        }
+                    });
+                });
+
+                $('#table_service').on('click', '.td-action', function(event) {
+                    event.stopPropagation(); // Prevent the click event from reaching the row
+                });
+
+
+            // [patient-detail-------------------------]
+
+
+        // [page-list-patient-------------------------------]
+
+        // [page-list-service-----------------------------------]
+
+            // [Edit Service----------------------------]
+                $('.btn_edit_service').on('click', function() {
+                    var id = $(this).data('id');
+                    var name = $(this).data('name');
+                    var unit = $(this).data('unit');
+                    var price = $(this).data('price');
+
+                    $('#service-id').val(id);
+                    $('#service-name').val(name);
+                    $('#service-unit').val(unit);
+                    $('#service-price').val(price);
+
+                    // Update the form action URL to include the service ID
+                    var formAction = "{{ route('service_Update', ':id') }}";
+                    formAction = formAction.replace(':id', id);
+                    $('#editServiceForm').attr('action', formAction);
+                });
+            // [Edit Service----------------------------]
+
+            // [Delete Service----------------------------]
+                $('#ModelDeleteService').on('show.bs.modal', function (event) {
+                    var button = $(event.relatedTarget); // Button that triggered the modal
+                    var id = button.data('id'); // Extract info from data-* attributes
+
+                    var form = $('#deleteForm');
+                    var actionUrl = "{{ route('service_Delete', ':id') }}";
+                    actionUrl = actionUrl.replace(':id', id);
+
+                    // Update the form action attribute
+                    form.attr('action', actionUrl);
+                });
+            // [Delete Service----------------------------]
+
+        // [page-list-service-----------------------------------]
+
+           
 
       });
   </script>

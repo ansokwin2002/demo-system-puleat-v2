@@ -56,19 +56,24 @@
                                                 <td>{{ $item->unit }}</td>
                                                 <td>{{ $item->price }}</td>
                                                 <td>
-                                                    <button class="btn btn-warning" 
+                                                    
+                                                <button class="btn btn-danger" data-toggle="modal" data-target="#ModelDeleteService" data-id="{{ $item->id }}">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+
+
+                                                    <button class="btn btn-warning btn_edit_service" 
                                                             data-toggle="modal" 
-                                                            data-target="#fire-modal-4-{{$item->id}}"
+                                                            data-target="#fire-modal-service"
                                                             data-id="{{ $item->id }}"
                                                             data-name="{{ $item->name }}"
                                                             data-unit="{{ $item->unit }}"
                                                             data-price="{{ $item->price }}">
-                                                        <i class="fa fa-edit"></i> Edit
+                                                        <i class="fa fa-edit"></i>
                                                     </button>
-                                                    <button class="btn btn-danger"><i class="fa fa-trash"></i> Delete</button>
                                                 </td>
                                             </tr>
-                                            @include('backend.service.edit_Model')
+                                            
 
 
                                         @endforeach
@@ -90,6 +95,70 @@
         @include('backend.body.footer')
     </footer>
     <!-- [footer------------------------------] -->
+     <!-- [Model Detail Patient Service-------------------------] -->
+        <div class="modal fade" id="fire-modal-service" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog custom-modal-service-detail">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Service</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editServiceForm" action="{{ route('service_Update', 0) }}" method="post">
+                            @csrf
+                            <input type="hidden" name="id" id="service-id">
+                            <div class="form-group">
+                                <label for="name">Service Name:</label>
+                                <input type="text" name="name" id="service-name" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="unit">Unit:</label>
+                                <input type="text" name="unit" id="service-unit" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="price">Price:</label>
+                                <input type="text" name="price" id="service-price" class="form-control" required>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-success">Update <i class="fa fa-edit"></i></button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- [Model Detail Patient Service-------------------------] -->
+
+    <!-- [Model Delete Service--------------------------------] -->
+        <div class="modal fade" id="ModelDeleteService" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete this service?
+                    </div>
+                    <div class="modal-footer">
+                        <form id="deleteForm" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- [Model Delete Service--------------------------------] -->
+
+
 </div>
 
 
