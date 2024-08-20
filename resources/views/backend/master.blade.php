@@ -80,6 +80,8 @@
     <script src="{{ asset('backend/assets/modules/jquery-selectric/jquery.selectric.min.js') }}"></script>
   <!-- [editor--------------------------------------] -->
 
+
+
   <!-- Initialize DataTable -->
 
     <script>
@@ -90,6 +92,7 @@
         window.addEventListener('beforeunload', function () {
             document.getElementById('loader').style.display = 'block';
         });
+      
     </script>
   
   <script>
@@ -579,7 +582,6 @@
 
         // [page-list-service-----------------------------------]
 
-           
 
       });
   </script>

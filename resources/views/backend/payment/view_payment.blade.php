@@ -30,170 +30,170 @@
             <!-- [header-------------------------] -->
 
             <!--[Service_table-------------------------]-->
-            <div class="row mt-4">
-                <div class="col-12">
-                    <div class="card p-4">
-                        <div class="card_title">
-                            <div class="row">
-                                <div class="col-12 col-sm-6 col-md-4">
-                                    <!-- First Date Form -->
-                                    <div class="form-group mb-2">
-                                        <div class="d-flex align-items-center">
-                                            <h6 class="mb-0 mr-2" style="flex: 0 0 100px;">Date :</h6>
-                                            <div class="flex-grow-1">
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <div class="input-group-text">
-                                                            <i class="fas fa-calendar"></i>
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card p-4">
+                            <div class="card_title">
+                                <div class="row">
+                                    <div class="col-12 col-sm-6 col-md-4">
+                                        <!-- First Date Form -->
+                                        <div class="form-group mb-2">
+                                            <div class="d-flex align-items-center">
+                                                <h6 class="mb-0 mr-2" style="flex: 0 0 100px;">Date :</h6>
+                                                <div class="flex-grow-1">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text">
+                                                                <i class="fas fa-calendar"></i>
+                                                            </div>
                                                         </div>
+                                                        <input type="text" class="form-control datepicker" id="date">
                                                     </div>
-                                                    <input type="text" class="form-control datepicker" id="date">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Second Form (Doctor) -->
+                                        <div class="form-group mb-2">
+                                            <div class="d-flex align-items-center">
+                                                <h6 class="mb-0 mr-2" style="flex: 0 0 100px;">Doctor :</h6>
+                                                <div class="flex-grow-1">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text">
+                                                                <i class="fas fa-user-md"></i>
+                                                            </div>
+                                                        </div> 
+                                                        <select class="form-control" name="doctor" id="doctor">
+                                                            <option value="sokleat">SOKLEAT</option>
+                                                            <option value="seyha">SEYHA</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- Second Form (Doctor) -->
-                                    <div class="form-group mb-2">
-                                        <div class="d-flex align-items-center">
-                                            <h6 class="mb-0 mr-2" style="flex: 0 0 100px;">Doctor :</h6>
-                                            <div class="flex-grow-1">
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <div class="input-group-text">
-                                                            <i class="fas fa-user-md"></i>
+                                    <div class="col-12 col-sm-6 col-md-8">
+                                        <div class="container-fluid pl-0 pr-0">
+                                            <div class="row">
+                                                <div class="col-12 col-sm-5 col-md-8 col-lg-12 d-flex">
+                                                    <div class="title_customer">
+                                                        <h6 class="pt-2">Patient :</h6>
+                                                    </div>
+                                                    <div class="box_select_customer">
+                                                        <div class="card_customer">
+                                                            <div class="icon_customer">
+                                                                <i class="fa fa-user"></i>
+                                                            </div>
+                                                            <div class="select_customer">
+                                                            @php 
+                                                                $patients = App\Models\Patient::all();
+                                                                $selectedPatientId = $selectedPatientId ?? null; 
+                                                            @endphp
+
+                                                            <select id="patient-select" class="form-control select2" style="width: 100%;">
+                                                                <option value="" disabled>Select a Patient</option>
+                                                                @foreach ($patients as $patient)
+                                                                    <option value="{{ $patient->id }}" {{ $patient->id == $selectedPatientId ? 'selected' : '' }}>
+                                                                        {{ $patient->name }} ({{ $patient->telephone }})
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        
+                                                            </div>
                                                         </div>
-                                                    </div> 
-                                                    <select class="form-control" name="doctor" id="doctor">
-                                                        <option value="sokleat">SOKLEAT</option>
-                                                        <option value="seyha">SEYHA</option>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="" style="width: 100%;">
+                                <div class="container-fluid pl-0 pr-0 mt-3">
+                                    <div class="row">
+                                        <div class="col-12 col-sm-5 col-md-8 col-lg-12">
+                                            <div class="card_service">
+                                                <div class="icon_service">
+                                                    <button class="btn btn-primary" style="width: 100%;height:100%;">Choose Service</button>
+                                                </div>
+                                                <div class="select_service">
+                                                    @php 
+                                                        $Services = App\Models\Service::all();
+                                                    @endphp
+
+                                                    <select id="serviceSelect" class="form-control select2" style="width: 100%;">
+                                                        <option>Select a Patient</option>
+                                                        @foreach ($Services as $service)
+                                                            <option value="{{ $service->id }}" 
+                                                            data-name-service="{{ $service->name }}"
+                                                            data-unit-service="{{ $service->unit }}"
+                                                            data-price-service="{{ $service->price }}"
+                                                            >
+                                                                {{ $service->name }}
+                                                            </option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
-                                <div class="col-12 col-sm-6 col-md-8">
-                                    <div class="container-fluid pl-0 pr-0">
+                            </div>
+                            <!-- [table_service-----------------------] -->
+                                <div class="" style="width: 100%;">
+                                    <div class="container-fluid pl-0 pr-0 mt-3 table_service">
                                         <div class="row">
-                                            <div class="col-12 col-sm-5 col-md-8 col-lg-12 d-flex">
-                                                <div class="title_customer">
-                                                    <h6 class="pt-2">Patient :</h6>
+                                            <div class="col-12 col-md-6 col-lg-12">
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered table-md">
+                                                        <thead class="bg-primary">
+                                                            <tr>
+                                                                <th class="text-white">#</th>
+                                                                <th style="width:700px;" class="text-white">Name</th>
+                                                                <th style="width:120px;" class="text-white">Unit</th>
+                                                                <th class="text-white">Price</th>
+                                                                <th class="text-white">Choose Discount</th>
+                                                                <th style="width:120px;" class="text-white">Discount (%)</th>
+                                                                <th style="width:120px;" class="text-white">Discount ($)</th>
+                                                                <th style="width:160px;" class="text-white">Amount</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="serviceTableBody">
+                                                            
+                                                        </tbody>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td colspan="7"><strong><span class="float-right">Grand Total (USD)</span></strong></td>
+                                                                <td><strong id="grand_total">$ 0.00</strong></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="7"><strong><span class="float-right">Amount paid <i style="cursor: pointer;" class="fa fa-edit" 
+                                                                data-toggle="modal" 
+                                                                data-target="#fire-modal-4"
+                                                                ></i></span></strong></td>
+                                                                <td><span id="amount_paid">$ 0.00</span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="7"><strong><span class="float-right" id="unpaid">Unpaid amount</span></strong></td>
+                                                                <td><span id="amount_unpaid">$ 0.00</span></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
                                                 </div>
-                                                <div class="box_select_customer">
-                                                    <div class="card_customer">
-                                                        <div class="icon_customer">
-                                                            <i class="fa fa-user"></i>
-                                                        </div>
-                                                        <div class="select_customer">
-                                                        @php 
-                                                            $patients = App\Models\Patient::all();
-                                                            $selectedPatientId = $selectedPatientId ?? null; 
-                                                        @endphp
-
-                                                        <select id="patient-select" class="form-control select2" style="width: 100%;">
-                                                            <option value="" disabled>Select a Patient</option>
-                                                            @foreach ($patients as $patient)
-                                                                <option value="{{ $patient->id }}" {{ $patient->id == $selectedPatientId ? 'selected' : '' }}>
-                                                                    {{ $patient->name }} ({{ $patient->telephone }})
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    
-                                                        </div>
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                            <!-- [table_service-----------------------] -->
+                            <div class="form-group mb-2">
+                                <button class="btn btn-primary" id="save_patient_history"><i class="fa fa-save"></i> Submit</button>
                             </div>
+
+
                         </div>
-                        <div class="" style="width: 100%;">
-                            <div class="container-fluid pl-0 pr-0 mt-3">
-                                <div class="row">
-                                    <div class="col-12 col-sm-5 col-md-8 col-lg-12">
-                                        <div class="card_service">
-                                            <div class="icon_service">
-                                                <button class="btn btn-primary" style="width: 100%;height:100%;">Choose Service</button>
-                                            </div>
-                                            <div class="select_service">
-                                                @php 
-                                                    $Services = App\Models\Service::all();
-                                                @endphp
-
-                                                <select id="serviceSelect" class="form-control select2" style="width: 100%;">
-                                                    <option>Select a Patient</option>
-                                                    @foreach ($Services as $service)
-                                                        <option value="{{ $service->id }}" 
-                                                        data-name-service="{{ $service->name }}"
-                                                        data-unit-service="{{ $service->unit }}"
-                                                        data-price-service="{{ $service->price }}"
-                                                        >
-                                                            {{ $service->name }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                        <!-- [table_service-----------------------] -->
-                            <div class="" style="width: 100%;">
-                                <div class="container-fluid pl-0 pr-0 mt-3 table_service">
-                                    <div class="row">
-                                        <div class="col-12 col-md-6 col-lg-12">
-                                            <div class="table-responsive">
-                                                <table class="table table-bordered table-md">
-                                                    <thead class="bg-primary">
-                                                        <tr>
-                                                            <th class="text-white">#</th>
-                                                            <th style="width:700px;" class="text-white">Name</th>
-                                                            <th style="width:120px;" class="text-white">Unit</th>
-                                                            <th class="text-white">Price</th>
-                                                            <th class="text-white">Choose Discount</th>
-                                                            <th style="width:120px;" class="text-white">Discount (%)</th>
-                                                            <th style="width:120px;" class="text-white">Discount ($)</th>
-                                                            <th style="width:160px;" class="text-white">Amount</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody id="serviceTableBody">
-                                                        
-                                                    </tbody>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td colspan="7"><strong><span class="float-right">Grand Total (USD)</span></strong></td>
-                                                            <td><strong id="grand_total">$ 0.00</strong></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td colspan="7"><strong><span class="float-right">Amount paid <i style="cursor: pointer;" class="fa fa-edit" 
-                                                             data-toggle="modal" 
-                                                             data-target="#fire-modal-4"
-                                                            ></i></span></strong></td>
-                                                            <td><span id="amount_paid">$ 0.00</span></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td colspan="7"><strong><span class="float-right" id="unpaid">Unpaid amount</span></strong></td>
-                                                            <td><span id="amount_unpaid">$ 0.00</span></td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        <!-- [table_service-----------------------] -->
-                        <div class="form-group mb-2">
-                            <button class="btn btn-primary" id="save_patient_history"><i class="fa fa-save"></i> Submit</button>
-                        </div>
-
-
                     </div>
                 </div>
-            </div>
             <!--[Service_table-------------------------]-->
 
         </section>

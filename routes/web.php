@@ -6,6 +6,9 @@ use App\Http\Controllers\Patient\PatientController;
 use App\Http\Controllers\PatientHistory\PatientHistoryController;
 use App\Http\Controllers\Payment\PaymentController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\Reports\ReportsController;
+use App\Http\Controllers\Reports\ReportServiceController;
 use App\Http\Controllers\Service\ServiceController;
 use Illuminate\Support\Facades\Route;
 
@@ -80,11 +83,11 @@ use Illuminate\Support\Facades\Route;
     });
 // [patient_history_controller----------------------------]
 
-// // [Invoice------------------------------------]
-//     Route::controller(InvoiceController::class)->group(function(){
-//         Route::post('/create-invoice','createInvoice')->name('create_invoice');
-//         Route::get('/show-invoice/{invoice_id}','showInvoice')->name('invoice_show');
-//     });
-// // [Invoice------------------------------------]
+// [Invoice------------------------------------]
+    Route::controller(ReportsController::class)->group(function(){
+        Route::get('/main/api_generate_default','Report')->name('view_report');
+    });
+
+// [Invoice------------------------------------]
 
 

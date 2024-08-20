@@ -57,14 +57,14 @@
         </ul>
     </li>
 
-    <li class="dropdown {{ Route::is('view_Patient*', 'add_Patient*' ,'patient_service_history*') ? 'active' : '' }}">
+    <li class="dropdown {{ Route::is('view_report*') ? 'active' : '' }}">
         <a href="#" class="nav-link has-dropdown" data-toggle="dropdown">
             <i class="fas fa-columns"></i> 
             <span>Reports</span>
         </a>
         <ul class="dropdown-menu">
-            <li class="{{ Route::is('patient_service_history*') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('patient_service_history') }}">Report Download</a>
+            <li class="{{ Route::is('view_report*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('view_report') }}">Report Download</a>
             </li>
         </ul>
     </li>

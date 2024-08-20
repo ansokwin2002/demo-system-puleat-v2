@@ -1,4 +1,5 @@
-@extends ('backend.master')
+@extends('backend.master')
+
 @section('content')
 
 <div class="main-wrapper main-wrapper-1">
@@ -21,67 +22,20 @@
             <div class="section-header">
                 <h1>Dashboard</h1>
             </div>
-            <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div class="card card-statistic-1">
-                    <div class="card-icon bg-primary">
-                    <i class="far fa-user"></i>
-                    </div>
-                    <div class="card-wrap">
-                    <div class="card-header">
-                        <h4>Total Admin</h4>
-                    </div>
-                    <div class="card-body">
-                        10
-                    </div>
-                    </div>
-                </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div class="card card-statistic-1">
-                    <div class="card-icon bg-danger">
-                    <i class="far fa-newspaper"></i>
-                    </div>
-                    <div class="card-wrap">
-                    <div class="card-header">
-                        <h4>News</h4>
-                    </div>
-                    <div class="card-body">
-                        42
-                    </div>
+            
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card p-4">
+                        <div class="card_title">
+                            <div class="row">
+                                <h3>&nbsp;&nbsp;Patient's Bar Chart</h3>
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                                    <canvas id="myChart2" width="400" height="100"></canvas>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div class="card card-statistic-1">
-                    <div class="card-icon bg-warning">
-                    <i class="far fa-file"></i>
-                    </div>
-                    <div class="card-wrap">
-                    <div class="card-header">
-                        <h4>Reports</h4>
-                    </div>
-                    <div class="card-body">
-                        1,201
-                    </div>
-                    </div>
-                </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div class="card card-statistic-1">
-                    <div class="card-icon bg-success">
-                    <i class="fas fa-circle"></i>
-                    </div>
-                    <div class="card-wrap">
-                    <div class="card-header">
-                        <h4>Online Users</h4>
-                    </div>
-                    <div class="card-body">
-                        47
-                    </div>
-                    </div>
-                </div>
-                </div>                  
             </div>
 
         </section>
@@ -93,6 +47,40 @@
         @include('backend.body.footer')
     </footer>
     <!-- [footer------------------------------] -->
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const ctx = document.getElementById('myChart2').getContext('2d');
+
+            // Define the data as a JavaScript object
+            const monthlyPatientCounts = @json($monthlyPatientCounts);
+
+            const labels = Object.keys(monthlyPatientCounts);
+            const data = Object.values(monthlyPatientCounts);
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Number of Patients',
+                        data: data,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 
 </div>
 
