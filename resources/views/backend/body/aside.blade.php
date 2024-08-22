@@ -6,68 +6,106 @@
     <a href="index.html">St</a>
     </div>
     <ul class="sidebar-menu">
+        <li class="menu-header">Dashboard</li>
 
-    <li class="menu-header">Dashboard</li>
-    <li class="dropdown {{ Route::is('view_Payment*', 'dashboard*') ? 'active' : '' }}">
-        <a href="#" class="nav-link has-dropdown" data-toggle="dropdown">
-            <i class="fas fa-columns"></i> 
-            <span>Dashboard</span>
-        </a>
-        <ul class="dropdown-menu">
-            <li class="{{ Route::is('dashboard*') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('dashboard') }}">Home</a>
+        <!-- [dashboard------------------------------] -->
+            <li class="dropdown {{ Route::is('view_Payment*', 'view_dashboard*') ? 'active' : '' }}">
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown">
+                    <i class="fa-solid fa-house-medical"></i>
+                    <span>Dashboard</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="{{ Route::is('view_dashboard*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('view_dashboard') }}">Home</a>
+                    </li>
+                    <li class="{{ Route::is('view_Payment*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('view_Payment') }}">Payment</a>
+                    </li>           
+                </ul>
             </li>
-            <li class="{{ Route::is('view_Payment*') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('view_Payment') }}">Payment</a>
-            </li>
-        </ul>
-    </li>
-    
-    <li class="dropdown {{ Route::is('view_Patient*', 'add_Patient*' ,'patient_service_history*') ? 'active' : '' }}">
-        <a href="#" class="nav-link has-dropdown" data-toggle="dropdown">
-            <i class="fas fa-columns"></i> 
-            <span>Patient</span>
-        </a>
-        <ul class="dropdown-menu">
-            <li class="{{ Route::is('add_Patient*') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('add_Patient') }}">Add Patient</a>
-            </li>
-            <li class="{{ Route::is('view_Patient*') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('view_Patient') }}">List Patient</a>
-            </li>
-            <li class="{{ Route::is('patient_service_history*') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('patient_service_history') }}">History Patient</a>
-            </li>
-           
-        </ul>
-    </li>
+        <!-- [dashboard------------------------------] -->
 
-    <li class="dropdown {{ Route::is('view_Service*', 'add_Service*') ? 'active' : '' }}">
-        <a href="#" class="nav-link has-dropdown" data-toggle="dropdown">
-            <i class="fas fa-columns"></i> 
-            <span>Services</span>
-        </a>
-        <ul class="dropdown-menu">
-            <li class="{{ Route::is('view_Service*') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('view_Service') }}">List Service</a>
+        
+        <!-- [patientt------------------------------------] -->
+            <li class="dropdown {{ Route::is('list_Patient*', 'add_Patient*' ,'patient_service_history*') ? 'active' : '' }}">
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown">
+                    <i class="fa-solid fa-user-plus"></i>
+                    <span>Patient</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="{{ Route::is('add_Patient*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('add_Patient') }}">Add Patient</a>
+                    </li>
+                    <li class="{{ Route::is('list_Patient*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('list_Patient') }}">List Patient</a>
+                    </li>
+                    <li class="{{ Route::is('patient_service_history*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('patient_service_history') }}">History Patient</a>
+                    </li>
+                
+                </ul>
             </li>
-            <li class="{{ Route::is('add_Service*') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('add_Service') }}">Add Service</a>
-            </li>
-        </ul>
-    </li>
+        <!-- [patientt------------------------------------] -->
 
-    <li class="dropdown {{ Route::is('view_report*') ? 'active' : '' }}">
-        <a href="#" class="nav-link has-dropdown" data-toggle="dropdown">
-            <i class="fas fa-columns"></i> 
-            <span>Reports</span>
-        </a>
-        <ul class="dropdown-menu">
-            <li class="{{ Route::is('view_report*') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('view_report') }}">Report Download</a>
+
+        <!-- [service-----------------------------------------] -->
+            <li class="dropdown {{ Route::is('view_Service*', 'add_Service*') ? 'active' : '' }}">
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown">
+                    <i class="fa fa-heart"></i>
+                    <span>Services</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="{{ Route::is('view_Service*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('view_Service') }}">List Service</a>
+                    </li>
+                    <li class="{{ Route::is('add_Service*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('add_Service') }}">Add Service</a>
+                    </li>
+                </ul>
             </li>
-        </ul>
-    </li>
+        <!-- [service-----------------------------------------] -->
+
+        <!-- [doctor-------------------------------------------------] -->
+            <li class="dropdown {{ Route::is('doctor.index*', 'doctor.create*') ? 'active' : '' }}">
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown">
+                    <i class="fa-solid fa-user-doctor"></i>
+                    <span>Doctor</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="{{ Route::is('doctor.index*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('doctor.index') }}">Create Doctor</a>
+                    </li>
+                    <li class="{{ Route::is('doctor.create*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('doctor.create') }}">List Doctor</a>
+                    </li>
+                </ul>
+            </li>
+        <!-- [doctor-------------------------------------------------] -->
+
+        <!-- [cashier--------------------------------------------------] -->
+            <li class="dropdown {{ Route::is('cashier.index*', 'cashier.create*') ? 'active' : '' }}">
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown">
+                    <i class="fa-solid fa-user-plus"></i>
+                    <span>Cashier</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="{{ Route::is('cashier.index*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('cashier.index') }}">Create Cashier</a>
+                    </li>
+                    <li class="{{ Route::is('cashier.create*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('cashier.create') }}">List Cashier</a>
+                    </li>
+                </ul>
+            </li>
+        <!-- [cashier--------------------------------------------------] -->
+
+        <!-- [notification----------------------------------------] -->
+            <li class="{{ Route::is('notifications.index*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('notifications.index') }}"><i class="fa-solid fa-bell"></i> Notification</a>
+            </li>
+        <!-- [notification----------------------------------------] -->
+
+    </ul>
     <!-- <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Blank Page</span></a></li>
     <li class="dropdown">
         <a href="#" class="nav-link has-dropdown"><i class="fas fa-th"></i> <span>Bootstrap</span></a>

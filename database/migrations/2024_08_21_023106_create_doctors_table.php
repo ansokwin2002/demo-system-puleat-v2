@@ -11,8 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('patient_histories', function (Blueprint $table) {
-            $table->integer('invoice_id')->unique()->after('patient_payment');
+        Schema::create('doctors', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('specialization');
+            $table->string('phone')->unique();
+            $table->string('email')->unique();
+            $table->timestamps();
         });
     }
 
@@ -21,8 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('patient_histories', function (Blueprint $table) {
-            $table->dropColumn('invoice_id');
-        });
+        Schema::dropIfExists('doctors');
     }
 };

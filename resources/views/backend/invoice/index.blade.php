@@ -14,20 +14,21 @@
             </div>
             <div class="box_street">
                 <p class="invoice_text">
-                    #1A, Street 57, Sangkat Boeng Keng Kang 1, Khan Chamkarmon, Phnom Penh
-                    ផ្ទះលេខ 1A ផ្លូវលេខ 57 សង្កាត់បឹងកេងកង១ ខណ្ឌចំការមន រាជធានីភ្នំពេញ
-                    Tel : 096 888 3388 / 085 200 244
+                   <center><b>#59, st261 ,Teuklaok3,ToulKork,Phnom Penh , Tel : 078813564 , 010692869</b></center>
                 </p>
             </div>
             <div class="box_3">
                 <div class="box_left">
-                    <p style="color: black;"><span class="doctor">Doctor :</span> {{ $data['patient_payment']['doctor'] }}</p>
+                    <p style="color: black;"><span class="doctor">Doctor :</span> {{ $data->doctor->name ?? 'Unknown' }}</p>
                     <p style="color: black;" class="date_box"><span class="date">Date :</span> {{ $data['patient_payment']['date'] }}</p>
                 </div>
                 <div class="box_right">
                     <p style="color: black;"><span class="patient">Patient :</span> {{ $data['patient_payment']['customer'] }}</p>
                     <!-- <p><span class="patient_id">Patient ID :</span> {{ $data['patient_payment']['patientId'] }}</p> -->
                     <p style="color: black;" class="box_invoice_id"><span class="invoice_id">Invoice ID :</span> {{ $data['invoice_id'] ?? '' }}</p>
+                </div>
+                <div class="box_center">
+                    <p style="color: black;" class="box_cashier_id"><span class="cashier_id">Cashier :</span> {{ $data->cashier->name ?? 'Unknown' }}</p>
                 </div>
             </div>
             <div class="box_table">
@@ -124,9 +125,9 @@
 </style>
 
 <script>
-    window.onload = function() {
-        window.print();
-    }
+    // window.onload = function() {
+    //     window.print();
+    // }
     document.getElementById('printButton').addEventListener('click', function() {
         window.print();
     });

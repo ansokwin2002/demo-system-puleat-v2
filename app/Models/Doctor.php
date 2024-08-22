@@ -5,24 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Patient extends Model
+class Doctor extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
-
-    public function histories()
-    {
-        return $this->hasMany(PatientHistory::class);
-    }
 
     public function appointments()
     {
         return $this->hasMany(Appointment::class);
     }
 
-    public function doctor()
+    public function histories()
     {
-        return $this->belongsTo(Doctor::class);
+        return $this->hasMany(PatientHistory::class);
     }
 }

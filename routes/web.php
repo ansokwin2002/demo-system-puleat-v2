@@ -1,7 +1,11 @@
 <?php
 
+use App\Http\Controllers\Appointment\AppointmentController;
+use App\Http\Controllers\Cashier\CashierController;
 use App\Http\Controllers\Dashbaord\DashboardController;
+use App\Http\Controllers\Doctor\DoctorController;
 use App\Http\Controllers\Invoice\InvoiceController;
+use App\Http\Controllers\Notification\NotificationController;
 use App\Http\Controllers\Patient\PatientController;
 use App\Http\Controllers\PatientHistory\PatientHistoryController;
 use App\Http\Controllers\Payment\PaymentController;
@@ -39,13 +43,13 @@ use Illuminate\Support\Facades\Route;
 
 // [dashboard_controller----------------------------]
     Route::controller(DashboardController::class)->group(function(){
-        Route::get('/dashboard','dashboard')->name('dashboard');
+        Route::get('/dashboard','dashboard')->name('view_dashboard');
     });
 // [dashboard_controller----------------------------]
 
 // [payment_controller----------------------------]
     Route::controller(PaymentController::class)->group(function(){
-        Route::get('/view-payment','view_Payment')->name('view_Payment');
+        Route::get('/payment','view_Payment')->name('view_Payment');
         Route::post('/create-patient','create_Patient')->name('create_Patient');
 
     });
@@ -68,7 +72,7 @@ use Illuminate\Support\Facades\Route;
 // [patient_controller----------------------------]
     Route::controller(PatientController::class)->group(function(){
         Route::get('/add-patient','add_Patient')->name('add_Patient');
-        Route::get('/view-patient','view_Patient')->name('view_Patient');
+        Route::get('/view-patient','view_Patient')->name('list_Patient');
         Route::post('/create-patient','create_Patient')->name('create_Patient');
         Route::get('/get-patient-noted','getPatientNoted')->name('patient_noted');
     });
@@ -89,5 +93,30 @@ use Illuminate\Support\Facades\Route;
     });
 
 // [Invoice------------------------------------]
+
+// [Notification-------------------------------]
+    Route::controller(AppointmentController::class)->group(function(){
+        Route::get('/appointments/set','showForm')->name('appointments.form');
+        Route::post('/appointments/set','setAppointment')->name('appointments.set');
+    });
+    Route::controller(NotificationController::class)->group(function(){
+        Route::get('/notifications','index')->name('notifications.index');
+    });
+// [Notification-------------------------------]
+
+// [Doctor------------------------------------]
+    Route::controller(DoctorController::class)->group(function(){
+        Route::get('/create-doctor','index')->name('doctor.index');
+        Route::post('/add-doctor','create')->name('doctor.create');
+    });
+// [Doctor------------------------------------]
+
+// [Cashier--------------------------------------]
+    Route::controller(CashierController::class)->group(function(){
+        Route::get('/create-cashier','index')->name('cashier.index');
+        Route::post('/add-cashier','create')->name('cashier.create');
+    });
+// [Cashier--------------------------------------]
+
 
 

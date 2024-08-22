@@ -21,7 +21,7 @@ class PatientController extends Controller
      */
     public function create_Patient(Request $request)
     {
-        $request = $request->validate([
+        $validatedData = $request->validate([
             'name'         => 'required|string|max:255',
             'age'          => 'required|integer|min:0',
             'sex'          => 'required|string|max:15',
@@ -30,25 +30,28 @@ class PatientController extends Controller
             'date'         => 'required|date',
             'type_service' => 'required|string|max:255',
             'type_patient' => 'required|string|max:255',
-            'patient_noted'=> 'nullable|string|max:10000'
+            'patient_noted'=> 'nullable|string|max:10000',
+            'next_appointment_date' => 'required|date',
+            'doctor_id'    => 'required|exists:doctors,id', 
         ]);
-        
+
         $patient = Patient::create([
-            'name'  => $request['name'],
-            'age'   => $request['age'],
-            'sex'   => $request['sex'],
-            'address' => $request['address'],
-            'telephone' => $request['telephone'],
-            'date' => $request['date'],
-            'type_service' => $request['type_service'],
-            'type_patient' => $request['type_patient'],
-            'patient_noted' => $request['patient_noted']
+            'name'          => $validatedData['name'],
+            'age'           => $validatedData['age'],
+            'sex'           => $validatedData['sex'],
+            'address'       => $validatedData['address'],
+            'telephone'     => $validatedData['telephone'],
+            'date'          => $validatedData['date'],
+            'type_service'  => $validatedData['type_service'],
+            'type_patient'  => $validatedData['type_patient'],
+            'patient_noted' => $validatedData['patient_noted'],
+            'next_appointment' => $validatedData['next_appointment_date'],
+            'doctor_id'     => $validatedData['doctor_id'], 
         ]);
-        
         toastr()->success('Add Patient Successfully!');
         return redirect()->route('view_Payment', ['selected_patient' => $patient->id]);
-        
     }
+
 
     /**
      * Show the form for creating a new resource.

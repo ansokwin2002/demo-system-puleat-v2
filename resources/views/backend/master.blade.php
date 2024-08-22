@@ -15,6 +15,7 @@
   <!-- General CSS Files -->
   <link rel="stylesheet" href=" {{ asset('backend/assets/modules/bootstrap/css/bootstrap.min.css') }}">
   <link rel="stylesheet" href=" {{ asset('backend/assets/modules/fontawesome/css/all.min.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <!-- CSS Libraries -->
   <link rel="stylesheet" href="{{ asset('backend/assets/modules/bootstrap-daterangepicker/daterangepicker.css') }}">
@@ -298,15 +299,16 @@
                     $(this).val(''); 
                 }
             });
+        // [Validation Form paid--------------------]
 
         // [Submit_Patient_history------------------------------]
-        
+                    
             $('#save_patient_history').click(function(e) {
                 e.preventDefault();
 
                 if ($('#serviceTableBody tr').length === 0) {
                     swal('Cannot submit', 'Please add at least one service first.', 'error');
-                    return; // Stop the function if no rows are found
+                    return; 
                 }
 
                 // Get the CSRF token directly from the meta tag
@@ -315,7 +317,8 @@
                 // Get data from your form or elements
                 let patientId = $('#patient-select').val();
                 let date = $('#date').val();
-                let doctor = $('#doctor').val();
+                let doctorId = $('#doctor').val(); // Ensure this is the doctor_id
+                let cashierId = $('#cashier-select').val();
                 let customer = $('#patient-select option:selected').text();
                 let grand_total = $('#grand_total').text().trim().replace('$', '');
                 let amount_paid = $('#amount_paid').text().trim().replace('$', '');
@@ -346,15 +349,16 @@
                 let paymentData = {
                     _token: csrfToken, // Include the CSRF token
                     patient_id: patientId,
+                    doctor_id: doctorId, // Include doctor_id here
+                    cashier_id: cashierId, 
                     patient_payment: {
-                        patientId:patientId,
+                        patientId: patientId,
                         date: date,
-                        doctor: doctor,
                         customer: customer,
                         grand_total: grand_total,
-                        amount_paid:amount_paid,
-                        amount_unpaid:amount_unpaid,
-                        services: services 
+                        amount_paid: amount_paid,
+                        amount_unpaid: amount_unpaid,
+                        services: services
                     }
                 };
 
@@ -372,7 +376,6 @@
                     method: 'POST',
                     data: paymentData,
                     success: function(response) {
-                        // window.location.href = '/patient-service-history';
                         window.location.href = `/invoice/${response.invoice_id}`;
                     },
                     error: function(xhr) {
@@ -380,11 +383,12 @@
                             swal('Error', 'There was an issue with your session. Please try again.', 'error');
                         } else {
                             console.error('Error saving patient history: ', xhr.responseJSON.message);
-                            swal('Error','Error saving patient history ' + xhr.responseJSON.message, 'error');
+                            swal('Error','Error saving patient history: ' + xhr.responseJSON.message, 'error');
                         }
                     }
                 });
             });
+
 
         // [Submit_Patient_history------------------------------]
 
@@ -401,6 +405,10 @@
                 } else {
                     alert('Element #grand_total not found or it is empty.');
                 }
+                $('#fire-modal-4').modal('hide');
+            });
+            $('.close, .btn-secondary').on('click', function() {
+                $('#fire-modal-4').modal('hide');
             });
         // [Button Paid---------------------------]
 
@@ -581,6 +589,42 @@
             // [Delete Service----------------------------]
 
         // [page-list-service-----------------------------------]
+
+        // [next-appointment-date------------------------------------]
+            $('#date').daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                autoApply: true,
+                locale: {
+                    format: 'YYYY-MM-DD'
+                }
+            });
+
+            function calculateNextAppointment() {
+                var typeService = $('#type_service').find(':selected').data('days');
+                var selectedDate = $('#date').val();
+
+                // alert('Selected Date: ' + selectedDate + '\nType Service Days: ' + typeService);
+                
+                if (typeService && selectedDate) {
+                    var date = new Date(selectedDate);
+                    date.setDate(date.getDate() + parseInt(typeService));
+                    var day = String(date.getDate()).padStart(2, '0');
+                    var month = String(date.getMonth() + 1).padStart(2, '0');
+                    var year = date.getFullYear();
+                    var formattedDate = `${year}-${month}-${day}`;
+                    $('#next_appointment_date').val(formattedDate);
+                }
+            }
+            $('#type_service').on('change', function () {
+                calculateNextAppointment();
+            });
+            $('#date').on('apply.daterangepicker', function () {
+                calculateNextAppointment();
+            });
+            //-change-by-default
+            calculateNextAppointment();
+        // [next-appointment-date------------------------------------]
 
 
       });

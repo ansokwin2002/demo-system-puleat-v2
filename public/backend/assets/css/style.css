@@ -2960,13 +2960,19 @@ body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li.active ul.dropdown-men
 } 
 
 .main_invoice .box_invoice .box_3 .box_left {
-  width: 50%;
+  width: 33.33%;
   height: 100%;
   /* background-color: #4cea67; */
 }
 
 .main_invoice .box_invoice .box_3 .box_right {
-  width: 50%;
+  width: 33.33%;
+  height: 100%;
+  /* background-color: blueviolet; */
+}
+
+.main_invoice .box_invoice .box_3 .box_center {
+  width: 33.33%;
   height: 100%;
   /* background-color: blueviolet; */
 }
@@ -2996,6 +3002,11 @@ body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li.active ul.dropdown-men
 }
 
 .main_invoice .box_invoice .box_3 .box_right .invoice_id {
+  color: black;
+  font-weight: bold;
+}
+
+.main_invoice .box_invoice .box_3 .box_center .cashier_id {
   color: black;
   font-weight: bold;
 }

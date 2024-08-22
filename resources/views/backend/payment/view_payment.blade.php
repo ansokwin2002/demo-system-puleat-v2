@@ -63,9 +63,14 @@
                                                                 <i class="fas fa-user-md"></i>
                                                             </div>
                                                         </div> 
-                                                        <select class="form-control" name="doctor" id="doctor">
-                                                            <option value="sokleat">SOKLEAT</option>
-                                                            <option value="seyha">SEYHA</option>
+                                                        @php 
+                                                            $doctors = App\Models\Doctor::all();
+                                                        @endphp
+                                                        <select class="form-control select2" name="doctor_id" id="doctor">
+                                                            <option value="" disabled>Select a Doctor</option>
+                                                            @foreach ($doctors as $doctor)
+                                                                <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
+                                                            @endforeach
                                                         </select>
                                                     </div>
                                                 </div>
@@ -74,6 +79,7 @@
                                     </div>
                                     <div class="col-12 col-sm-6 col-md-8">
                                         <div class="container-fluid pl-0 pr-0">
+                                        <!-- [patient-----------------------------------] -->
                                             <div class="row">
                                                 <div class="col-12 col-sm-5 col-md-8 col-lg-12 d-flex">
                                                     <div class="title_customer">
@@ -104,8 +110,44 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                        <!-- [patient-----------------------------------] -->
+
+                                        <!-- [cashier-----------------------------------] -->
+
+                                            <div class="row mt-2">
+                                                <div class="col-12 col-sm-5 col-md-8 col-lg-12 d-flex">
+                                                    <div class="title_customer">
+                                                        <h6 class="pt-2">Cashier :</h6>
+                                                    </div>
+                                                    <div class="box_select_customer">
+                                                        <div class="card_customer">
+                                                            <div class="icon_customer">
+                                                                <i class="fa fa-user"></i>
+                                                            </div>
+                                                            <div class="select_customer">
+                                                            @php 
+                                                                $cashiers = App\Models\Cashier::all();
+                                                            @endphp
+
+                                                            <select id="cashier-select" name="cashier_id"  class="form-control select2" style="width: 100%;">
+                                                                <option value="" disabled>Select a Cashier</option>
+                                                                @foreach ($cashiers as $cashier)
+                                                                    <option value="{{ $cashier->id }}">
+                                                                        {{ $cashier->name }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <!-- [cashier-----------------------------------] -->
+
                                         </div>
                                     </div>
+                                    
                                 </div>
                             </div>
                             <div class="" style="width: 100%;">
@@ -122,7 +164,7 @@
                                                     @endphp
 
                                                     <select id="serviceSelect" class="form-control select2" style="width: 100%;">
-                                                        <option>Select a Patient</option>
+                                                        <option>Select a Service</option>
                                                         @foreach ($Services as $service)
                                                             <option value="{{ $service->id }}" 
                                                             data-name-service="{{ $service->name }}"
