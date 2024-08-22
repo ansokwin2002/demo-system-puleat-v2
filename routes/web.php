@@ -43,7 +43,7 @@ use Illuminate\Support\Facades\Route;
 
 // [dashboard_controller----------------------------]
     Route::controller(DashboardController::class)->group(function(){
-        Route::get('/dashboard','dashboard')->name('view_dashboard');
+        Route::get('/dashboard','dashboard')->name('dashboard');
     });
 // [dashboard_controller----------------------------]
 

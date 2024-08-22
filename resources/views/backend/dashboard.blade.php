@@ -184,9 +184,14 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        scales: {
+                       scales: {
                             y: {
-                                beginAtZero: true
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return '$' + value.toLocaleString(); 
+                                    }
+                                }
                             }
                         }
                     }
@@ -258,7 +263,12 @@
                         maintainAspectRatio: false,
                         scales: {
                             y: {
-                                beginAtZero: true
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return '$' + value.toLocaleString(); 
+                                    }
+                                }
                             }
                         }
                     }

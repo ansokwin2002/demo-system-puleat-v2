@@ -25,13 +25,14 @@ class NotificationController extends Controller
             // Extract service data from patient histories
             $services = $patient->histories->flatMap(function ($history) {
                 // Decode the patient_payment JSON column
-                $data = json_decode($history->patient_payment, true);
+                $data = $history->patient_payment;
                 return $data['services'] ?? [];
             });
 
             return [
                 'patient_id' => $patient->id,
                 'patient_name' => $patient->name,
+                'patient_phone' => $patient->telephone,
                 'doctor_name' => $patient->doctor->name ?? 'No Doctor Assigned',
                 'register_date' => $patient->created_at->format('Y-m-d'),
                 'next_appointment' => $nextAppointmentDate->format('Y-m-d'),
