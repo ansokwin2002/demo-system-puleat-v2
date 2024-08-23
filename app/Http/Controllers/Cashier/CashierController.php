@@ -33,4 +33,27 @@ class CashierController extends Controller
         return redirect()->back();
     }
 
+    public function list()
+    {
+        return view('backend.cashier.list_cashier');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'sex' => 'required|string|max:10',
+            'email' => 'required|email|max:255',
+            'telephone' => 'required|string|max:20',
+        ]);
+
+        $cashier = Cashier::findOrFail($id);
+        $cashier->name = $request->input('name');
+        $cashier->sex = $request->input('sex');
+        $cashier->email = $request->input('email');
+        $cashier->telephone = $request->input('telephone');
+        $cashier->save();
+        toastr()->success('Updated Cashier Successfully!');
+        return redirect()->back();
+    }
 }

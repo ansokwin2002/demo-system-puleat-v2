@@ -20,16 +20,16 @@
         <section class="section">
             <!-- [header-------------------------] -->
             <div class="section-header">
-                <h1>List Service</h1>
+                <h1>List Doctor</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="#">Service</a></div>
-                    <div class="breadcrumb-item">List Service</div>
+                    <div class="breadcrumb-item"><a href="#">Doctor</a></div>
+                    <div class="breadcrumb-item">List Doctor</div>
                 </div>
             </div>
             <!-- [header-------------------------] -->
 
-            <!-- [Service_table-------------------------] -->
+            <!-- [Doctor_table-------------------------] -->
                 <div class="row mt-4">
                     <div class="col-12">
                         <div class="card p-4">
@@ -39,43 +39,42 @@
                                         <thead class="bg-primary">
                                             <tr>
                                                 <th class="text-white">#</th>
-                                                <th class="text-white">Service</th>
-                                                <th class="text-white">Unit</th>
-                                                <th class="text-white">Price</th>
+                                                <th class="text-white">Name</th>
+                                                <th class="text-white">Specialization</th>
+                                                <th class="text-white">Phone</th>
+                                                <th class="text-white">Email</th>
                                                 <th class="text-white">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                         @php 
-                                            $services = App\Models\Service::all();
+                                            $doctors = App\Models\Doctor::all();
                                         @endphp
-                                        @foreach ($services as $item)
+                                        @foreach ($doctors as $doctor)
                                             <tr>
-                                                <td>{{ $item->id }}</td>
-                                                <td>{{ $item->name }}</td>
-                                                <td>{{ $item->unit }}</td>
-                                                <td>{{ $item->price }}</td>
+                                                <td>{{ $doctor->id }}</td>
+                                                <td>{{ $doctor->name }}</td>
+                                                <td>{{ $doctor->specialization }}</td>
+                                                <td>{{ $doctor->phone }}</td>
+                                                <td>{{ $doctor->email }}</td>
                                                 <td>
                                                     
-                                                <button class="btn btn-danger" data-toggle="modal" data-target="#ModelDeleteService" data-id="{{ $item->id }}">
+                                                <button class="btn btn-danger" onclick="swal('Cannot Delete', 'Doctor can only be updated after creation !', 'error');">
                                                     <i class="fa fa-trash"></i>
                                                 </button>
 
-
-                                                    <button class="btn btn-warning btn_edit_service" 
-                                                            data-toggle="modal" 
-                                                            data-target="#fire-modal-service"
-                                                            data-id="{{ $item->id }}"
-                                                            data-name="{{ $item->name }}"
-                                                            data-unit="{{ $item->unit }}"
-                                                            data-price="{{ $item->price }}">
-                                                        <i class="fa fa-edit"></i>
-                                                    </button>
+                                                <button class="btn btn-warning btn_edit_doctor" 
+                                                        data-toggle="modal" 
+                                                        data-target="#fire-modal-doctor"
+                                                        data-id="{{ $doctor->id }}"
+                                                        data-name="{{ $doctor->name }}"
+                                                        data-specialization="{{ $doctor->specialization }}"
+                                                        data-phone="{{ $doctor->phone }}"
+                                                        data-email="{{ $doctor->email }}">
+                                                    <i class="fa fa-edit"></i>
+                                                </button>
                                                 </td>
                                             </tr>
-                                            
-
-
                                         @endforeach
                                         </tbody>
                                     </table>
@@ -84,7 +83,7 @@
                         </div>
                     </div>
                 </div>
-            <!-- [Service_table-------------------------] -->
+            <!-- [Doctor_table-------------------------] -->
 
         </section>
     </div>
@@ -95,31 +94,35 @@
         @include('backend.body.footer')
     </footer>
     <!-- [footer------------------------------] -->
-     <!-- [Model Detail Patient Service-------------------------] -->
-        <div class="modal fade" id="fire-modal-service" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+     <!-- [Model Edit Doctor-------------------------] -->
+        <div class="modal fade" id="fire-modal-doctor" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
             <div class="modal-dialog custom-modal-service-detail">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Edit Service</h5>
+                        <h5 class="modal-title">Edit Doctor</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form id="editServiceForm" action="{{ route('service_Update', 0) }}" method="post">
+                        <form id="editDoctorForm" action="{{ route('doctor.update', 0) }}" method="post">
                             @csrf
-                            <input type="hidden" name="id" id="service-id">
+                            <input type="hidden" name="id" id="doctor-id">
                             <div class="form-group">
-                                <label for="name">Service Name:</label>
-                                <input type="text" name="name" id="service-name" class="form-control" required>
+                                <label for="name">Doctor Name:</label>
+                                <input type="text" name="name" id="doctor-name" class="form-control" required>
                             </div>
                             <div class="form-group">
-                                <label for="unit">Unit:</label>
-                                <input type="text" name="unit" id="service-unit" class="form-control" required>
+                                <label for="specialization">Specialization:</label>
+                                <input type="text" name="specialization" id="doctor-specialization" class="form-control" required>
                             </div>
                             <div class="form-group">
-                                <label for="price">Price:</label>
-                                <input type="text" name="price" id="service-price" class="form-control" required>
+                                <label for="phone">Phone:</label>
+                                <input type="text" name="phone" id="doctor-phone" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="email" name="email" id="doctor-email" class="form-control" required>
                             </div>
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-success">Update <i class="fa fa-edit"></i></button>
@@ -130,10 +133,10 @@
                 </div>
             </div>
         </div>
-    <!-- [Model Detail Patient Service-------------------------] -->
+    <!-- [Model Edit Doctor-------------------------] -->
 
-    <!-- [Model Delete Service--------------------------------] -->
-        <div class="modal fade" id="ModelDeleteService" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <!-- [Model Delete Doctor--------------------------------] -->
+        <div class="modal fade" id="ModelDeleteDoctor" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -143,7 +146,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        Are you sure you want to delete this service?
+                        Are you sure you want to delete this doctor?
                     </div>
                     <div class="modal-footer">
                         <form id="deleteForm" method="POST">
@@ -156,11 +159,9 @@
                 </div>
             </div>
         </div>
-    <!-- [Model Delete Service--------------------------------] -->
+    <!-- [Model Delete Doctor--------------------------------] -->
 
 
 </div>
-
-
 
 @endsection

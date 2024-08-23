@@ -40,10 +40,9 @@ use Illuminate\Support\Facades\Route;
     require __DIR__.'/auth.php';
 // [Admin---------------------------------]
 
-
 // [dashboard_controller----------------------------]
     Route::controller(DashboardController::class)->group(function(){
-        Route::get('/dashboard','dashboard')->name('dashboard');
+        Route::get('/','dashboard')->name('dashboard');
     });
 // [dashboard_controller----------------------------]
 
@@ -51,7 +50,6 @@ use Illuminate\Support\Facades\Route;
     Route::controller(PaymentController::class)->group(function(){
         Route::get('/payment','view_Payment')->name('view_Payment');
         Route::post('/create-patient','create_Patient')->name('create_Patient');
-
     });
 // [payment_controller----------------------------]
 
@@ -59,7 +57,7 @@ use Illuminate\Support\Facades\Route;
     Route::controller(ServiceController::class)->group(function(){
         Route::get('/add-service','add_Service')->name('add_Service');
         Route::post('/create-service','create_Service')->name('create_Service');
-        Route::get('/view-service','view_Service')->name('view_Service');
+        Route::get('/list-service','view_Service')->name('view_Service');
         Route::get('/edit-service/{id}','edit_Service')->name('edit_Service');
 
 
@@ -72,7 +70,7 @@ use Illuminate\Support\Facades\Route;
 // [patient_controller----------------------------]
     Route::controller(PatientController::class)->group(function(){
         Route::get('/add-patient','add_Patient')->name('add_Patient');
-        Route::get('/view-patient','view_Patient')->name('list_Patient');
+        Route::get('/list-patient','view_Patient')->name('list_Patient');
         Route::post('/create-patient','create_Patient')->name('create_Patient');
         Route::get('/get-patient-noted','getPatientNoted')->name('patient_noted');
     });
@@ -91,7 +89,6 @@ use Illuminate\Support\Facades\Route;
     Route::controller(ReportsController::class)->group(function(){
         Route::get('/main/api_generate_default','Report')->name('view_report');
     });
-
 // [Invoice------------------------------------]
 
 // [Notification-------------------------------]
@@ -108,6 +105,9 @@ use Illuminate\Support\Facades\Route;
     Route::controller(DoctorController::class)->group(function(){
         Route::get('/create-doctor','index')->name('doctor.index');
         Route::post('/add-doctor','create')->name('doctor.create');
+        Route::get('/list-doctor','list')->name('doctor.list');
+        Route::post('/update-doctor/{id}','update')->name('doctor.update');
+        Route::delete('/delete-doctor/{id}','destroy')->name('doctor.destroy');
     });
 // [Doctor------------------------------------]
 
@@ -115,6 +115,8 @@ use Illuminate\Support\Facades\Route;
     Route::controller(CashierController::class)->group(function(){
         Route::get('/create-cashier','index')->name('cashier.index');
         Route::post('/add-cashier','create')->name('cashier.create');
+        Route::get('/list-cashier','list')->name('cashier.list');
+        Route::post('/update-cashier/{id}','update')->name('cashier.update');
     });
 // [Cashier--------------------------------------]
 

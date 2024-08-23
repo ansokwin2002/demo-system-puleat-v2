@@ -22,61 +22,72 @@
             <div class="section-header">
                 <h1>Notification</h1>
                 <div class="section-header-breadcrumb">
-                    <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="#">Notification</a></div>
-                    <div class="breadcrumb-item">Get Notification</div>
+                    <div class="breadcrumb-item active"><a href="{{ route('dashboard') }}">Dashboard</a></div>
+                    <div class="breadcrumb-item">Notification</div>
                 </div>
             </div>
             <!-- [header-------------------------] -->
 
-            <!-- [Inline_notification-------------------------] -->
+            <!-- [Table_notification-------------------------] -->
             <div class="row mt-4">
                 <div class="col-12">
-                    <!-- Display the count of rows -->
-                    <h4 class="pb-2">Today's Appointments : {{ $appointmentNotifications->count() }}</h4>
+                    <div class="card p-4">
+                        <div class="card-body">
+                            <!-- Display the count of rows -->
+                            <h4 class="pb-2">Today's Appointments: {{ $appointmentNotifications->count() }}</h4>
 
-                    <!-- Check if there are any notifications -->
-                    @if($appointmentNotifications->isNotEmpty())
-                        <div class="d-flex flex-column">
-                            @foreach($appointmentNotifications as $notification)
-                                <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center justify-content-between" role="alert">
-                                    <div class="d-inline-flex flex-wrap">
-                                        <div class="mr-3 badge badge-dark"><strong>Patient Name:</strong> {{ $notification['patient_name'] }}</div>
-                                        <div class="mr-3 badge badge-dark"><strong>Telephone:</strong> {{ $notification['patient_phone'] }}</div>
-                                        <div class="mr-3 badge badge-dark"><strong>Doctor Name:</strong> {{ $notification['doctor_name'] }}</div>
-                                        <div class="mr-3 badge badge-dark"><strong>Register Date:</strong> {{ $notification['register_date'] }}</div>
-                                        <div class="mr-3 badge badge-dark"><strong>Next Appointment:</strong> {{ $notification['next_appointment'] }}</div>
-
-                                        <!-- Services Details -->
-                                        @if($notification['services']->isEmpty())
-                                            <div class="mr-3 badge badge-warning">No services found.</div>
-                                        @else
-                                            @foreach($notification['services'] as $service)
-                                                <div class="mr-3 badge badge-dark"><strong>Service Name:</strong> {{ $service['service_name'] ?? '' }}</div>
+                            <!-- Check if there are any notifications -->
+                            @if($appointmentNotifications->isNotEmpty())
+                                <div class="table-responsive">
+                                    <table class="table table-striped dataTable" id="table_service">
+                                        <thead class="bg-primary">
+                                            <tr>
+                                                <th class="text-white">#</th>
+                                                <th class="text-white">Patient Name</th>
+                                                <th class="text-white">Telephone</th>
+                                                <th class="text-white">Doctor Name</th>
+                                                <th class="text-white">Register Date</th>
+                                                <th class="text-white">Next Appointment</th>
+                                                <th class="text-white">Services</th>
+                                                <th class="text-white">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($appointmentNotifications as $index => $notification)
+                                            <tr>
+                                                <td>{{ $index + 1 }}</td>
+                                                <td>{{ $notification['patient_name'] }}</td>
+                                                <td>{{ $notification['patient_phone'] }}</td>
+                                                <td>{{ $notification['doctor_name'] }}</td>
+                                                <td>{{ $notification['register_date'] }}</td>
+                                                <td>{{ $notification['next_appointment'] }}</td>
+                                                <td>
+                                                    @if($notification['services']->isEmpty())
+                                                        <span class="badge badge-warning">No services found.</span>
+                                                    @else
+                                                        @foreach($notification['services'] as $service)
+                                                            <span class="badge badge-dark">{{ $service['service_name'] ?? '' }}</span><br>
+                                                        @endforeach
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-success">read</button>
+                                                </td>
+                                            </tr>
                                             @endforeach
-                                        @endif
-                                    </div>
-
-                                    <!-- Hide/Show Icons -->
-                                    <div>
-                                        <button type="button" class="btn btn-warning btn-sm ml-2" data-toggle="collapse" data-target="#details{{ $loop->index }}">
-                                            <i class="fa fa-eye"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-danger btn-sm" data-dismiss="alert" aria-label="Close">
-                                            <i class="fa fa-times"></i>
-                                        </button>
-                                    </div>
+                                        </tbody>
+                                    </table>
                                 </div>
-                            @endforeach
+                            @else
+                                <div class="alert alert-danger">
+                                    No appointments today.
+                                </div>
+                            @endif
                         </div>
-                    @else
-                        <div class="alert alert-danger">
-                            No appointments today.
-                        </div>
-                    @endif
+                    </div>
                 </div>
             </div>
-            <!-- [Inline_notification-------------------------] -->
+            <!-- [Table_notification-------------------------] -->
 
         </section>
     </div>

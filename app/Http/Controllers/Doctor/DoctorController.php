@@ -35,7 +35,7 @@ class DoctorController extends Controller
             $doctor->phone = $validatedData['phone'];
             $doctor->email = $validatedData['email'];
             $doctor->save();
-            toastr()->success('Doctor Added Successfully!');
+            toastr()->success('Added Doctor Successfully!');
             return redirect()->back();
         } catch (\Exception $e) {
             toastr()->error('Error occurred while adding the doctor.');
@@ -47,9 +47,9 @@ class DoctorController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function list()
     {
-        //
+        return view('backend.doctors.list_doctor');
     }
 
     /**
@@ -63,16 +63,34 @@ class DoctorController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'specialization' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'email' => 'required|email|max:255',
+        ]);
+
+        $doctor = Doctor::findOrFail($id);
+        $doctor->name = $request->input('name');
+        $doctor->specialization = $request->input('specialization');
+        $doctor->phone = $request->input('phone');
+        $doctor->email = $request->input('email');
+        $doctor->save();
+
+        toastr()->success('Updated Doctor Successfully !');
+        return redirect()->back();
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $doctor = Doctor::findOrFail($id);
+        $doctor->delete();
+        toastr()->success('Delete Doctor Successfully !');
+        return redirect()->back();
     }
 }

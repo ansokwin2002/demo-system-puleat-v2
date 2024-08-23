@@ -301,8 +301,7 @@
             });
         // [Validation Form paid--------------------]
 
-        // [Submit_Patient_history------------------------------]
-                    
+        // [Submit_Patient_history------------------------------]    
             $('#save_patient_history').click(function(e) {
                 e.preventDefault();
 
@@ -388,8 +387,6 @@
                     }
                 });
             });
-
-
         // [Submit_Patient_history------------------------------]
 
         // [Button Paid---------------------------]
@@ -458,8 +455,6 @@
                 event.stopPropagation(); // Prevent the click event from reaching the row
             });
         // [Detail_Patient_Service--------------------------]
-
-
 
         
         // [page-add-pateint---------------------------]
@@ -625,6 +620,67 @@
             //-change-by-default
             calculateNextAppointment();
         // [next-appointment-date------------------------------------]
+
+        // [page-list-doctor-----------------------------------]
+            // [Edit Doctor----------------------------]
+                $('.btn_edit_doctor').on('click', function() {
+                    var id = $(this).data('id');
+                    var name = $(this).data('name');
+                    var specialization = $(this).data('specialization');
+                    var phone = $(this).data('phone');
+                    var email = $(this).data('email');
+
+                    $('#doctor-id').val(id);
+                    $('#doctor-name').val(name);
+                    $('#doctor-specialization').val(specialization);
+                    $('#doctor-phone').val(phone);
+                    $('#doctor-email').val(email);
+
+                    // Update the form action URL to include the doctor ID
+                    var formAction = "{{ route('doctor.update', ':id') }}";
+                    formAction = formAction.replace(':id', id);
+                    $('#editDoctorForm').attr('action', formAction);
+                });
+            // [Edit Doctor----------------------------]
+
+            // [Delete Doctor----------------------------]
+                $('#ModelDeleteDoctor').on('show.bs.modal', function (event) {
+                    var button = $(event.relatedTarget); // Button that triggered the modal
+                    var id = button.data('id'); // Extract info from data-* attributes
+
+                    var form = $('#deleteForm');
+                    var actionUrl = "{{ route('doctor.destroy', ':id') }}";
+                    actionUrl = actionUrl.replace(':id', id);
+
+                    // Update the form action attribute
+                    form.attr('action', actionUrl);
+                });
+            // [Delete Doctor----------------------------]
+
+        // [page-list-doctor-----------------------------------]
+
+        // [page-list-cashier-----------------------------------]
+            // [Edit Cashier----------------------------]
+                $('.btn_edit_cashier').on('click', function() {
+                    var id = $(this).data('id');
+                    var name = $(this).data('name');
+                    var sex = $(this).data('sex');
+                    var email = $(this).data('email');
+                    var telephone = $(this).data('telephone');
+
+                    $('#cashier-id').val(id);
+                    $('#cashier-name').val(name);
+                    $('#cashier-sex').val(sex);
+                    $('#cashier-email').val(email);
+                    $('#cashier-telephone').val(telephone);
+
+                    var formAction = "{{ route('cashier.update', ':id') }}";
+                    formAction = formAction.replace(':id', id);
+                    $('#editCashierForm').attr('action', formAction);
+                });
+            // [Edit Cashier----------------------------]
+        // [page-list-cashier-----------------------------------]
+
 
 
       });
