@@ -46,7 +46,7 @@ use Illuminate\Support\Facades\Route;
 // [dashboard_controller----------------------------]
     Route::middleware('auth')->group(function () {
         Route::controller(DashboardController::class)->group(function(){
-            Route::get('/', 'dashboard')->name('dashboard');
+            Route::get('/dashboard', 'dashboard')->name('dashboard');
         });
     });
 // [dashboard_controller----------------------------]
@@ -146,6 +146,9 @@ use Illuminate\Support\Facades\Route;
             Route::get('/upload-image','index')->name('uploadMultiImage.index');
             Route::post('/create-image','store')->name('uploadMultiImage.store');
             Route::get('/get-images/{invoiceId}', 'getImages')->name('uploadMultiImage.view');
+            Route::post('/delete-image','deleteImage')->name('uploadMultiImage.destroy');
+
+
         });
     });
 // [uploadMultiImage-----------------------------]

@@ -30,10 +30,6 @@ class uploadMultiImageController extends Controller
             $invoiceId = $request->input('invoice_id');
             $files = $request->file('files');
     
-            // Log invoice_id and files
-            Log::info('Invoice ID:', ['invoice_id' => $invoiceId]);
-            Log::info('Received Files:', ['files' => $files]);
-    
             if (empty($files)) {
                 throw new \Exception('No files were uploaded.');
             }
@@ -52,9 +48,6 @@ class uploadMultiImageController extends Controller
                 }
     
                 $filePath = $file->store('images', 'public'); // Store in 'public/images'
-                
-                // Log file path
-                Log::info('File Path:', ['file_path' => $filePath]);
     
                 if (!$filePath) {
                     throw new \Exception('Failed to store file.');
@@ -69,11 +62,12 @@ class uploadMultiImageController extends Controller
             }
     
             DB::commit();
-            return response()->json(['success' => 'Files uploaded successfully.']);
+            toastr()->success('Upload Images Successfully!');
+            return redirect()->back();
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('File upload failed:', ['error' => $e->getMessage()]);
-            return response()->json(['error' => 'File upload failed. ' . $e->getMessage()], 500);
+            toastr()->error('Upload Images Not Successfully!');
+            return redirect()->back();
         }
     }
 
@@ -91,6 +85,31 @@ class uploadMultiImageController extends Controller
 
         return response()->json(['images' => $imageData]);
     }
+    public function deleteImage(Request $request)
+{
+    $request->validate([
+        'url' => 'required|string',
+    ]);
+
+    $url = $request->input('url');
+    $filename = basename($url);
+    
+    // Delete from storage
+    $filePath = 'images/' . $filename;
+    if (Storage::exists($filePath)) {
+        Storage::delete($filePath);
+    }
+
+    // Delete from database
+    $image = uploadMultiImage::where('path', $filePath)->first();
+    if ($image) {
+        $image->delete();
+    }
+
+    return response()->json(['success' => true]);
+}
+
+
 
     
    
