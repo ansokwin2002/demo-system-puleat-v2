@@ -1,4 +1,5 @@
-@extends ('backend.master')
+@extends('backend.master')
+
 @section('content')
 
 <div class="main-wrapper main-wrapper-1">
@@ -20,52 +21,74 @@
         <section class="section">
             <!-- [header-------------------------] -->
             <div class="section-header">
-                <h1>Appointments</h1>
+                <h1>Patient Service History</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="#">Appointments</a></div>
-                    <div class="breadcrumb-item">Set Appointments</div>
+                    <div class="breadcrumb-item"><a href="#">Patient</a></div>
+                    <div class="breadcrumb-item">Patient Service History</div>
                 </div>
             </div>
             <!-- [header-------------------------] -->
 
-            <!-- [Service_table-------------------------] -->
-                <div class="row mt-4">
-                    <div class="col-12">
-                        <div class="card p-4">
-                            <div class="card-body">
-                                <form action="{{ route('appointments.set') }}" method="POST">
-                                    @csrf
-
-                                    <div class="form-group">
-                                        <label for="patient">Select Patient</label>
-                                        <select name="patient_id" id="patient" class="form-control select2" required>
-                                            <option value="">Select a Patient</option>
-                                            @foreach($patients as $patient)
-                                                <option value="{{ $patient->id }}">{{ $patient->name }} ({{ $patient->telephone }})</option>
+            <!--[Patient_table-------------------------]-->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card p-4">
+                        <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped dataTable" id="table_service">
+                                <thead class="bg-primary">
+                                    <tr>
+                                        <th class="text-white">Invoice ID</th>
+                                        <th class="text-white">Date</th>
+                                        <th class="text-white">Doctor</th>
+                                        <th class="text-white">Patient</th>
+                                        <th class="text-white">Service</th>
+                                        <th class="text-white">Next Appointment</th>
+                                        <th class="text-white">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                @foreach ($patientHistories as $patientHistory)
+                                    @php
+                                      
+                                        $paymentData = $patientHistory->patient_payment;
+                                        $doctorName = $patientHistory->doctor->name ?? '';
+                                        $patientName = $patientHistory->patient->name ?? '';
+                                        $services = $paymentData['services'] ?? [];
+                                    @endphp
+                                    <tr class="row_service_detail">
+                                        <td>{{ $patientHistory->invoice_id }}</td>
+                                        <td>{{ $paymentData['date'] ?? '' }}</td>
+                                        <td>{{ $doctorName }}</td>
+                                        <td>{{ $patientName }}</td>
+                                        <td>
+                                            @foreach($services as $service)
+                                                {{ $service['service_name'] ?? 'N/A' }}<br>
                                             @endforeach
-                                        </select>
-                                    </div>
+                                        </td>
+                                        <td>{{ $paymentData['next_appointment_date'] ?? '' }}</td>
+                                        <td class="td-action">
+                                            <button class="btn btn-danger" onclick="swal('Cannot Delete', 'Appointment can only be updated after creation !', 'error');"><i class="fa fa-trash"></i></button>
+                                            <button class="btn btn-warning btn_edit_appointment" 
+                                                data-toggle="modal" 
+                                                data-target="#fire-modal-appointment"
+                                                data-id="{{ $patientHistory->id }}"
+                                                data-date="{{ $paymentData['next_appointment_date'] }}">
+                                                <i class="fa fa-edit"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
 
-                                    <div class="form-group">
-                                        <label for="appointment_date">Appointment Date</label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text">
-                                                    <i class="fas fa-calendar"></i>
-                                                </div>
-                                            </div>
-                                            <input type="text" name="appointment_date" class="form-control datepicker" id="date" required>
-                                        </div>
-                                    </div>
-
-                                    <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Set Appointment</button>
-                                </form>
-                            </div>
                         </div>
                     </div>
                 </div>
-            <!-- [Service_table-------------------------] -->
+            </div>
+            <!--[Patient_table-------------------------]-->
 
         </section>
     </div>
@@ -76,10 +99,44 @@
         @include('backend.body.footer')
     </footer>
     <!-- [footer------------------------------] -->
-    
+    <!-- [Model Detail Patient Appointment-------------------------] -->
+    <div class="modal fade" id="fire-modal-appointment" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog custom-modal-service-detail">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Appointment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            <form id="editAppointmentForm" method="post">
+                @csrf
+                @method('PUT') <!-- Added method spoofing -->
+                <input type="hidden" name="id" id="appointment-id">
+                <div class="form-group">
+                    <label for="name">Next Appointment:</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fas fa-calendar"></i>
+                            </div>
+                        </div>
+                        <input type="text" name="appointment_date" id="appointment-date" class="form-control datepicker" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Update <i class="fa fa-edit"></i></button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
 
+            </div>
+        </div>
+    </div>
 </div>
 
-
+    <!-- [Model Detail Patient Appointment-------------------------] -->
+</div>
 
 @endsection

@@ -3,39 +3,42 @@
 namespace App\Http\Controllers\Notification;
 
 use App\Http\Controllers\Controller;
-use App\Models\Patient;
+use App\Models\PatientHistory;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 
 class NotificationController extends Controller
 {
     public function index()
     {
         // Get today's date
-        $today = Carbon::today();
-
-        // Fetch patients with next_appointment matching today's date
-        $appointmentsToday = Patient::whereDate('next_appointment', $today->format('Y-m-d'))
-            ->with(['doctor', 'histories']) // Load doctor and histories relationships
+        $today = Carbon::today()->format('Y-m-d');
+        // Retrieve patient histories with related doctor and patient
+        $patientHistories = PatientHistory::with(['doctor', 'patient'])
+            ->whereRaw('JSON_EXTRACT(patient_payment, "$.next_appointment_date") = ?', [$today])
             ->get();
-
         // Prepare data for the view
-        $appointmentNotifications = $appointmentsToday->map(function ($patient) {
-            $nextAppointmentDate = Carbon::parse($patient->next_appointment);
+        $appointmentNotifications = $patientHistories->map(function ($history) {
+            // Access related models
+            $doctorName = $history->doctor ? $history->doctor->name : 'No Doctor Assigned';
+            $patientName = $history->patient ? $history->patient->name : 'Unknown Patient';
+            $patientPhone = $history->patient ? $history->patient->telephone : 'N/A';
 
-            // Extract service data from patient histories
-            $services = $patient->histories->flatMap(function ($history) {
-                // Decode the patient_payment JSON column
-                $data = $history->patient_payment;
-                return $data['services'] ?? [];
-            });
+            // Access next appointment date from patient_payment JSON
+            $nextAppointmentDate = isset($history->patient_payment['next_appointment_date']) 
+                ? Carbon::parse($history->patient_payment['next_appointment_date']) 
+                : null;
+
+            // Convert services to a collection for further operations
+            $services = collect($history->patient_payment['services'] ?? []);
 
             return [
-                'patient_id' => $patient->id,
-                'patient_name' => $patient->name,
-                'patient_phone' => $patient->telephone,
-                'doctor_name' => $patient->doctor->name ?? 'No Doctor Assigned',
-                'register_date' => $patient->created_at->format('Y-m-d'),
-                'next_appointment' => $nextAppointmentDate->format('Y-m-d'),
+                'patient_id' => $history->patient_id,
+                'patient_name' => $patientName,
+                'patient_phone' => $patientPhone,
+                'doctor_name' => $doctorName,
+                'register_date' => $history->created_at->format('Y-m-d'),
+                'next_appointment' => $nextAppointmentDate ? $nextAppointmentDate->format('Y-m-d') : 'N/A',
                 'services' => $services
             ];
         });

@@ -7,38 +7,28 @@
     </div>
     <ul class="sidebar-menu">
         <li class="menu-header">Dashboard</li>
-
-        <!-- [dashboard------------------------------] -->
-
-            <li class="{{ Route::is('dashboard*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('dashboard') }}"><i class="fa-solid fa-house-medical"></i> <span>Dashboard</span></a></li>   
-
-            <li class="{{ Route::is('add_Patient*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('add_Patient') }}"><i class="fa-solid fa-user-nurse"></i> <span>Add Patient</span></a></li>   
-            <li class="{{ Route::is('view_Payment*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('view_Payment') }}"><i class="fa-solid fa-money-bill"></i> <span>Payment</span></a></li>   
-        <!-- [dashboard------------------------------] -->
-
-        <!-- [patient------------------------------------] -->
-
-        <!-- [notification----------------------------------------] -->
-            <li class="{{ Route::is('notifications.index*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('notifications.index') }}"><i class="fa-solid fa-bell"></i> <span>Notification</span></a></li>   
-        <!-- [notification----------------------------------------] -->
-            <li class="dropdown {{ Route::is('list_Patient*','patient_service_history*') ? 'active' : '' }}">
-                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown">
-                    <i class="fa-solid fa-user-plus"></i>
-                    <span>Patient</span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li class="{{ Route::is('list_Patient*') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('list_Patient') }}">List Patient</a>
-                    </li>
-                    <li class="{{ Route::is('patient_service_history*') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('patient_service_history') }}">History Patient</a>
-                    </li>
-                
-                </ul>
-            </li>
-        <!-- [patient------------------------------------] -->
-
-
+        <li class="{{ Route::is('dashboard*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('dashboard') }}"><i class="fa-solid fa-house-medical"></i> <span>Dashboard</span></a></li>   
+        <li class="{{ Route::is('add_Patient*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('add_Patient') }}"><i class="fa-solid fa-user-nurse"></i> <span>Add Patient</span></a></li>   
+        <li class="{{ Route::is('view_Payment*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('view_Payment') }}"><i class="fa-solid fa-money-bill"></i> <span>Payment</span></a></li>   
+        <li class="{{ Route::is('notifications.index*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('notifications.index') }}"><i class="fa-solid fa-bell"></i> <span>Notification</span></a></li>   
+        <li class="{{ Route::is('appointments.form*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('appointments.form') }}"><i class="fa-solid fa-calendar-days"></i> <span>Appointment</span></a></li>   
+        <li class="{{ Route::is('uploadMultiImage.index*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('uploadMultiImage.index') }}"><i class="fa-solid fa-upload"></i> <span>Upload</span></a></li>   
+        
+        <li class="dropdown {{ Route::is('list_Patient*','patient_service_history*') ? 'active' : '' }}">
+            <a href="#" class="nav-link has-dropdown" data-toggle="dropdown">
+                <i class="fa-solid fa-user-plus"></i>
+                <span>Patient</span>
+            </a>
+            <ul class="dropdown-menu">
+                <li class="{{ Route::is('list_Patient*') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('list_Patient') }}">List Patient</a>
+                </li>
+                <li class="{{ Route::is('patient_service_history*') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('patient_service_history') }}">History Patient</a>
+                </li>
+            
+            </ul>
+        </li>
         <!-- [service-----------------------------------------] -->
             <li class="dropdown {{ Route::is('view_Service*', 'add_Service*') ? 'active' : '' }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown">
@@ -46,11 +36,11 @@
                     <span>Services</span>
                 </a>
                 <ul class="dropdown-menu">
+                    <li class="{{ Route::is('add_Service*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('add_Service') }}">Create Service</a>
+                    </li>
                     <li class="{{ Route::is('view_Service*') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('view_Service') }}">List Service</a>
-                    </li>
-                    <li class="{{ Route::is('add_Service*') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('add_Service') }}">Add Service</a>
                     </li>
                 </ul>
             </li>

@@ -29,4 +29,8 @@ class PatientHistory extends Model
     {
         return $this->belongsTo(Cashier::class);
     }
+    public function images()
+    {
+        return $this->hasMany(uploadMultiImage::class, 'invoice_id');
+    }
 }

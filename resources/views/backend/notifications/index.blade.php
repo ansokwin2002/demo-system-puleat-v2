@@ -71,7 +71,7 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-success">read</button>
+                                                    <button class="btn btn-danger btn_hide_notification"><i class="fa fa-trash"></i></button>
                                                 </td>
                                             </tr>
                                             @endforeach

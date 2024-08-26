@@ -8,31 +8,12 @@ use Illuminate\Http\Request;
 
 class PatientHistoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    // public function patientServiceHistory()
-    // {
-    //     $patientHistories = PatientHistory::all(); 
-    //     return view('backend.patient.patient_service_history', compact('patientHistories'));
-    // }    
+    
     public function patientServiceHistory()
     {
-        // Retrieve patient histories with related doctor, cashier, and patient
         $patientHistories = PatientHistory::with(['doctor', 'cashier', 'patient'])->get();
-        // dd($patientHistories);
         return view('backend.patient.patient_service_history', compact('patientHistories'));
     }
-    
-
 
     /**
      * Store a newly created resource in storage.

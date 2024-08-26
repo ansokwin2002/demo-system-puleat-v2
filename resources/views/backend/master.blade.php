@@ -32,6 +32,13 @@
     <link rel="stylesheet" href="{{ asset('backend/assets/modules/jquery-selectric/selectric.css') }}">
   <!-- [editor-------------------------------] -->
 
+  <!-- [dropzone----------------------------------] -->
+    <link rel="stylesheet" href="{{ asset('backend/assets/modules/dropzonejs/dropzone.css') }}">
+  <!-- [dropzone----------------------------------] -->
+  <!-- [Gallary-------------------------------------] -->
+    <link rel="stylesheet" href="{{ asset('backend/assets/modules/chocolat/dist/css/chocolat.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  <!-- [Gallary-------------------------------------] -->
 
   <link rel="stylesheet" href="{{ asset('backend/assets/modules/datatables/datatables.min.css') }}">
 
@@ -81,6 +88,15 @@
     <script src="{{ asset('backend/assets/modules/jquery-selectric/jquery.selectric.min.js') }}"></script>
   <!-- [editor--------------------------------------] -->
 
+  <!-- [dropzone---------------------------------] -->
+    <script src="{{ asset('backend/assets/modules/dropzonejs/min/dropzone.min.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/page/components-multiple-upload.js') }}"></script>
+  <!-- [dropzone---------------------------------] -->
+
+  <!-- [Gallary--------------------------------------] -->
+    <script src="{{ asset('backend/assets/modules/chocolat/dist/js/jquery.chocolat.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+  <!-- [Gallary--------------------------------------] -->
 
 
   <!-- Initialize DataTable -->
@@ -98,6 +114,11 @@
   
   <script>
       $(document).ready(function() {
+
+    // [appointment_date-----------------------------]
+        $('#appointmentNotificationModal').modal('show');
+    // [appointment_date-----------------------------]
+
 
         // // [loading-------------------------------]
         //     $('.loading').show();
@@ -119,7 +140,7 @@
 
         // [summernote-------------------------------]
             $('.summernote').summernote({
-                height: 200 
+                height: 100 
             });
         // [summernote-------------------------------]
 
@@ -318,6 +339,9 @@
                 let date = $('#date').val();
                 let doctorId = $('#doctor').val(); // Ensure this is the doctor_id
                 let cashierId = $('#cashier-select').val();
+                let next_appointment_date = $('#next_appointment_date').val();
+                let type_service = $('#type_service').val();
+                let patient_noted = $('#patient_noted').val();
                 let customer = $('#patient-select option:selected').text();
                 let grand_total = $('#grand_total').text().trim().replace('$', '');
                 let amount_paid = $('#amount_paid').text().trim().replace('$', '');
@@ -346,12 +370,15 @@
 
                 // Organize data to be sent, including the CSRF token
                 let paymentData = {
-                    _token: csrfToken, // Include the CSRF token
+                    _token: csrfToken,
                     patient_id: patientId,
-                    doctor_id: doctorId, // Include doctor_id here
+                    doctor_id: doctorId,
                     cashier_id: cashierId, 
                     patient_payment: {
                         patientId: patientId,
+                        next_appointment_date:next_appointment_date,
+                        type_service:type_service,
+                        patient_noted:patient_noted,
                         date: date,
                         customer: customer,
                         grand_total: grand_total,
@@ -681,6 +708,53 @@
             // [Edit Cashier----------------------------]
         // [page-list-cashier-----------------------------------]
 
+        // [page-list-appointment-----------------------------------]
+            // [Edit appointment----------------------------]
+
+            $('.btn_edit_appointment').on('click', function() {
+                var id = $(this).data('id');
+                var date = $(this).data('date');
+                // Set the form values
+                $('#appointment-id').val(id);
+                $('#appointment-date').val(date);
+
+                // Update the form action URL
+                var formAction = "{{ route('appointments.update', ':id') }}".replace(':id', id);
+                $('#editAppointmentForm').attr('action', formAction);
+
+                // Show the modal
+                $('#fire-modal-appointment').modal('show');
+        
+            });
+
+            // [Edit appointment----------------------------]
+        // [page-list-appointment-----------------------------------]
+
+        // [Hide_Notification---------------------------------]
+            $('.btn_hide_notification').on('click', function() {
+                // Find the closest row and hide it
+                $(this).closest('tr').hide();
+                
+                // Optionally, you can send an AJAX request to mark the notification as "hidden" if needed
+                // var id = $(this).data('id');
+                // $.ajax({
+                //     url: '/path/to/your/route/' + id,
+                //     type: 'POST',
+                //     data: {
+                //         _token: '{{ csrf_token() }}',
+                //         // Additional data if needed
+                //     },
+                //     success: function(response) {
+                //         // Handle success response
+                //     },
+                //     error: function(xhr) {
+                //         // Handle error response
+                //     }
+                // });
+            });
+        // [Hide_Notification---------------------------------]
+
+        
 
 
       });
@@ -697,6 +771,7 @@
     // Configure Axios to include the CSRF token in all requests
     axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
   </script>
+   @stack('scripts')
 
 </body>
 </html>

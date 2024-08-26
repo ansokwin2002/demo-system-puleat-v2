@@ -14,57 +14,43 @@ class AppointmentController extends Controller
 {
     public function showForm()
     {
-        // Fetch all patient histories with patient_payment records
-        $histories = PatientHistory::whereNotNull('patient_payment')->get();
-
-        // Map to get unique patients from histories
-        $patients = $histories->map(function ($history) {
-            return Patient::find($history->patient_id);
-        })->filter()->unique('id');
-
-        return view('backend.appointments.form', compact('patients'));
+        $patientHistories = PatientHistory::with(['doctor', 'cashier', 'patient'])->get();
+        foreach ($patientHistories as $patientHistory) {
+            if (is_string($patientHistory->patient_payment)) {
+                $patientHistory->patient_payment = json_decode($patientHistory->patient_payment, true);
+            }
+        }
+        return view('backend.appointments.form', compact('patientHistories'));
     }
 
 
-    public function setAppointment(Request $request)
+
+    public function update(Request $request, $id)
     {
         $request->validate([
-            'patient_id' => 'required|exists:patients,id',
-            'appointment_date' => 'required|date'
+            'appointment_date' => 'required|date',
         ]);
 
-        // Store the appointment data
-        $appointment = Appointment::create([
-            'patient_id' => $request->patient_id,
-            'appointment_date' => $request->appointment_date
-        ]);
+        $patientHistory = PatientHistory::findOrFail($id);
 
-        // Notify about the new appointment
-        $this->createNotification($appointment);
+        $patientPayment = $patientHistory->patient_payment;
 
-        toastr()->success('Create Appointment Successfully!');
+        if (is_string($patientPayment)) {
+            $patientPayment = json_decode($patientPayment, true);
+        }
+
+        if (!is_array($patientPayment)) {
+            $patientPayment = [];
+        }
+
+        $patientPayment['next_appointment_date'] = $request->input('appointment_date');
+        $patientHistory->patient_payment = $patientPayment;
+        $patientHistory->save();
+
+        toastr()->success('Appointment Updated Successfully!');
         return redirect()->route('appointments.form');
     }
-    protected function createNotification(Appointment $appointment)
-    {
-        // Retrieve patient details
-        $patient = Patient::find($appointment->patient_id);
 
-        // Get the latest patient history for the patient
-        $latestHistory = PatientHistory::where('patient_id', $patient->id)
-                                       ->latest('created_at')
-                                       ->first();
 
-        // Extract doctor from patient history
-        $doctor = $latestHistory->patient_payment['doctor'] ?? 'Unknown';
 
-        // Create a notification entry (Assuming you have a notifications table)
-        DB::table('notifications')->insert([
-            'patient_id' => $patient->id,
-            'message' => "Patient {$patient->name} (Telephone: {$patient->telephone}) has an appointment scheduled on {$appointment->appointment_date}. The patient was previously seen by Dr. {$doctor}.",
-            'notification_date' => now()->toDateString(),
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-    }
 }

@@ -7,6 +7,7 @@ use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\PatientHistory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -41,49 +42,45 @@ class DashboardController extends Controller
     // [Patient-----------------------------------------------------]
 
     // [Service-----------------------------------------------------]
-            $serviceTotals = [
-                'General' => array_fill_keys(array_values($months), 0),
-                'Implant' => array_fill_keys(array_values($months), 0),
-                'Ortho' => array_fill_keys(array_values($months), 0)
-            ];
+        $serviceTotals = [
+            'General' => array_fill_keys(array_values($months), 0),
+            'Implant' => array_fill_keys(array_values($months), 0),
+            'Ortho' => array_fill_keys(array_values($months), 0)
+        ];
+        // Initialize the sumServiceData array to store the total of all services for each month
+        $sumServiceData = array_fill_keys(array_values($months), 0);
 
-            // Initialize the sumServiceData array to store the total of all services for each month
-            $sumServiceData = array_fill_keys(array_values($months), 0);
+        $patientHistories = PatientHistory::whereYear('created_at', $currentYear)
+            ->with('patient') 
+            ->get();
+        foreach ($patientHistories as $history) {
+            $patient = $history->patient;
 
-            $patientHistories = PatientHistory::whereYear('created_at', $currentYear)
-                ->with('patient') 
-                ->get();
+            if ($patient) {
+                // Decode patient_payment JSON data
+                $paymentData = is_array($history->patient_payment)
+                    ? $history->patient_payment
+                    : json_decode($history->patient_payment, true);
 
-            foreach ($patientHistories as $history) {
-                $patient = $history->patient;
-
-                if ($patient && in_array($patient->type_service, ['General', 'Implant', 'Ortho'])) {
-                    $paymentData = is_array($history->patient_payment)
-                        ? $history->patient_payment
-                        : json_decode($history->patient_payment, true);
-
+                if (isset($paymentData['type_service']) && in_array($paymentData['type_service'], ['General', 'Implant', 'Ortho'])) {
                     if (isset($paymentData['date']) && isset($paymentData['grand_total'])) {
                         $date = \Carbon\Carbon::parse($paymentData['date']);
                         $monthKey = $date->format('m');
                         $monthName = $months[$monthKey]; 
-
                         // Increment the total for the appropriate service type and month
-                        $serviceTotals[$patient->type_service][$monthName] += floatval($paymentData['grand_total']);
-
+                        $serviceTotals[$paymentData['type_service']][$monthName] += floatval($paymentData['grand_total']);
                         // Add to the sumServiceData for the corresponding month
                         $sumServiceData[$monthName] += floatval($paymentData['grand_total']);
                     }
                 }
             }
-
-            // Prepare the data for frontend by mapping the month names directly
-            $generalData = $serviceTotals['General'];
-            $implantData = $serviceTotals['Implant'];
-            $orthoData = $serviceTotals['Ortho'];
-
-            // sumServiceData now contains the total of all three services for each month
-            $sumData = $sumServiceData;
-
+        }
+        // Prepare the data for frontend by mapping the month names directly
+        $generalData = $serviceTotals['General'];
+        $implantData = $serviceTotals['Implant'];
+        $orthoData = $serviceTotals['Ortho'];
+        // sumServiceData now contains the total of all three services for each month
+        $sumData = $sumServiceData;
     // [Service-----------------------------------------------------]
 
     // [Doctor-----------------------------------------------------]
@@ -126,6 +123,47 @@ class DashboardController extends Controller
 
         $dataForView = $doctorTotals;
 
+
+
+
+        // Get today's date
+        $today = Carbon::today()->format('Y-m-d');
+        
+        // Retrieve patient histories with related doctor and patient
+        $patientHistories = PatientHistory::with(['doctor', 'patient'])
+            ->whereRaw('JSON_EXTRACT(patient_payment, "$.next_appointment_date") = ?', [$today])
+            ->get();
+        
+        // Prepare data for the view
+        $appointmentNotifications = $patientHistories->map(function ($history) {
+            // Access related models
+            $doctorName = $history->doctor ? $history->doctor->name : 'No Doctor Assigned';
+            $patientName = $history->patient ? $history->patient->name : 'Unknown Patient';
+            $patientPhone = $history->patient ? $history->patient->telephone : 'N/A';
+
+            // Access next appointment date from patient_payment JSON
+            $nextAppointmentDate = isset($history->patient_payment['next_appointment_date']) 
+                ? Carbon::parse($history->patient_payment['next_appointment_date']) 
+                : null;
+
+            // Convert services to a collection for further operations
+            $services = collect($history->patient_payment['services'] ?? []);
+
+            return [
+                'patient_id' => $history->patient_id,
+                'patient_name' => $patientName,
+                'patient_phone' => $patientPhone,
+                'doctor_name' => $doctorName,
+                'register_date' => $history->created_at->format('Y-m-d'),
+                'next_appointment' => $nextAppointmentDate ? $nextAppointmentDate->format('Y-m-d') : 'N/A',
+                'services' => $services
+            ];
+        });
+
+        // Count of today's appointments
+        $appointmentCount = $appointmentNotifications->count();
+
+
         return view('backend.dashboard', [
             'year' => $currentYear,
             'monthlyPatientCounts' => $orderedPatientCounts,
@@ -135,10 +173,14 @@ class DashboardController extends Controller
             'orthoData' => $orthoData,
             'sumData' => $sumData,
             'doctorData' => $dataForView, 
+            'appointmentNotifications' => $appointmentNotifications,
+            'appointmentCount' => $appointmentCount
         ]);
 
 
         }
     // [Doctor-----------------------------------------------------]
+
+    
   
 }

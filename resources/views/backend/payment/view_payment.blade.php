@@ -52,6 +52,7 @@
                                             </div>
                                         </div>
                                         <!-- Second Form (Doctor) -->
+       
                                         <div class="form-group mb-2">
                                             <div class="d-flex align-items-center">
                                                 <h6 class="mb-0 mr-2" style="flex: 0 0 100px;">Doctor :</h6>
@@ -59,14 +60,14 @@
                                                     <div class="input-group">
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text">
-                                                                <i class="fas fa-user-md"></i>
+                                                                <i class="fa-solid fa-user-doctor"></i>
                                                             </div>
-                                                        </div> 
+                                                        </div>
                                                         @php 
                                                             $doctors = App\Models\Doctor::all();
                                                         @endphp
-                                                        <select class="form-control select2" name="doctor_id" id="doctor">
-                                                            <option value="" disabled>Select a Doctor</option>
+                                                        <select class="form-control " name="doctor_id" id="doctor">
+                                                            <!-- <option value="" disabled>Select a Doctor</option> -->
                                                             @foreach ($doctors as $doctor)
                                                                 <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
                                                             @endforeach
@@ -143,7 +144,56 @@
                                                 </div>
                                             </div>
                                         <!-- [cashier-----------------------------------] -->
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 col-sm-6 col-md-4">
+                                        <!-- First Date Form -->
+                                        <div class="form-group mb-2">
+                                            <div class="d-flex align-items-center">
+                                                <h6 class="mb-0 mr-2" style="flex: 0 0 100px;">Next :</h6>
+                                                <div class="flex-grow-1">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text">
+                                                                <i class="fas fa-calendar"></i>
+                                                            </div>
+                                                        </div>
+                                                        <input type="text" name="next_appointment_date" id="next_appointment_date" class="form-control datepicker">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-md-8">
+                                        <div class="container-fluid pl-0 pr-0">
+                                        <!-- [patient-----------------------------------] -->
+                                            <div class="row">
+                                                <div class="col-12 col-sm-5 col-md-8 col-lg-12 d-flex">
+                                                    <div class="title_customer">
+                                                        <h6 class="pt-2">Type Service :</h6>
+                                                    </div>
+                                                    <div class="box_select_customer">
+                                                        <div class="card_customer">
+                                                            <div class="icon_customer">
+                                                                <i class="fa fa-heart"></i>
+                                                            </div>
+                                                            <div class="select_customer">
+                                                                <select name="type_service" id="type_service" class="form-control">
+                                                                    <option value="General" data-days="60">General</option>
+                                                                    <option value="Implant" data-days="60">Implant</option>
+                                                                    <option value="Ortho" data-days="30">Ortho</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <!-- [patient-----------------------------------] -->
 
+                                        
                                         </div>
                                     </div>
                                     
@@ -226,8 +276,20 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!-- [patient-noted-----------------------------------] -->
+                                    <div class="form-group row">
+                                        <div class="col-sm-12 col-md-12 col-lg-12">
+                                            <div class="flex-grow-1">
+                                                <textarea name="patient_noted" id="patient_noted" class="summernote"></textarea>
+                                            </div>
+                                            <div class="invalid-feedback">
+                                                Please fill Type Patient!
+                                            </div>
+                                        </div>
+                                    </div>
+                                <!-- [patient-noted-----------------------------------] -->
                             <!-- [table_service-----------------------] -->
-                            <div class="form-group mb-2">
+                            <div class="form-group">
                                 <button class="btn btn-primary" id="save_patient_history"><i class="fa fa-save"></i> Submit</button>
                             </div>
 

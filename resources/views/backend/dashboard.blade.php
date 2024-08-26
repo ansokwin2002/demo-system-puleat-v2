@@ -231,7 +231,7 @@
                     datasets.push({
                         label: doctorName,
                         data: sortedMonths.map(month => doctorData[doctorName][month] || 0),
-                        backgroundColor: getRandomColor(), // Generate random colors for each doctor
+                        backgroundColor: getRandomColor(), 
                         borderColor: 'rgba(0, 0, 0, 1)',
                         borderWidth: 1
                     });
@@ -287,8 +287,32 @@
 
         // [Doctor---------------------------------------------]
 
-            
+        document.addEventListener('DOMContentLoaded', function () {
+            var appointmentCount = @json($appointmentCount);
+
+            if (appointmentCount > 0) {
+                swal({
+                    title: 'Today\'s Appointments',
+                    text: `Total appointments for today: ${appointmentCount}`,
+                    icon: 'success',
+                    button: 'Close'
+                });
+            } else {
+                swal({
+                    title: 'No Appointments',
+                    text: 'There are no appointments scheduled for today.',
+                    icon: 'info',
+                    button: 'Close'
+                });
+            }
+        });
+
     </script>
+
+
+
+
+
 
 </div>
 

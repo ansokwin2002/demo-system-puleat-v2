@@ -28,11 +28,7 @@ class PatientController extends Controller
             'address'      => 'required|string|max:255',
             'telephone'    => 'required|string|max:15',
             'date'         => 'required|date',
-            'type_service' => 'required|string|max:255',
             'type_patient' => 'required|string|max:255',
-            'patient_noted'=> 'nullable|string|max:10000',
-            'next_appointment_date' => 'required|date',
-            'doctor_id'    => 'required|exists:doctors,id', 
         ]);
 
         $patient = Patient::create([
@@ -42,11 +38,7 @@ class PatientController extends Controller
             'address'       => $validatedData['address'],
             'telephone'     => $validatedData['telephone'],
             'date'          => $validatedData['date'],
-            'type_service'  => $validatedData['type_service'],
             'type_patient'  => $validatedData['type_patient'],
-            'patient_noted' => $validatedData['patient_noted'],
-            'next_appointment' => $validatedData['next_appointment_date'],
-            'doctor_id'     => $validatedData['doctor_id'], 
         ]);
         toastr()->success('Add Patient Successfully!');
         return redirect()->route('view_Payment', ['selected_patient' => $patient->id]);
