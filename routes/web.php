@@ -81,7 +81,6 @@ use Illuminate\Support\Facades\Route;
             Route::get('/add-patient','add_Patient')->name('add_Patient');
             Route::get('/list-patient','view_Patient')->name('list_Patient');
             Route::post('/create-patient','create_Patient')->name('create_Patient');
-            Route::get('/get-patient-noted','getPatientNoted')->name('patient_noted');
         });
     });
 // [patient_controller----------------------------]
@@ -93,6 +92,7 @@ use Illuminate\Support\Facades\Route;
             Route::get('/patient-service-history','patientServiceHistory')->name('patient_service_history');
             Route::get('/patient-details/{id}','getPatientDetails')->name('get_patient_details');
             Route::get('/invoice/{invoiceId}','showInvoice')->name('show_invoice');
+            Route::get('/get-patient-noted','getPatientNoted')->name('patient_noted');
         });
     });
 // [patient_history_controller----------------------------]

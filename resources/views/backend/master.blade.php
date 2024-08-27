@@ -462,10 +462,10 @@
                                         <td>${i++}</td>
                                         <td>${service.service_name}</td>
                                         <td>${service.service_unit}</td>
-                                        <td>${service.service_price}</td>
-                                        <td>${service.subtotal}</td>
-                                        <td>${service.discount_percent ? service.discount_percent + '%' : ''}</td>
-                                        <td>${service.discount_dollar ? '$' + service.discount_dollar : ''}</td>
+                                        <td>${service.service_price ? '$ ' + service.service_price : ''}</td>
+                                        <td>${service.subtotal ? '$ ' + service.subtotal : ''}</td>
+                                        <td>${service.discount_percent ? service.discount_percent + ' %' : ''}</td>
+                                        <td>${service.discount_dollar ? '$ ' + service.discount_dollar : ''}</td>
                                     </tr>
                                 `);
                             });
@@ -540,7 +540,7 @@
 
             // [patient-detail-------------------------]
 
-                $('#table_service').on('click', '.row_patient_detail', function(event) {
+                $('#table_service').on('click', '.row_service_detail', function(event) {
                     if ($(event.target).closest('.td-action').length > 0) {
                         return; // Exit the function if an action td-action was clicked
                     }

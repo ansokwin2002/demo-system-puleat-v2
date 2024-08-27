@@ -68,27 +68,15 @@ class PatientHistoryController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function getPatientNoted(Request $request)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $patient = PatientHistory::find($request->id);
+        if ($patient) {
+            $patientPayment = $patient->patient_payment ?? [];
+            $patientNoted = $patientPayment['patient_noted'] ?? 'No notes found.';
+            return response()->json(['patient_noted' => $patientNoted]);
+        } else {
+            return response()->json(['patient_noted' => 'No notes found.']);
+        }
     }
 }

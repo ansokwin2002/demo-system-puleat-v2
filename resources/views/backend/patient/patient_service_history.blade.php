@@ -124,16 +124,17 @@
                                             <td>{{ $index + 1 }}</td>
                                             <td>{{ $service['service_name'] }}</td>
                                             <td>{{ $service['service_unit'] }}</td>
-                                            <td>${{ $service['service_price'] }}</td>
-                                            <td>${{ $service['subtotal'] }}</td>
-                                            <td>{{ $service['discount_percent'] }}</td>
-                                            <td>${{ $service['discount_dollar'] ?? '' }}</td>
+                                            <td>$ {{ $service['service_price'] ?? '' }}</td>
+                                            <td>$ {{ $service['subtotal'] ?? '' }}</td>
+                                            <td>{{ $service['discount_percent'] ?? '' }} %</td>
+                                            <td>$ {{ $service['discount_dollar'] ?? '' }}</td>
                                         </tr>
                                     @endforeach
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
+                    <textarea class="summernote" name="" id="patientsNotedContent"></textarea> 
                 </div>
             </div>
         </div>

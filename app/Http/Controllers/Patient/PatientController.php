@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Patient;
 
 use App\Http\Controllers\Controller;
 use App\Models\Patient;
+use App\Models\PatientHistory;
 use Illuminate\Http\Request;
 
 class PatientController extends Controller
@@ -56,16 +57,7 @@ class PatientController extends Controller
     /**
      * Display the specified resource.
      */
-    public function getPatientNoted(Request $request)
-    {
-        $patient = Patient::find($request->id);
 
-        if ($patient) {
-            return response()->json(['patient_noted' => $patient->patient_noted]);
-        } else {
-            return response()->json(['patient_noted' => 'No notes found.']);
-        }
-    }
 
     /**
      * Show the form for editing the specified resource.
