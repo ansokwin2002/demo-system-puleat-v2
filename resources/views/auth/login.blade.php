@@ -83,7 +83,7 @@
           Don't have an account? <a href="{{ route('register') }}">Create One</a>
         </div>
         <div class="simple-footer">
-          Copyright &copy; Stisla 2018
+          Copyright by An Sokwin ({{ date('Y') }});
         </div>
       </div>
     </div>

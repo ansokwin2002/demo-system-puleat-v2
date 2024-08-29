@@ -221,44 +221,6 @@
     });
 // [get_row_multi_image---------------------------------]
 
-// [view_all_image---------------------------------]
-    // document.addEventListener('DOMContentLoaded', function () {
-    //     const viewImagesModal = document.getElementById('view-images-modal');
-    //     const imageGallery = viewImagesModal.querySelector('.image-gallery');
-
-    //     // Function to open modal and load images
-    //     function openModalWithImages(invoiceId) {
-    //         fetch(`/get-images/${invoiceId}`)
-    //             .then(response => response.json())
-    //             .then(data => {
-    //                 imageGallery.innerHTML = ''; // Clear previous images
-
-    //                 data.images.forEach(image => {
-    //                     const img = document.createElement('img');
-    //                     img.src = image.url; // URL of the image
-    //                     img.alt = 'Image';
-    //                     img.style.width = '100%'; // Adjust width as needed
-    //                     img.style.height = 'auto'; // Maintain aspect ratio
-
-    //                     imageGallery.appendChild(img);
-    //                 });
-
-    //                 $(viewImagesModal).modal('show'); // Show the modal
-    //             })
-    //             .catch(error => console.error('Error fetching images:', error));
-    //     }
-
-    //     // Handle button click separately
-    //     document.querySelectorAll('.view-images-btn').forEach(button => {
-    //         button.addEventListener('click', function (event) {
-    //             event.stopPropagation(); // Prevent the row click event from also triggering
-    //             const invoiceId = this.getAttribute('data-invoice-id');
-    //             openModalWithImages(invoiceId);
-    //         });
-    //     });
-    // });
-// [view_all_image---------------------------------]
-
 // [view-btn-image--------------------------------]
     document.addEventListener('DOMContentLoaded', function () {
         function loadImages(invoiceId) {
@@ -350,8 +312,7 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            galleryItem.remove(); // Remove image from gallery
-                            alert('Image deleted successfully');
+                            galleryItem.remove();
                         } else {
                             alert('Failed to delete image');
                         }

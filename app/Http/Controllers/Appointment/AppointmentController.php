@@ -48,7 +48,7 @@ class AppointmentController extends Controller
         $patientHistory->save();
 
         toastr()->success('Appointment Updated Successfully!');
-        return redirect()->route('appointments.form');
+        return redirect()->back();
     }
 
 

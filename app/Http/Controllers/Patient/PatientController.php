@@ -54,32 +54,34 @@ class PatientController extends Controller
         return view('backend.patient.view_patient');
     }
 
-    /**
-     * Display the specified resource.
-     */
-
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        //
+        $validatedData = $request->validate([
+            'name'         => 'required|string|max:255',
+            'age'          => 'required|numeric|min:0',
+            'sex'          => 'required|string|max:10',
+            'address'      => 'required|string|max:255',
+            'telephone'    => 'required|string|max:20',
+            'type_patient' => 'required|string|max:255',
+        ]);
+
+        $patient = Patient::find($id);
+
+        if (!$patient) {
+            toastr()->error('Patient not found!');
+            return redirect()->back();
+        }
+
+        $patient->name         = $validatedData['name'];
+        $patient->age          = $validatedData['age'];
+        $patient->sex          = $validatedData['sex'];
+        $patient->address      = $validatedData['address'];
+        $patient->telephone    = $validatedData['telephone'];
+        $patient->type_patient = $validatedData['type_patient'];
+        $patient->save();
+
+        toastr()->success('Patient updated successfully!');
+        return redirect()->back();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }

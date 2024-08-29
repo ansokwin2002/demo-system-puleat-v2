@@ -101,7 +101,8 @@
 
   <!-- Initialize DataTable -->
 
-    <script>
+  <script>
+    //[loading-------------------------------------------]
         document.addEventListener("DOMContentLoaded", function() {
             document.getElementById('loader').style.display = 'none';
         });
@@ -109,10 +110,8 @@
         window.addEventListener('beforeunload', function () {
             document.getElementById('loader').style.display = 'block';
         });
+    //[loading-------------------------------------------]
       
-    </script>
-  
-  <script>
       $(document).ready(function() {
 
     // [appointment_date-----------------------------]
@@ -754,6 +753,42 @@
             });
         // [Hide_Notification---------------------------------]
 
+         // [page-list-patient-----------------------------------]
+
+            // [Edit Patinet----------------------------]
+            $(document).ready(function() {
+            $('.btn_edit_patient').on('click', function() {
+                var id = $(this).data('id');
+                var name = $(this).data('name');
+                var age = $(this).data('age');
+                var sex = $(this).data('sex');
+                var address = $(this).data('address');
+                var telephone = $(this).data('telephone');
+                var type_patient = $(this).data('type_patient');
+
+                $('#patient-id').val(id);
+                $('#patient-name').val(name);
+                $('#patient-age').val(age);
+                $('#patient-address').val(address);
+                $('#patient-telephone').val(telephone);
+                $('#patient-type_patient').val(type_patient);
+
+                // Set the selected value for the dropdown
+                $('#patient-sex').val(sex).change();
+
+                // Update the form action URL to include the patient ID
+                var formAction = "{{ route('patient.update', ':id') }}";
+                formAction = formAction.replace(':id', id);
+                $('#editPatientForm').attr('action', formAction);
+
+                // Show the modal
+                $('#fire-modal-patient').modal('show');
+            });
+        });
+
+            // [Edit Patient----------------------------]
+
+        // [page-list-patient-----------------------------------]
         
 
 

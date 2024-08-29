@@ -64,10 +64,19 @@
                                                     <td>{{ $patient->telephone }}</td>
                                                     <td><span class="badge badge-secondary">{{ $patient->type_patient }}</td>
                                                     <td class="td-action">
-                                                        <button class="btn btn-danger">
+                                                        <button class="btn btn-danger" onclick="swal('Cannot Delete', 'Doctor can only be updated after creation !', 'error');">
                                                             <i class="fa fa-trash"></i>
                                                         </button>
-                                                        <button class="btn btn-warning">
+                                                        <button class="btn btn-warning btn_edit_patient"
+                                                            data-toggle="modal" 
+                                                            data-target="#fire-modal-patient"
+                                                            data-id="{{ $patient->id }}"
+                                                            data-name="{{ $patient->name }}"
+                                                            data-age ="{{ $patient->age }}"
+                                                            data-sex ="{{ $patient->sex }}"
+                                                            data-address ="{{ $patient->address }}"
+                                                            data-telephone ="{{ $patient->telephone }}"
+                                                            data-type_patient ="{{ $patient->type_patient }}">
                                                             <i class="fa fa-edit"></i>
                                                         </button>
                                                     </td>
@@ -91,7 +100,57 @@
         @include('backend.body.footer')
     </footer>
     <!-- [footer------------------------------] -->
-
+ <!-- [Model Edit Patient-------------------------] -->
+ <div class="modal fade" id="fire-modal-patient" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog custom-modal-service-detail">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Patient</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editPatientForm" method="post">
+                        @csrf
+                        <input type="hidden" name="id" id="patient-id">
+                        <div class="form-group">
+                            <label for="name">Patient Name:</label>
+                            <input type="text" name="name" id="patient-name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="age">Age:</label>
+                            <input type="number" name="age" id="patient-age" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="sex">Sex:</label>
+                            <select name="sex" id="patient-sex" class="form-control" required>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Address:</label>
+                            <input type="text" name="address" id="patient-address" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="telephone">Telephone:</label>
+                            <input type="text" name="telephone" id="patient-telephone" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="type_patient">Type Patient:</label>
+                            <input type="text" name="type_patient" id="patient-type_patient" class="form-control" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success">Update <i class="fa fa-edit"></i></button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- [Model Edit Patient-------------------------] -->
 
 </div>
 

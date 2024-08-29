@@ -81,6 +81,7 @@ use Illuminate\Support\Facades\Route;
             Route::get('/add-patient','add_Patient')->name('add_Patient');
             Route::get('/list-patient','view_Patient')->name('list_Patient');
             Route::post('/create-patient','create_Patient')->name('create_Patient');
+            Route::post('/update-patient/{id}','update')->name('patient.update');
         });
     });
 // [patient_controller----------------------------]

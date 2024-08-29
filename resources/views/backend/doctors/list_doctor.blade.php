@@ -94,7 +94,7 @@
         @include('backend.body.footer')
     </footer>
     <!-- [footer------------------------------] -->
-     <!-- [Model Edit Doctor-------------------------] -->
+    <!-- [Model Edit Doctor-------------------------] -->
         <div class="modal fade" id="fire-modal-doctor" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
             <div class="modal-dialog custom-modal-service-detail">
                 <div class="modal-content">
