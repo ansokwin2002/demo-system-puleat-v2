@@ -115,7 +115,7 @@
                                             <div class="image-preview-container"></div>
                                             <div class="modal-footer">
                                                 <button type="submit" class="btn btn-warning"><i class="fa-solid fa-upload"></i> Upload</button>
-                                                <button type="button" class="btn btn-success" data-dismiss="modal"><i class="fa-solid fa-times"></i> Close</button>
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa-solid fa-times"></i> Close</button>
                                             </div>
                                         </form>
                                     </div>
@@ -130,7 +130,7 @@
 
     <!-- [Modal View Images] -->
         <div id="view-images-modal" class="modal fade" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-dialog custom-modal-service-detail" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">View Images</h5>

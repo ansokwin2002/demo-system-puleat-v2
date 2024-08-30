@@ -48,7 +48,7 @@
                                         </thead>
                                         <tbody>
                                         @php 
-                                            $doctors = App\Models\Doctor::orderBy('created_at', 'desc')->get();
+                                            $doctors = App\Models\Doctor::all();
                                         @endphp
                                         @foreach ($doctors as $index => $doctor)
                                             <tr>
@@ -57,7 +57,6 @@
                                                 <td>{{ $doctor->specialization }}</td>
                                                 <td>{{ $doctor->phone }}</td>
                                                 <td>{{ $doctor->email }}</td>
-                                                <td style="display: none;">{{ $doctor->created_at }}</td>
                                                 <td>
                                                     
                                                 <button class="btn btn-danger" onclick="swal('Cannot Delete', 'Doctor can only be updated after creation !', 'error');">
@@ -127,7 +126,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-success">Update <i class="fa fa-edit"></i></button>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa-solid fa-times"></i> Close</button>
                             </div>
                         </form>
                     </div>

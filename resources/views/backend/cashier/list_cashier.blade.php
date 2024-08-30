@@ -48,7 +48,7 @@
                                         </thead>
                                         <tbody>
                                         @php 
-                                            $cashiers = App\Models\Cashier::orderBy('created_at', 'desc')->get();
+                                            $cashiers = App\Models\Cashier::all();
                                         @endphp
                                         @foreach ($cashiers as $index => $cashier)
                                             <tr>
@@ -57,7 +57,6 @@
                                                 <td>{{ $cashier->sex }}</td>
                                                 <td>{{ $cashier->email }}</td>
                                                 <td>{{ $cashier->telephone }}</td>
-                                                <td style="display: none;">{{ $cashier->created_at }}</td>
                                                 <td>
                                                     <button class="btn btn-danger" onclick="swal('Cannot Delete', 'Cashier can only be updated after creation !', 'error');">
                                                         <i class="fa fa-trash"></i>
@@ -130,7 +129,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-success">Update <i class="fa fa-edit"></i></button>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa-solid fa-times"></i> Close</button>
                             </div>
                         </form>
                     </div>
