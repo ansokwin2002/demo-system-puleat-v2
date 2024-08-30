@@ -36,7 +36,7 @@ class DoctorController extends Controller
             $doctor->email = $validatedData['email'];
             $doctor->save();
             toastr()->success('Added Doctor Successfully!');
-            return redirect()->back();
+            return redirect()->route('doctor.list');
         } catch (\Exception $e) {
             toastr()->error('Error occurred while adding the doctor.');
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);

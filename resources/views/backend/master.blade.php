@@ -114,682 +114,712 @@
       
       $(document).ready(function() {
 
-    // [appointment_date-----------------------------]
-        $('#appointmentNotificationModal').modal('show');
-    // [appointment_date-----------------------------]
+        // [appointment_date-----------------------------]
+            $('#appointmentNotificationModal').modal('show');
+        // [appointment_date-----------------------------]
 
 
-        // // [loading-------------------------------]
-        //     $('.loading').show();
-        //     $(window).on('load', function() {
-        //         $('.loading').fadeOut(); 
-        //     });
-        // // [loading-------------------------------]
+            // // [loading-------------------------------]
+            //     $('.loading').show();
+            //     $(window).on('load', function() {
+            //         $('.loading').fadeOut(); 
+            //     });
+            // // [loading-------------------------------]
 
-        // [current_year--------------------------]
-            const currentYear = new Date().getFullYear();
-            document.getElementById('year').textContent = currentYear;
-        // [current_year--------------------------]
+            // [current_year--------------------------]
+                const currentYear = new Date().getFullYear();
+                document.getElementById('year').textContent = currentYear;
+            // [current_year--------------------------]
 
-        // [dataTable_Service---------------------]
-            $('#table_service').DataTable({
+            // [dataTable_Service---------------------]
+                $('#table_service').DataTable({
+                    "pageLength": 50,
+                });
+            // [dataTable_Service---------------------]
+
+            // [dataTable_Patient---------------------]
+                $('#table_patient').DataTable({
+                    "pageLength": 50,
+                });
+            // [dataTable_Patient---------------------]
+
+            // [dataTable_Doctor---------------------]
+                $('#table_doctor').DataTable({
+                    "pageLength": 50,
+                });
+            // [dataTable_Doctor---------------------]
+
+            // [dataTable_Cashier---------------------]
+                $('#table_cashier').DataTable({
+                    "pageLength": 50,
+                });
+            // [dataTable_Cashier---------------------]
+
+            // [dataTable_Appoinment---------------------]
+                $('#table_appoinment').DataTable({
+                    "pageLength": 50,
+                });
+            // [dataTable_Appoinment---------------------]
+
+            // [dataTable_Patient_History---------------------]
+                $('#table_patient_history').DataTable({
                 "pageLength": 50,
-            });
-        // [dataTable_Service---------------------]
+                });
+            // [dataTable_Patient_History---------------------]
 
-        // [summernote-------------------------------]
-            $('.summernote').summernote({
-                height: 100 
-            });
-        // [summernote-------------------------------]
+            // [summernote-------------------------------]
+                $('.summernote').summernote({
+                    height: 100 
+                });
+            // [summernote-------------------------------]
 
 
-        // [Select_Service---------------------]
-            $('#serviceSelect').on('change', function() {
-                const selectedOption = $(this).find('option:selected');
-                const serviceName = selectedOption.data('name-service');
-                const serviceUnit = selectedOption.data('unit-service');
-                const servicePrice = selectedOption.data('price-service');  
-                const serviceId = Date.now(); // Unique ID based on timestamp
+            // [Select_Service---------------------]
+                $('#serviceSelect').on('change', function() {
+                    const selectedOption = $(this).find('option:selected');
+                    const serviceName = selectedOption.data('name-service');
+                    const serviceUnit = selectedOption.data('unit-service');
+                    const servicePrice = selectedOption.data('price-service');  
+                    const serviceId = Date.now(); // Unique ID based on timestamp
 
-                const tableRow = `
-                    <tr>
-                        <td></td>
-                        <td style="width:700px;">${serviceName}<button class="btn btn-danger remove-row float-right"><i class="fa fa-trash"></i></button></td>
-                        <td style="width:120px;"><input type="text" class="form-control unit" inputmode="numeric" pattern="\d*" title="Please enter a number"></td>
-                        <td class="price"><p>$ ${servicePrice}</p></td>
-                        <td class="d-flex">
-                            <div class="form-check form-check-lg">
-                                <input class="form-check-input discount-type" type="radio" name="discount${serviceId}" id="discountPercent${serviceId}" checked>
-                                <label class="form-check-label mr-4" for="discountPercent${serviceId}">%</label>
-                            </div>
-                            <div class="form-check form-check-lg">
-                                <input class="form-check-input discount-type" type="radio" name="discount${serviceId}" id="discountDollar${serviceId}">
-                                <label class="form-check-label mr-4" for="discountDollar${serviceId}">$</label>
-                            </div>
-                        </td>
-                        <td style="width:120px;">
-                            <input type="text" class="form-control discount-percent" id="form_discount_percent${serviceId}" inputmode="numeric" pattern="\d*" title="Please enter a number">
-                        </td>
-                        <td style="width:120px;">
-                            <input type="text" class="form-control discount-dollar" id="form_discount_dollar${serviceId}" inputmode="numeric" pattern="\d*" title="Please enter a number">
-                        </td>
-                        <td style="width:160px;"><p class="subtotal">$0.00</p></td>
-                    </tr>
-                `;
+                    const tableRow = `
+                        <tr>
+                            <td></td>
+                            <td style="width:700px;">${serviceName}<button class="btn btn-danger remove-row float-right"><i class="fa fa-trash"></i></button></td>
+                            <td style="width:120px;"><input type="text" class="form-control unit" inputmode="numeric" pattern="\d*" title="Please enter a number"></td>
+                            <td class="price"><p>$ ${servicePrice}</p></td>
+                            <td class="d-flex">
+                                <div class="form-check form-check-lg">
+                                    <input class="form-check-input discount-type" type="radio" name="discount${serviceId}" id="discountPercent${serviceId}" checked>
+                                    <label class="form-check-label mr-4" for="discountPercent${serviceId}">%</label>
+                                </div>
+                                <div class="form-check form-check-lg">
+                                    <input class="form-check-input discount-type" type="radio" name="discount${serviceId}" id="discountDollar${serviceId}">
+                                    <label class="form-check-label mr-4" for="discountDollar${serviceId}">$</label>
+                                </div>
+                            </td>
+                            <td style="width:120px;">
+                                <input type="text" class="form-control discount-percent" id="form_discount_percent${serviceId}" inputmode="numeric" pattern="\d*" title="Please enter a number">
+                            </td>
+                            <td style="width:120px;">
+                                <input type="text" class="form-control discount-dollar" id="form_discount_dollar${serviceId}" inputmode="numeric" pattern="\d*" title="Please enter a number">
+                            </td>
+                            <td style="width:160px;"><p class="subtotal">$0.00</p></td>
+                        </tr>
+                    `;
 
-                $('#serviceTableBody').append(tableRow);
-                updateRowNumbers(); 
-                updateInputState();
-                calculateSubtotal();
-            });
+                    $('#serviceTableBody').append(tableRow);
+                    updateRowNumbers(); 
+                    updateInputState();
+                    calculateSubtotal();
+                });
 
-            function calculateSubtotal() {
-                $('#serviceTableBody').find('tr').each(function() {
-                    const servicePrice = parseFloat($(this).find('.price p').text().replace('$ ', ''));
-                    const unit = parseFloat($(this).find('.unit').val()) || 0;
-                    const discountPercent = parseFloat($(this).find('.discount-percent').val()) || 0;
-                    const discountDollar = parseFloat($(this).find('.discount-dollar').val()) || 0;
+                function calculateSubtotal() {
+                    $('#serviceTableBody').find('tr').each(function() {
+                        const servicePrice = parseFloat($(this).find('.price p').text().replace('$ ', ''));
+                        const unit = parseFloat($(this).find('.unit').val()) || 0;
+                        const discountPercent = parseFloat($(this).find('.discount-percent').val()) || 0;
+                        const discountDollar = parseFloat($(this).find('.discount-dollar').val()) || 0;
 
-                    let subtotal = servicePrice * unit;
+                        let subtotal = servicePrice * unit;
 
-                    // Apply discount based on the selected type
-                    const isPercentChecked = $(this).find('input.discount-type:checked').attr('id').includes('Percent');
+                        // Apply discount based on the selected type
+                        const isPercentChecked = $(this).find('input.discount-type:checked').attr('id').includes('Percent');
+                        
+                        if (isPercentChecked) {
+                            subtotal = subtotal - (subtotal * (discountPercent / 100));
+                        } else {
+                            subtotal = subtotal - discountDollar;
+                        }
+
+                        // Ensure subtotal does not go below zero
+                        subtotal = Math.max(subtotal, 0);
+
+                        $(this).find('.subtotal').text('$ ' + subtotal.toFixed(2));
+                    });
+                }
+
+                $('#serviceTableBody').on('click', '.remove-row', function() {
+                    $(this).closest('tr').remove();
+                    updateRowNumbers(); 
+                });
+
+                function updateRowNumbers() {
+                    $('#serviceTableBody tr').each(function(index) {
+                        $(this).find('td:first').text(index + 1); 
+                    });
+                }
+
+                function updateInputState() {
+                    $('#serviceTableBody').find('tr').each(function() {
+                        var isPercentChecked = $(this).find('input.discount-type:checked').attr('id').includes('Percent');
+                        
+                        if (isPercentChecked) {
+                            $(this).find('.discount-percent').removeClass('disabled-input').attr('readonly', false);
+                            $(this).find('.discount-dollar').addClass('disabled-input').attr('readonly', true);
+                        } else {
+                            $(this).find('.discount-percent').addClass('disabled-input').attr('readonly', true);
+                            $(this).find('.discount-dollar').removeClass('disabled-input').attr('readonly', false);
+                        }
+                    });
+                }
+
+                // Event handlers for discount changes
+                $('#serviceTableBody').on('change', 'input.discount-type', function() {
+                    updateInputState();
+                    calculateSubtotal();
+                    updateGrandTotal();
+                });
+
+                // Event handlers for input changes
+                $('#serviceTableBody').on('input', '.unit, .discount-percent, .discount-dollar', function() {
+                    calculateSubtotal();
+                    updateGrandTotal();
+                });
+
+            // [Select_Service---------------------]
+
+            // [Update Grand Total------------------------]
+                function updateGrandTotal() {
+                    let grandTotal = 0;
+
+                    $('#serviceTableBody').find('tr').each(function() {
+                        const subtotalText = $(this).find('.subtotal').text().replace('$ ', '');
+                        const subtotal = parseFloat(subtotalText) || 0;
+                        grandTotal += subtotal;
+                    });
+                    // $('#grand_total').closest('tr').find('td:last').html('<strong>$ ' + grandTotal.toFixed(2) + '</strong>');
+                    $('#grand_total').html('<strong>$ ' + grandTotal.toFixed(2) + '</strong>');
+                }
+
+                $('#serviceTableBody').on('click', '.remove-row', function() {
+                    $(this).closest('tr').remove(); 
+                    updateRowNumbers();
+                    updateGrandTotal();
+                });
+            // [Update Grand Total------------------------]
+
+            // [Unit-----------------------]
+                $('#serviceTableBody').on('keyup', '#unit', function() {
+                    var $row = $(this).closest('tr'); 
+                    var unit = parseFloat($(this).val()); 
+                    var priceText = $row.find('#price').text();
+                    var price = parseFloat(priceText.replace('$', '').trim());
                     
-                    if (isPercentChecked) {
-                        subtotal = subtotal - (subtotal * (discountPercent / 100));
+                    if (!isNaN(unit) && !isNaN(price)) { 
+                        var total = unit * price; 
+                        $row.find('#subtotal').text('$ ' + total.toFixed(2)); 
                     } else {
-                        subtotal = subtotal - discountDollar;
+                        $row.find('#subtotal').text('$ 0.00'); 
+                    }
+                });
+            // [Unit-----------------------]
+
+            // [Validation_Unit---------------------]
+                $('#serviceTableBody').on('input', '.unit, .discount-percent, .discount-dollar', function() {
+                    var value = $(this).val();
+                    var numericValue = value.replace(/[^0-9.]/g, ''); 
+
+                    if (value !== numericValue) {
+                        $(this).val(numericValue); 
+                    }
+                });
+
+                $('#serviceTableBody').on('blur', '.unit, .discount-percent, .discount-dollar', function() {
+                    var value = $(this).val();
+                    if (isNaN(value) || value.trim() === '') {
+                        $(this).val(''); 
+                    }
+                });
+            // [Validation_Unit---------------------]
+
+            // [Validation Form paid--------------------]
+                $(document).on('input', '.form_paid', function() {
+                    var value = $(this).val();
+                    var numericValue = value.replace(/[^0-9.]/g, ''); 
+
+                    if (value !== numericValue) {
+                        $(this).val(numericValue); 
+                    }
+                });
+
+                $(document).on('blur', '.form_paid', function() {
+                    var value = $(this).val();
+                    if (isNaN(value) || value.trim() === '') {
+                        $(this).val(''); 
+                    }
+                });
+            // [Validation Form paid--------------------]
+
+            // [Submit_Patient_history------------------------------]    
+                $('#save_patient_history').click(function(e) {
+                    e.preventDefault();
+
+                    if ($('#serviceTableBody tr').length === 0) {
+                        swal('Cannot submit', 'Please add at least one service first.', 'error');
+                        return; 
                     }
 
-                    // Ensure subtotal does not go below zero
-                    subtotal = Math.max(subtotal, 0);
+                    // Get the CSRF token directly from the meta tag
+                    let csrfToken = $('meta[name="csrf-token"]').attr('content');
 
-                    $(this).find('.subtotal').text('$ ' + subtotal.toFixed(2));
-                });
-            }
+                    // Get data from your form or elements
+                    let patientId = $('#patient-select').val();
+                    let date = $('#date').val();
+                    let doctorId = $('#doctor').val(); // Ensure this is the doctor_id
+                    let cashierId = $('#cashier-select').val();
+                    let next_appointment_date = $('#next_appointment_date').val();
+                    let type_service = $('#type_service').val();
+                    let patient_noted = $('#patient_noted').val();
+                    let customer = $('#patient-select option:selected').text();
+                    let grand_total = $('#grand_total').text().trim().replace('$', '');
+                    let amount_paid = $('#amount_paid').text().trim().replace('$', '');
+                    let amount_unpaid = $('#amount_unpaid').text().trim().replace('$', '');
 
-            $('#serviceTableBody').on('click', '.remove-row', function() {
-                $(this).closest('tr').remove();
-                updateRowNumbers(); 
-            });
+                    // Collect data from each row
+                    let services = [];
+                    $('#serviceTableBody tr').each(function() {
+                        let row = $(this);
+                        let serviceName = row.find('td').eq(1).text().trim(); // Adjust index if necessary
+                        let serviceUnit = row.find('.unit').val();
+                        let servicePrice = row.find('.price p').text().trim().replace('$ ', '');
+                        let discountPercent = row.find('.discount-percent').val();
+                        let discountDollar = row.find('.discount-dollar').val();
+                        let subtotalRow = row.find('.subtotal').text().trim().replace('$ ', '');
 
-            function updateRowNumbers() {
-                $('#serviceTableBody tr').each(function(index) {
-                    $(this).find('td:first').text(index + 1); 
-                });
-            }
+                        services.push({
+                            service_name: serviceName,
+                            service_unit: serviceUnit,
+                            service_price: servicePrice,
+                            discount_percent: discountPercent,
+                            discount_dollar: discountDollar,
+                            subtotal: subtotalRow
+                        });
+                    });
 
-            function updateInputState() {
-                $('#serviceTableBody').find('tr').each(function() {
-                    var isPercentChecked = $(this).find('input.discount-type:checked').attr('id').includes('Percent');
+                    // Organize data to be sent, including the CSRF token
+                    let paymentData = {
+                        _token: csrfToken,
+                        patient_id: patientId,
+                        doctor_id: doctorId,
+                        cashier_id: cashierId, 
+                        patient_payment: {
+                            patientId: patientId,
+                            next_appointment_date:next_appointment_date,
+                            type_service:type_service,
+                            patient_noted:patient_noted,
+                            date: date,
+                            customer: customer,
+                            grand_total: grand_total,
+                            amount_paid: amount_paid,
+                            amount_unpaid: amount_unpaid,
+                            services: services
+                        }
+                    };
+
+                    // Base URL for the AJAX request
+                    let url = '/patient-save-history';
                     
-                    if (isPercentChecked) {
-                        $(this).find('.discount-percent').removeClass('disabled-input').attr('readonly', false);
-                        $(this).find('.discount-dollar').addClass('disabled-input').attr('readonly', true);
-                    } else {
-                        $(this).find('.discount-percent').addClass('disabled-input').attr('readonly', true);
-                        $(this).find('.discount-dollar').removeClass('disabled-input').attr('readonly', false);
+                    // Append query parameter if patientId is present
+                    if (patientId) {
+                        url += `?selected_patient=${patientId}`;
                     }
-                });
-            }
 
-            // Event handlers for discount changes
-            $('#serviceTableBody').on('change', 'input.discount-type', function() {
-                updateInputState();
-                calculateSubtotal();
-                updateGrandTotal();
-            });
-
-            // Event handlers for input changes
-            $('#serviceTableBody').on('input', '.unit, .discount-percent, .discount-dollar', function() {
-                calculateSubtotal();
-                updateGrandTotal();
-            });
-
-        // [Select_Service---------------------]
-
-        // [Update Grand Total------------------------]
-            function updateGrandTotal() {
-                let grandTotal = 0;
-
-                $('#serviceTableBody').find('tr').each(function() {
-                    const subtotalText = $(this).find('.subtotal').text().replace('$ ', '');
-                    const subtotal = parseFloat(subtotalText) || 0;
-                    grandTotal += subtotal;
-                });
-                // $('#grand_total').closest('tr').find('td:last').html('<strong>$ ' + grandTotal.toFixed(2) + '</strong>');
-                $('#grand_total').html('<strong>$ ' + grandTotal.toFixed(2) + '</strong>');
-            }
-
-            $('#serviceTableBody').on('click', '.remove-row', function() {
-                $(this).closest('tr').remove(); 
-                updateRowNumbers();
-                updateGrandTotal();
-            });
-        // [Update Grand Total------------------------]
-
-        // [Unit-----------------------]
-            $('#serviceTableBody').on('keyup', '#unit', function() {
-                var $row = $(this).closest('tr'); 
-                var unit = parseFloat($(this).val()); 
-                var priceText = $row.find('#price').text();
-                var price = parseFloat(priceText.replace('$', '').trim());
-                
-                if (!isNaN(unit) && !isNaN(price)) { 
-                    var total = unit * price; 
-                    $row.find('#subtotal').text('$ ' + total.toFixed(2)); 
-                } else {
-                    $row.find('#subtotal').text('$ 0.00'); 
-                }
-            });
-        // [Unit-----------------------]
-
-        // [Validation_Unit---------------------]
-            $('#serviceTableBody').on('input', '.unit, .discount-percent, .discount-dollar', function() {
-                var value = $(this).val();
-                var numericValue = value.replace(/[^0-9.]/g, ''); 
-
-                if (value !== numericValue) {
-                    $(this).val(numericValue); 
-                }
-            });
-
-            $('#serviceTableBody').on('blur', '.unit, .discount-percent, .discount-dollar', function() {
-                var value = $(this).val();
-                if (isNaN(value) || value.trim() === '') {
-                    $(this).val(''); 
-                }
-            });
-        // [Validation_Unit---------------------]
-
-        // [Validation Form paid--------------------]
-            $(document).on('input', '.form_paid', function() {
-                var value = $(this).val();
-                var numericValue = value.replace(/[^0-9.]/g, ''); 
-
-                if (value !== numericValue) {
-                    $(this).val(numericValue); 
-                }
-            });
-
-            $(document).on('blur', '.form_paid', function() {
-                var value = $(this).val();
-                if (isNaN(value) || value.trim() === '') {
-                    $(this).val(''); 
-                }
-            });
-        // [Validation Form paid--------------------]
-
-        // [Submit_Patient_history------------------------------]    
-            $('#save_patient_history').click(function(e) {
-                e.preventDefault();
-
-                if ($('#serviceTableBody tr').length === 0) {
-                    swal('Cannot submit', 'Please add at least one service first.', 'error');
-                    return; 
-                }
-
-                // Get the CSRF token directly from the meta tag
-                let csrfToken = $('meta[name="csrf-token"]').attr('content');
-
-                // Get data from your form or elements
-                let patientId = $('#patient-select').val();
-                let date = $('#date').val();
-                let doctorId = $('#doctor').val(); // Ensure this is the doctor_id
-                let cashierId = $('#cashier-select').val();
-                let next_appointment_date = $('#next_appointment_date').val();
-                let type_service = $('#type_service').val();
-                let patient_noted = $('#patient_noted').val();
-                let customer = $('#patient-select option:selected').text();
-                let grand_total = $('#grand_total').text().trim().replace('$', '');
-                let amount_paid = $('#amount_paid').text().trim().replace('$', '');
-                let amount_unpaid = $('#amount_unpaid').text().trim().replace('$', '');
-
-                // Collect data from each row
-                let services = [];
-                $('#serviceTableBody tr').each(function() {
-                    let row = $(this);
-                    let serviceName = row.find('td').eq(1).text().trim(); // Adjust index if necessary
-                    let serviceUnit = row.find('.unit').val();
-                    let servicePrice = row.find('.price p').text().trim().replace('$ ', '');
-                    let discountPercent = row.find('.discount-percent').val();
-                    let discountDollar = row.find('.discount-dollar').val();
-                    let subtotalRow = row.find('.subtotal').text().trim().replace('$ ', '');
-
-                    services.push({
-                        service_name: serviceName,
-                        service_unit: serviceUnit,
-                        service_price: servicePrice,
-                        discount_percent: discountPercent,
-                        discount_dollar: discountDollar,
-                        subtotal: subtotalRow
+                    // AJAX request to save patient history
+                    $.ajax({
+                        url: url,
+                        method: 'POST',
+                        data: paymentData,
+                        success: function(response) {
+                            window.location.href = `/invoice/${response.invoice_id}`;
+                        },
+                        error: function(xhr) {
+                            if (xhr.status === 419) { // CSRF token mismatch
+                                swal('Error', 'There was an issue with your session. Please try again.', 'error');
+                            } else {
+                                console.error('Error saving patient history: ', xhr.responseJSON.message);
+                                swal('Error','Error saving patient history: ' + xhr.responseJSON.message, 'error');
+                            }
+                        }
                     });
                 });
+            // [Submit_Patient_history------------------------------]
 
-                // Organize data to be sent, including the CSRF token
-                let paymentData = {
-                    _token: csrfToken,
-                    patient_id: patientId,
-                    doctor_id: doctorId,
-                    cashier_id: cashierId, 
-                    patient_payment: {
-                        patientId: patientId,
-                        next_appointment_date:next_appointment_date,
-                        type_service:type_service,
-                        patient_noted:patient_noted,
-                        date: date,
-                        customer: customer,
-                        grand_total: grand_total,
-                        amount_paid: amount_paid,
-                        amount_unpaid: amount_unpaid,
-                        services: services
+            // [Button Paid---------------------------]
+                $('.btn_paid').on('click', function() {
+                    if ($('#grand_total').length > 0) {
+                        let grandTotalText = $('#grand_total').text().replace('$', '').trim();
+                        let grandTotal = parseFloat(grandTotalText) || 0;
+                        let amountPaid = parseFloat($('#form_paid').val()) || 0;
+                        $('#amount_paid').text('$ ' + amountPaid.toFixed(2));
+
+                        const amountUnpaid = grandTotal - amountPaid;
+                        $('#amount_unpaid').text('$ ' + amountUnpaid.toFixed(2)); 
+                    } else {
+                        alert('Element #grand_total not found or it is empty.');
                     }
-                };
-
-                // Base URL for the AJAX request
-                let url = '/patient-save-history';
-                
-                // Append query parameter if patientId is present
-                if (patientId) {
-                    url += `?selected_patient=${patientId}`;
-                }
-
-                // AJAX request to save patient history
-                $.ajax({
-                    url: url,
-                    method: 'POST',
-                    data: paymentData,
-                    success: function(response) {
-                        window.location.href = `/invoice/${response.invoice_id}`;
-                    },
-                    error: function(xhr) {
-                        if (xhr.status === 419) { // CSRF token mismatch
-                            swal('Error', 'There was an issue with your session. Please try again.', 'error');
-                        } else {
-                            console.error('Error saving patient history: ', xhr.responseJSON.message);
-                            swal('Error','Error saving patient history: ' + xhr.responseJSON.message, 'error');
-                        }
-                    }
+                    $('#fire-modal-4').modal('hide');
                 });
-            });
-        // [Submit_Patient_history------------------------------]
-
-        // [Button Paid---------------------------]
-            $('.btn_paid').on('click', function() {
-                if ($('#grand_total').length > 0) {
-                    let grandTotalText = $('#grand_total').text().replace('$', '').trim();
-                    let grandTotal = parseFloat(grandTotalText) || 0;
-                    let amountPaid = parseFloat($('#form_paid').val()) || 0;
-                    $('#amount_paid').text('$ ' + amountPaid.toFixed(2));
-
-                    const amountUnpaid = grandTotal - amountPaid;
-                    $('#amount_unpaid').text('$ ' + amountUnpaid.toFixed(2)); 
-                } else {
-                    alert('Element #grand_total not found or it is empty.');
-                }
-                $('#fire-modal-4').modal('hide');
-            });
-            $('.close, .btn-secondary').on('click', function() {
-                $('#fire-modal-4').modal('hide');
-            });
-        // [Button Paid---------------------------]
-
-        // [Detail_Patient_Service--------------------------]
-            $('#table_service').on('click', '.row_service_detail', function(event) {
-                if ($(event.target).closest('.td-action').length > 0) {
-                    return; // Exit the function if an action td-action was clicked
-                }
-                const patientId = $(this).data('id');
-                
-                // Fetch the patient details using AJAX
-                $.ajax({
-                    url: `/patient-details/${patientId}`,
-                    method: 'GET',
-                    success: function(response) {
-                        const paymentData = response.patient_payment;
-
-                        // Clear any previous data
-                        $('#modalServiceDetails tbody').empty();
-
-                        // Populate the modal with service details
-                        let i = 1;
-                        if (paymentData && paymentData.services) {
-                            paymentData.services.forEach(service => {
-                                $('#modalServiceDetails tbody').append(`
-                                    <tr>
-                                        <td>${i++}</td>
-                                        <td>${service.service_name}</td>
-                                        <td>${service.service_unit}</td>
-                                        <td>${service.service_price ? '$ ' + service.service_price : ''}</td>
-                                        <td>${service.subtotal ? '$ ' + service.subtotal : ''}</td>
-                                        <td>${service.discount_percent ? service.discount_percent + ' %' : ''}</td>
-                                        <td>${service.discount_dollar ? '$ ' + service.discount_dollar : ''}</td>
-                                    </tr>
-                                `);
-                            });
-                        } else {
-                            $('#modalServiceDetails tbody').append('<tr><td colspan="6">No services available</td></tr>');
-                        }
-                    },
-                    error: function(xhr) {
-                        console.error('Error fetching patient details:', xhr.responseText);
-                    }
+                $('.close, .btn-secondary').on('click', function() {
+                    $('#fire-modal-4').modal('hide');
                 });
-            });
-            $('#table_service').on('click', '.td-action', function(event) {
-                event.stopPropagation(); // Prevent the click event from reaching the row
-            });
-        // [Detail_Patient_Service--------------------------]
+            // [Button Paid---------------------------]
 
-        
-        // [page-add-pateint---------------------------]
+            // [Detail_Patient_Service--------------------------]
+                $('#table_service').on('click', '.row_service_detail', function(event) {
+                    if ($(event.target).closest('.td-action').length > 0) {
+                        return; // Exit the function if an action td-action was clicked
+                    }
+                    const patientId = $(this).data('id');
+                    
+                    // Fetch the patient details using AJAX
+                    $.ajax({
+                        url: `/patient-details/${patientId}`,
+                        method: 'GET',
+                        success: function(response) {
+                            const paymentData = response.patient_payment;
 
-            // [type-patient----------------------------]
-                // Function to replace select with text input
-                function switchToTextInput() {
-                    $('#type-patient-wrapper').html(`
-                        <div class="input-group-prepend">
-                            <div class="input-group-text" id="type-patient-icon">
-                                <i class="fas fa-user-md"></i>
+                            // Clear any previous data
+                            $('#modalServiceDetails tbody').empty();
+
+                            // Populate the modal with service details
+                            let i = 1;
+                            if (paymentData && paymentData.services) {
+                                paymentData.services.forEach(service => {
+                                    $('#modalServiceDetails tbody').append(`
+                                        <tr>
+                                            <td>${i++}</td>
+                                            <td>${service.service_name}</td>
+                                            <td>${service.service_unit}</td>
+                                            <td>${service.service_price ? '$ ' + service.service_price : ''}</td>
+                                            <td>${service.subtotal ? '$ ' + service.subtotal : ''}</td>
+                                            <td>${service.discount_percent ? service.discount_percent + ' %' : ''}</td>
+                                            <td>${service.discount_dollar ? '$ ' + service.discount_dollar : ''}</td>
+                                        </tr>
+                                    `);
+                                });
+                            } else {
+                                $('#modalServiceDetails tbody').append('<tr><td colspan="6">No services available</td></tr>');
+                            }
+                        },
+                        error: function(xhr) {
+                            console.error('Error fetching patient details:', xhr.responseText);
+                        }
+                    });
+                });
+                $('#table_service').on('click', '.td-action', function(event) {
+                    event.stopPropagation(); // Prevent the click event from reaching the row
+                });
+            // [Detail_Patient_Service--------------------------]
+
+            
+            // [page-add-pateint---------------------------]
+
+                // [type-patient----------------------------]
+                    // Function to replace select with text input
+                    function switchToTextInput() {
+                        $('#type-patient-wrapper').html(`
+                            <div class="input-group-prepend">
+                                <div class="input-group-text" id="type-patient-icon">
+                                    <i class="fas fa-user-md"></i>
+                                </div>
                             </div>
-                        </div>
-                        <input type="text" name="type_patient" class="form-control">
-                    `);
-                }
+                            <input type="text" name="type_patient" class="form-control">
+                        `);
+                    }
 
-                // Function to replace text input with select
-                function switchToSelect() {
-                    $('#type-patient-wrapper').html(`
-                        <div class="input-group-prepend">
-                            <div class="input-group-text" id="type-patient-icon">
-                                <i class="fas fa-user-md"></i>
+                    // Function to replace text input with select
+                    function switchToSelect() {
+                        $('#type-patient-wrapper').html(`
+                            <div class="input-group-prepend">
+                                <div class="input-group-text" id="type-patient-icon">
+                                    <i class="fas fa-user-md"></i>
+                                </div>
                             </div>
-                        </div>
-                        <select name="type_patient" class="form-control" id="type-patient-select">
-                            <option value="Walk-in">Walk-in</option>
-                            <option value="Customize">Customize</option>
-                        </select>
-                    `);
+                            <select name="type_patient" class="form-control" id="type-patient-select">
+                                <option value="Walk-in">Walk-in</option>
+                                <option value="Customize">Customize</option>
+                            </select>
+                        `);
 
-                    // Reattach event listener to the select element
+                        // Reattach event listener to the select element
+                        $('#type-patient-select').on('change', function() {
+                            if ($(this).val() === 'Customize') {
+                                switchToTextInput();
+                            }
+                        });
+                    }
+
+                    // Initial event listener for select change
                     $('#type-patient-select').on('change', function() {
                         if ($(this).val() === 'Customize') {
                             switchToTextInput();
                         }
                     });
-                }
 
-                // Initial event listener for select change
-                $('#type-patient-select').on('change', function() {
-                    if ($(this).val() === 'Customize') {
-                        switchToTextInput();
-                    }
-                });
-
-                // Event listener for switching back to select when clicking the icon
-                $(document).on('click', '#type-patient-icon', function() {
-                    switchToSelect();
-                });
-            // [type-patient----------------------------]
-
-        // [page-add-pateint---------------------------]
-
-        // [page-list-patient-------------------------------]
-
-            // [patient-detail-------------------------]
-
-                $('#table_service').on('click', '.row_service_detail', function(event) {
-                    if ($(event.target).closest('.td-action').length > 0) {
-                        return; // Exit the function if an action td-action was clicked
-                    }
-
-                    const patientId = $(this).data('id');
-
-                    // Make an AJAX call to fetch the patient's noted data
-                    $.ajax({
-                        url: '/get-patient-noted', // Define this route in your web.php
-                        method: 'GET',
-                        data: { id: patientId },
-                        success: function(response) {
-                            console.log(response);
-                            // Populate the modal with the patient's noted information
-                            $('#patientsNotedContent').summernote('code', response.patient_noted);
-                            // Show the modal
-                            $('#fire-modal-4').modal('show');
-                        },
-                        error: function() {
-                            alert('Failed to fetch patient notes.');
-                        }
+                    // Event listener for switching back to select when clicking the icon
+                    $(document).on('click', '#type-patient-icon', function() {
+                        switchToSelect();
                     });
+                // [type-patient----------------------------]
+
+            // [page-add-pateint---------------------------]
+
+            // [page-list-patient-------------------------------]
+
+                // [patient-detail-------------------------]
+
+                    $('#table_service').on('click', '.row_service_detail', function(event) {
+                        if ($(event.target).closest('.td-action').length > 0) {
+                            return; // Exit the function if an action td-action was clicked
+                        }
+
+                        const patientId = $(this).data('id');
+
+                        // Make an AJAX call to fetch the patient's noted data
+                        $.ajax({
+                            url: '/get-patient-noted', // Define this route in your web.php
+                            method: 'GET',
+                            data: { id: patientId },
+                            success: function(response) {
+                                console.log(response);
+                                // Populate the modal with the patient's noted information
+                                $('#patientsNotedContent').summernote('code', response.patient_noted);
+                                // Show the modal
+                                $('#fire-modal-4').modal('show');
+                            },
+                            error: function() {
+                                alert('Failed to fetch patient notes.');
+                            }
+                        });
+                    });
+
+                    $('#table_service').on('click', '.td-action', function(event) {
+                        event.stopPropagation(); // Prevent the click event from reaching the row
+                    });
+
+
+                // [patient-detail-------------------------]
+
+
+            // [page-list-patient-------------------------------]
+
+            // [page-list-service-----------------------------------]
+
+                // [Edit Service----------------------------]
+                    $('.btn_edit_service').on('click', function() {
+                        var id = $(this).data('id');
+                        var name = $(this).data('name');
+                        var unit = $(this).data('unit');
+                        var price = $(this).data('price');
+
+                        $('#service-id').val(id);
+                        $('#service-name').val(name);
+                        $('#service-unit').val(unit);
+                        $('#service-price').val(price);
+
+                        // Update the form action URL to include the service ID
+                        var formAction = "{{ route('service_Update', ':id') }}";
+                        formAction = formAction.replace(':id', id);
+                        $('#editServiceForm').attr('action', formAction);
+                    });
+                // [Edit Service----------------------------]
+
+                // [Delete Service----------------------------]
+                    $('#ModelDeleteService').on('show.bs.modal', function (event) {
+                        var button = $(event.relatedTarget); // Button that triggered the modal
+                        var id = button.data('id'); // Extract info from data-* attributes
+
+                        var form = $('#deleteForm');
+                        var actionUrl = "{{ route('service_Delete', ':id') }}";
+                        actionUrl = actionUrl.replace(':id', id);
+
+                        // Update the form action attribute
+                        form.attr('action', actionUrl);
+                    });
+                // [Delete Service----------------------------]
+
+            // [page-list-service-----------------------------------]
+
+            // [next-appointment-date------------------------------------]
+                $('#date').daterangepicker({
+                    singleDatePicker: true,
+                    showDropdowns: true,
+                    autoApply: true,
+                    locale: {
+                        format: 'YYYY-MM-DD'
+                    }
                 });
 
-                $('#table_service').on('click', '.td-action', function(event) {
-                    event.stopPropagation(); // Prevent the click event from reaching the row
-                });
+                function calculateNextAppointment() {
+                    var typeService = $('#type_service').find(':selected').data('days');
+                    var selectedDate = $('#date').val();
 
-
-            // [patient-detail-------------------------]
-
-
-        // [page-list-patient-------------------------------]
-
-        // [page-list-service-----------------------------------]
-
-            // [Edit Service----------------------------]
-                $('.btn_edit_service').on('click', function() {
-                    var id = $(this).data('id');
-                    var name = $(this).data('name');
-                    var unit = $(this).data('unit');
-                    var price = $(this).data('price');
-
-                    $('#service-id').val(id);
-                    $('#service-name').val(name);
-                    $('#service-unit').val(unit);
-                    $('#service-price').val(price);
-
-                    // Update the form action URL to include the service ID
-                    var formAction = "{{ route('service_Update', ':id') }}";
-                    formAction = formAction.replace(':id', id);
-                    $('#editServiceForm').attr('action', formAction);
-                });
-            // [Edit Service----------------------------]
-
-            // [Delete Service----------------------------]
-                $('#ModelDeleteService').on('show.bs.modal', function (event) {
-                    var button = $(event.relatedTarget); // Button that triggered the modal
-                    var id = button.data('id'); // Extract info from data-* attributes
-
-                    var form = $('#deleteForm');
-                    var actionUrl = "{{ route('service_Delete', ':id') }}";
-                    actionUrl = actionUrl.replace(':id', id);
-
-                    // Update the form action attribute
-                    form.attr('action', actionUrl);
-                });
-            // [Delete Service----------------------------]
-
-        // [page-list-service-----------------------------------]
-
-        // [next-appointment-date------------------------------------]
-            $('#date').daterangepicker({
-                singleDatePicker: true,
-                showDropdowns: true,
-                autoApply: true,
-                locale: {
-                    format: 'YYYY-MM-DD'
+                    // alert('Selected Date: ' + selectedDate + '\nType Service Days: ' + typeService);
+                    
+                    if (typeService && selectedDate) {
+                        var date = new Date(selectedDate);
+                        date.setDate(date.getDate() + parseInt(typeService));
+                        var day = String(date.getDate()).padStart(2, '0');
+                        var month = String(date.getMonth() + 1).padStart(2, '0');
+                        var year = date.getFullYear();
+                        var formattedDate = `${year}-${month}-${day}`;
+                        $('#next_appointment_date').val(formattedDate);
+                    }
                 }
-            });
-
-            function calculateNextAppointment() {
-                var typeService = $('#type_service').find(':selected').data('days');
-                var selectedDate = $('#date').val();
-
-                // alert('Selected Date: ' + selectedDate + '\nType Service Days: ' + typeService);
-                
-                if (typeService && selectedDate) {
-                    var date = new Date(selectedDate);
-                    date.setDate(date.getDate() + parseInt(typeService));
-                    var day = String(date.getDate()).padStart(2, '0');
-                    var month = String(date.getMonth() + 1).padStart(2, '0');
-                    var year = date.getFullYear();
-                    var formattedDate = `${year}-${month}-${day}`;
-                    $('#next_appointment_date').val(formattedDate);
-                }
-            }
-            $('#type_service').on('change', function () {
+                $('#type_service').on('change', function () {
+                    calculateNextAppointment();
+                });
+                $('#date').on('apply.daterangepicker', function () {
+                    calculateNextAppointment();
+                });
+                //-change-by-default
                 calculateNextAppointment();
-            });
-            $('#date').on('apply.daterangepicker', function () {
-                calculateNextAppointment();
-            });
-            //-change-by-default
-            calculateNextAppointment();
-        // [next-appointment-date------------------------------------]
+            // [next-appointment-date------------------------------------]
 
-        // [page-list-doctor-----------------------------------]
-            // [Edit Doctor----------------------------]
-                $('.btn_edit_doctor').on('click', function() {
+            // [page-list-doctor-----------------------------------]
+                // [Edit Doctor----------------------------]
+                    $('.btn_edit_doctor').on('click', function() {
+                        var id = $(this).data('id');
+                        var name = $(this).data('name');
+                        var specialization = $(this).data('specialization');
+                        var phone = $(this).data('phone');
+                        var email = $(this).data('email');
+
+                        $('#doctor-id').val(id);
+                        $('#doctor-name').val(name);
+                        $('#doctor-specialization').val(specialization);
+                        $('#doctor-phone').val(phone);
+                        $('#doctor-email').val(email);
+
+                        // Update the form action URL to include the doctor ID
+                        var formAction = "{{ route('doctor.update', ':id') }}";
+                        formAction = formAction.replace(':id', id);
+                        $('#editDoctorForm').attr('action', formAction);
+                    });
+                // [Edit Doctor----------------------------]
+
+                // [Delete Doctor----------------------------]
+                    $('#ModelDeleteDoctor').on('show.bs.modal', function (event) {
+                        var button = $(event.relatedTarget); // Button that triggered the modal
+                        var id = button.data('id'); // Extract info from data-* attributes
+
+                        var form = $('#deleteForm');
+                        var actionUrl = "{{ route('doctor.destroy', ':id') }}";
+                        actionUrl = actionUrl.replace(':id', id);
+
+                        // Update the form action attribute
+                        form.attr('action', actionUrl);
+                    });
+                // [Delete Doctor----------------------------]
+
+            // [page-list-doctor-----------------------------------]
+
+            // [page-list-cashier-----------------------------------]
+                // [Edit Cashier----------------------------]
+                    $('.btn_edit_cashier').on('click', function() {
+                        var id = $(this).data('id');
+                        var name = $(this).data('name');
+                        var sex = $(this).data('sex');
+                        var email = $(this).data('email');
+                        var telephone = $(this).data('telephone');
+
+                        $('#cashier-id').val(id);
+                        $('#cashier-name').val(name);
+                        $('#cashier-sex').val(sex);
+                        $('#cashier-email').val(email);
+                        $('#cashier-telephone').val(telephone);
+
+                        var formAction = "{{ route('cashier.update', ':id') }}";
+                        formAction = formAction.replace(':id', id);
+                        $('#editCashierForm').attr('action', formAction);
+                    });
+                // [Edit Cashier----------------------------]
+            // [page-list-cashier-----------------------------------]
+
+            // [page-list-appointment-----------------------------------]
+                // [Edit appointment----------------------------]
+
+                $('.btn_edit_appointment').on('click', function() {
+                    var id = $(this).data('id');
+                    var date = $(this).data('date');
+                    // Set the form values
+                    $('#appointment-id').val(id);
+                    $('#appointment-date').val(date);
+
+                    // Update the form action URL
+                    var formAction = "{{ route('appointments.update', ':id') }}".replace(':id', id);
+                    $('#editAppointmentForm').attr('action', formAction);
+
+                    // Show the modal
+                    $('#fire-modal-appointment').modal('show');
+            
+                });
+
+                // [Edit appointment----------------------------]
+            // [page-list-appointment-----------------------------------]
+
+            // [Hide_Notification---------------------------------]
+                $('.btn_hide_notification').on('click', function() {
+                    // Find the closest row and hide it
+                    $(this).closest('tr').hide();
+                    
+                    // Optionally, you can send an AJAX request to mark the notification as "hidden" if needed
+                    // var id = $(this).data('id');
+                    // $.ajax({
+                    //     url: '/path/to/your/route/' + id,
+                    //     type: 'POST',
+                    //     data: {
+                    //         _token: '{{ csrf_token() }}',
+                    //         // Additional data if needed
+                    //     },
+                    //     success: function(response) {
+                    //         // Handle success response
+                    //     },
+                    //     error: function(xhr) {
+                    //         // Handle error response
+                    //     }
+                    // });
+                });
+            // [Hide_Notification---------------------------------]
+
+            // [page-list-patient-----------------------------------]
+
+                // [Edit Patinet----------------------------]
+    
+                $('.btn_edit_patient').on('click', function() {
                     var id = $(this).data('id');
                     var name = $(this).data('name');
-                    var specialization = $(this).data('specialization');
-                    var phone = $(this).data('phone');
-                    var email = $(this).data('email');
-
-                    $('#doctor-id').val(id);
-                    $('#doctor-name').val(name);
-                    $('#doctor-specialization').val(specialization);
-                    $('#doctor-phone').val(phone);
-                    $('#doctor-email').val(email);
-
-                    // Update the form action URL to include the doctor ID
-                    var formAction = "{{ route('doctor.update', ':id') }}";
-                    formAction = formAction.replace(':id', id);
-                    $('#editDoctorForm').attr('action', formAction);
-                });
-            // [Edit Doctor----------------------------]
-
-            // [Delete Doctor----------------------------]
-                $('#ModelDeleteDoctor').on('show.bs.modal', function (event) {
-                    var button = $(event.relatedTarget); // Button that triggered the modal
-                    var id = button.data('id'); // Extract info from data-* attributes
-
-                    var form = $('#deleteForm');
-                    var actionUrl = "{{ route('doctor.destroy', ':id') }}";
-                    actionUrl = actionUrl.replace(':id', id);
-
-                    // Update the form action attribute
-                    form.attr('action', actionUrl);
-                });
-            // [Delete Doctor----------------------------]
-
-        // [page-list-doctor-----------------------------------]
-
-        // [page-list-cashier-----------------------------------]
-            // [Edit Cashier----------------------------]
-                $('.btn_edit_cashier').on('click', function() {
-                    var id = $(this).data('id');
-                    var name = $(this).data('name');
+                    var age = $(this).data('age');
                     var sex = $(this).data('sex');
-                    var email = $(this).data('email');
+                    var address = $(this).data('address');
                     var telephone = $(this).data('telephone');
+                    var type_patient = $(this).data('type_patient');
 
-                    $('#cashier-id').val(id);
-                    $('#cashier-name').val(name);
-                    $('#cashier-sex').val(sex);
-                    $('#cashier-email').val(email);
-                    $('#cashier-telephone').val(telephone);
+                    $('#patient-id').val(id);
+                    $('#patient-name').val(name);
+                    $('#patient-age').val(age);
+                    $('#patient-address').val(address);
+                    $('#patient-telephone').val(telephone);
+                    $('#patient-type_patient').val(type_patient);
 
-                    var formAction = "{{ route('cashier.update', ':id') }}";
+                    // Set the selected value for the dropdown
+                    $('#patient-sex').val(sex).change();
+
+                    // Update the form action URL to include the patient ID
+                    var formAction = "{{ route('patient.update', ':id') }}";
                     formAction = formAction.replace(':id', id);
-                    $('#editCashierForm').attr('action', formAction);
+                    $('#editPatientForm').attr('action', formAction);
+
+                    // Show the modal
+                    $('#fire-modal-patient').modal('show');
                 });
-            // [Edit Cashier----------------------------]
-        // [page-list-cashier-----------------------------------]
-
-        // [page-list-appointment-----------------------------------]
-            // [Edit appointment----------------------------]
-
-            $('.btn_edit_appointment').on('click', function() {
-                var id = $(this).data('id');
-                var date = $(this).data('date');
-                // Set the form values
-                $('#appointment-id').val(id);
-                $('#appointment-date').val(date);
-
-                // Update the form action URL
-                var formAction = "{{ route('appointments.update', ':id') }}".replace(':id', id);
-                $('#editAppointmentForm').attr('action', formAction);
-
-                // Show the modal
-                $('#fire-modal-appointment').modal('show');
         
-            });
 
-            // [Edit appointment----------------------------]
-        // [page-list-appointment-----------------------------------]
+                // [Edit Patient----------------------------]
 
-        // [Hide_Notification---------------------------------]
-            $('.btn_hide_notification').on('click', function() {
-                // Find the closest row and hide it
-                $(this).closest('tr').hide();
-                
-                // Optionally, you can send an AJAX request to mark the notification as "hidden" if needed
-                // var id = $(this).data('id');
-                // $.ajax({
-                //     url: '/path/to/your/route/' + id,
-                //     type: 'POST',
-                //     data: {
-                //         _token: '{{ csrf_token() }}',
-                //         // Additional data if needed
-                //     },
-                //     success: function(response) {
-                //         // Handle success response
-                //     },
-                //     error: function(xhr) {
-                //         // Handle error response
-                //     }
-                // });
-            });
-        // [Hide_Notification---------------------------------]
-
-         // [page-list-patient-----------------------------------]
-
-            // [Edit Patinet----------------------------]
-            $(document).ready(function() {
-            $('.btn_edit_patient').on('click', function() {
-                var id = $(this).data('id');
-                var name = $(this).data('name');
-                var age = $(this).data('age');
-                var sex = $(this).data('sex');
-                var address = $(this).data('address');
-                var telephone = $(this).data('telephone');
-                var type_patient = $(this).data('type_patient');
-
-                $('#patient-id').val(id);
-                $('#patient-name').val(name);
-                $('#patient-age').val(age);
-                $('#patient-address').val(address);
-                $('#patient-telephone').val(telephone);
-                $('#patient-type_patient').val(type_patient);
-
-                // Set the selected value for the dropdown
-                $('#patient-sex').val(sex).change();
-
-                // Update the form action URL to include the patient ID
-                var formAction = "{{ route('patient.update', ':id') }}";
-                formAction = formAction.replace(':id', id);
-                $('#editPatientForm').attr('action', formAction);
-
-                // Show the modal
-                $('#fire-modal-patient').modal('show');
-            });
-        });
-
-            // [Edit Patient----------------------------]
-
-        // [page-list-patient-----------------------------------]
-        
+            // [page-list-patient-----------------------------------]
+            
 
 
       });

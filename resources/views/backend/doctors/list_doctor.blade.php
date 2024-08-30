@@ -35,7 +35,7 @@
                         <div class="card p-4">
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-striped dataTable" id="table_service">
+                                    <table class="table table-striped dataTable" id="table_doctor">
                                         <thead class="bg-primary">
                                             <tr>
                                                 <th class="text-white">#</th>
@@ -48,15 +48,16 @@
                                         </thead>
                                         <tbody>
                                         @php 
-                                            $doctors = App\Models\Doctor::all();
+                                            $doctors = App\Models\Doctor::orderBy('created_at', 'desc')->get();
                                         @endphp
-                                        @foreach ($doctors as $doctor)
+                                        @foreach ($doctors as $index => $doctor)
                                             <tr>
-                                                <td>{{ $doctor->id }}</td>
+                                                <td>{{ $index +=1 }}</td>
                                                 <td>{{ $doctor->name }}</td>
                                                 <td>{{ $doctor->specialization }}</td>
                                                 <td>{{ $doctor->phone }}</td>
                                                 <td>{{ $doctor->email }}</td>
+                                                <td style="display: none;">{{ $doctor->created_at }}</td>
                                                 <td>
                                                     
                                                 <button class="btn btn-danger" onclick="swal('Cannot Delete', 'Doctor can only be updated after creation !', 'error');">

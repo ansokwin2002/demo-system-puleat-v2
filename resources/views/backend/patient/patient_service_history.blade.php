@@ -48,6 +48,8 @@
                                             <th class="text-white">Amount Paid</th>
                                             <th class="text-white">Amount Unpaid</th>
                                             <th class="text-white">Action</th>
+                                            <th class="text-white">Created_at</th>
+                                            <th class="text-white">Updated_at</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -68,9 +70,11 @@
                                                 <td>${{ $paymentData['grand_total'] ?? '' }}</td>
                                                 <td>${{ $paymentData['amount_paid'] ?? '' }}</td>
                                                 <td>${{ $paymentData['amount_unpaid'] ?? '' }}</td>
+                                                <td>{{ $patientHistory['created_at'] }}</td>
+                                                <td>{{ $patientHistory['updated_at'] }}</td>
                                                 <td class="td-action">
-                                                    <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
-                                                    <button class="btn btn-warning"><i class="fa fa-edit"></i></button>
+                                                    <button class="btn btn-danger" onclick="swal('Cannot Delete', 'Patient\'s history can not delete after creation !', 'error');"><i class="fa fa-trash"></i></button>
+                                                    <button class="btn btn-warning" onclick="swal('Cannot Edit', 'Patient\'s history can not edit after creation !', 'error');"><i class="fa fa-edit"></i></button>
                                                 </td>
                                             </tr>
                                         @endforeach

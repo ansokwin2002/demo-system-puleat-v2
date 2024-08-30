@@ -36,7 +36,7 @@
                     <div class="card p-4">
                         <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-striped dataTable" id="table_service">
+                            <table class="table table-striped dataTable" id="table_appoinment">
                                 <thead class="bg-primary">
                                     <tr>
                                         <th class="text-white">Invoice ID</th>

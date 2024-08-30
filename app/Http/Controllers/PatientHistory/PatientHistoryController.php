@@ -11,9 +11,12 @@ class PatientHistoryController extends Controller
     
     public function patientServiceHistory()
     {
-        $patientHistories = PatientHistory::with(['doctor', 'cashier', 'patient'])->get();
+        $patientHistories = PatientHistory::with(['doctor', 'cashier', 'patient'])
+            ->orderBy('created_at', 'desc')
+            ->get();
         return view('backend.patient.patient_service_history', compact('patientHistories'));
     }
+
 
     /**
      * Store a newly created resource in storage.

@@ -47,14 +47,15 @@
                                         </thead>
                                         <tbody>
                                         @php 
-                                            $services = App\Models\Service::all();
+                                            $services = App\Models\Service::orderBy('created_at', 'desc')->get();
                                         @endphp
-                                        @foreach ($services as $item)
+                                        @foreach ($services as $index => $item)
                                             <tr>
-                                                <td>{{ $item->id }}</td>
+                                                <td>{{ $index +=1 }}</td>
                                                 <td>{{ $item->name }}</td>
                                                 <td>{{ $item->unit }}</td>
                                                 <td>{{ $item->price }}</td>
+                                                <td style="display: none;">{{ $item->created_at }}</td>
                                                 <td>
                                                     
                                                 <button class="btn btn-danger" data-toggle="modal" data-target="#ModelDeleteService" data-id="{{ $item->id }}">

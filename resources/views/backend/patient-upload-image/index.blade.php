@@ -36,7 +36,7 @@
                     <div class="card p-4">
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-striped dataTable" id="table_service">
+                                <table class="table table-striped dataTable" id="table_upload">
                                     <thead class="bg-primary">
                                         <tr>
                                             <th class="text-white">Date</th>
@@ -153,6 +153,13 @@
 
 @push('scripts')
 <script>
+
+    // [dataTable_Upload---------------------]
+        $('#table_upload').DataTable({
+            "pageLength": 50,
+        });
+    // [dataTable_Upload---------------------]
+
 
 // [model_upload_multi_image---------------------------------]
     document.addEventListener('DOMContentLoaded', function () {

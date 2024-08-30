@@ -35,7 +35,7 @@
                         <div class="card p-4">
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-striped dataTable" id="table_service">
+                                    <table class="table table-striped dataTable" id="table_patient">
                                         <thead class="bg-primary">
                                             <tr>
                                                 <th class="text-white">Patient's ID</th>
@@ -51,11 +51,11 @@
                                         </thead>
                                         <tbody>
                                             @php 
-                                                $patients = App\Models\Patient::all();
+                                                $patients = App\Models\Patient::orderBy('created_at', 'desc')->get();
                                             @endphp
-                                            @foreach ($patients as $patient)
+                                            @foreach ($patients as $index => $patient)
                                                 <tr class="row_patient_detail">
-                                                    <td>{{ $patient->id }}</td>
+                                                    <td>{{ $index +=1 }}</td>
                                                     <td>{{ $patient->date }}</td>
                                                     <td>{{ $patient->name }}</td>
                                                     <td>{{ $patient->age }}</td>
@@ -64,7 +64,7 @@
                                                     <td>{{ $patient->telephone }}</td>
                                                     <td><span class="badge badge-secondary">{{ $patient->type_patient }}</td>
                                                     <td class="td-action">
-                                                        <button class="btn btn-danger" onclick="swal('Cannot Delete', 'Doctor can only be updated after creation !', 'error');">
+                                                        <button class="btn btn-danger" onclick="swal('Cannot Delete', 'Patient can only be updated after creation !', 'error');">
                                                             <i class="fa fa-trash"></i>
                                                         </button>
                                                         <button class="btn btn-warning btn_edit_patient"
@@ -125,8 +125,9 @@
                         <div class="form-group">
                             <label for="sex">Sex:</label>
                             <select name="sex" id="patient-sex" class="form-control" required>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
                             </select>
                         </div>
                         <div class="form-group">

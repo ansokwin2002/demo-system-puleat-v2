@@ -35,7 +35,7 @@
                         <div class="card p-4">
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-striped dataTable" id="table_service">
+                                    <table class="table table-striped dataTable" id="table_cashier">
                                         <thead class="bg-primary">
                                             <tr>
                                                 <th class="text-white">#</th>
@@ -48,15 +48,16 @@
                                         </thead>
                                         <tbody>
                                         @php 
-                                            $cashiers = App\Models\Cashier::all();
+                                            $cashiers = App\Models\Cashier::orderBy('created_at', 'desc')->get();
                                         @endphp
-                                        @foreach ($cashiers as $cashier)
+                                        @foreach ($cashiers as $index => $cashier)
                                             <tr>
-                                                <td>{{ $cashier->id }}</td>
+                                                <td>{{ $index +=1 }}</td>
                                                 <td>{{ $cashier->name }}</td>
                                                 <td>{{ $cashier->sex }}</td>
                                                 <td>{{ $cashier->email }}</td>
                                                 <td>{{ $cashier->telephone }}</td>
+                                                <td style="display: none;">{{ $cashier->created_at }}</td>
                                                 <td>
                                                     <button class="btn btn-danger" onclick="swal('Cannot Delete', 'Cashier can only be updated after creation !', 'error');">
                                                         <i class="fa fa-trash"></i>

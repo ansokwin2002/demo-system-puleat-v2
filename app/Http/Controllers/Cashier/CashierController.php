@@ -30,7 +30,7 @@ class CashierController extends Controller
         ]);
 
         toastr()->success('Add Cashier Successfully!');
-        return redirect()->back();
+        return redirect()->route('cashier.list');
     }
 
     public function list()
