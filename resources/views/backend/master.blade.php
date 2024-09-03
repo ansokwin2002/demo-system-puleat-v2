@@ -163,7 +163,13 @@
 
             // [dataTable_Patient_History---------------------]
                 $('#table_patient_history').DataTable({
-                "pageLength": 50,
+                     "pageLength": 50,
+                });
+            // [dataTable_Patient_History---------------------]
+
+            // [dataTable_Patient_History---------------------]
+                $('#table_patient_all_history').DataTable({
+                    "pageLength": 50,
                 });
             // [dataTable_Patient_History---------------------]
 

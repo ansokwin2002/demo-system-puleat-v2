@@ -31,60 +31,60 @@
             <!-- [header-------------------------] -->
 
             <!--[Patient_table-------------------------]-->
-            <div class="row mt-4">
-                <div class="col-12">
-                    <div class="card p-4">
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped dataTable" id="table_service">
-                                    <thead class="bg-primary">
-                                        <tr>
-                                            <th class="text-white">Invoice ID</th>
-                                            <th class="text-white">Date</th>
-                                            <th class="text-white">Doctor</th>
-                                            <th class="text-white">Cashier</th>
-                                            <th class="text-white">Patient</th>
-                                            <th class="text-white">Grand Total</th>
-                                            <th class="text-white">Amount Paid</th>
-                                            <th class="text-white">Amount Unpaid</th>
-                                            <th class="text-white">Action</th>
-                                            <th class="text-white">Created_at</th>
-                                            <th class="text-white">Updated_at</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($patientHistories as $patientHistory)
-                                            @php
-                                                $paymentData = $patientHistory->patient_payment;
-                                                $doctorName = $patientHistory->doctor->name ?? '';
-                                                $cashierName = $patientHistory->cashier->name ?? '';
-                                                $patientName = $patientHistory->patient->name ?? '';
-                                            @endphp
-                                            <tr class="row_service_detail" data-toggle="modal" 
-                                                data-target="#fire-modal-4" data-id="{{ $patientHistory->id }}">
-                                                <td>{{ $patientHistory->invoice_id }}</td>
-                                                <td>{{ $paymentData['date'] ?? '' }}</td>
-                                                <td>{{ $doctorName }}</td>
-                                                <td>{{ $cashierName }}</td>
-                                                <td>{{ $patientName }}</td>
-                                                <td>${{ $paymentData['grand_total'] ?? '' }}</td>
-                                                <td>${{ $paymentData['amount_paid'] ?? '' }}</td>
-                                                <td>${{ $paymentData['amount_unpaid'] ?? '' }}</td>
-                                                <td>{{ $patientHistory['created_at'] }}</td>
-                                                <td>{{ $patientHistory['updated_at'] }}</td>
-                                                <td class="td-action">
-                                                    <button class="btn btn-danger" onclick="swal('Cannot Delete', 'Patient\'s history can not delete after creation !', 'error');"><i class="fa fa-trash"></i></button>
-                                                    <button class="btn btn-warning" onclick="swal('Cannot Edit', 'Patient\'s history can not edit after creation !', 'error');"><i class="fa fa-edit"></i></button>
-                                                </td>
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card p-4">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped dataTable" id="table_service">
+                                        <thead class="bg-primary">
+                                            <tr>
+                                                <th class="text-white">Invoice ID</th>
+                                                <th class="text-white">Date</th>
+                                                <th class="text-white">Doctor</th>
+                                                <th class="text-white">Cashier</th>
+                                                <th class="text-white">Patient</th>
+                                                <th class="text-white">Grand Total</th>
+                                                <th class="text-white">Amount Paid</th>
+                                                <th class="text-white">Amount Unpaid</th>
+                                                <th class="text-white">Action</th>
+                                                <th class="text-white">Created_at</th>
+                                                <th class="text-white">Updated_at</th>
                                             </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($patientHistories as $patientHistory)
+                                                @php
+                                                    $paymentData = $patientHistory->patient_payment;
+                                                    $doctorName = $patientHistory->doctor->name ?? '';
+                                                    $cashierName = $patientHistory->cashier->name ?? '';
+                                                    $patientName = $patientHistory->patient->name ?? '';
+                                                @endphp
+                                                <tr class="row_service_detail" data-toggle="modal" 
+                                                    data-target="#fire-modal-4" data-id="{{ $patientHistory->id }}">
+                                                    <td>{{ $patientHistory->invoice_id }}</td>
+                                                    <td>{{ $paymentData['date'] ?? '' }}</td>
+                                                    <td>{{ $doctorName }}</td>
+                                                    <td>{{ $cashierName }}</td>
+                                                    <td>{{ $patientName }}</td>
+                                                    <td>${{ $paymentData['grand_total'] ?? '' }}</td>
+                                                    <td>${{ $paymentData['amount_paid'] ?? '' }}</td>
+                                                    <td>${{ $paymentData['amount_unpaid'] ?? '' }}</td>
+                                                    <td>{{ $patientHistory['created_at'] }}</td>
+                                                    <td>{{ $patientHistory['updated_at'] }}</td>
+                                                    <td class="td-action">
+                                                        <button class="btn btn-danger" onclick="swal('Cannot Delete', 'Patient\'s history can not delete after creation !', 'error');"><i class="fa fa-trash"></i></button>
+                                                        <button class="btn btn-warning" onclick="swal('Cannot Edit', 'Patient\'s history can not edit after creation !', 'error');"><i class="fa fa-edit"></i></button>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             <!--[Patient_table-------------------------]-->
 
         </section>
@@ -98,51 +98,51 @@
     <!-- [footer------------------------------] -->
 
     <!-- [Model Detail Patient Service-------------------------] -->
-    <div class="modal fade" id="fire-modal-4" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog custom-modal-service-detail">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Service Details</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-bordered" id="modalServiceDetails">
-                            <thead class="bg-primary">
-                                <tr>
-                                    <th class="text-white">#</th>
-                                    <th class="text-white">Service Name</th>
-                                    <th class="text-white">Service Unit</th>
-                                    <th class="text-white">Service Price</th>
-                                    <th class="text-white">Subtotal</th>
-                                    <th class="text-white">Discount (%)</th>
-                                    <th class="text-white">Discount ($)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($patientHistories as $patientHistory)
-                                    @foreach ($patientHistory->patient_payment['services'] ?? [] as $index => $service)
-                                        <tr>
-                                            <td>{{ $index + 1 }}</td>
-                                            <td>{{ $service['service_name'] }}</td>
-                                            <td>{{ $service['service_unit'] }}</td>
-                                            <td>$ {{ $service['service_price'] ?? '' }}</td>
-                                            <td>$ {{ $service['subtotal'] ?? '' }}</td>
-                                            <td>{{ $service['discount_percent'] ?? '' }} %</td>
-                                            <td>$ {{ $service['discount_dollar'] ?? '' }}</td>
-                                        </tr>
-                                    @endforeach
-                                @endforeach
-                            </tbody>
-                        </table>
+        <div class="modal fade" id="fire-modal-4" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog custom-modal-service-detail">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Service Details</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
                     </div>
-                    <textarea class="summernote" name="" id="patientsNotedContent"></textarea> 
+                    <div class="modal-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" id="modalServiceDetails">
+                                <thead class="bg-primary">
+                                    <tr>
+                                        <th class="text-white">#</th>
+                                        <th class="text-white">Service Name</th>
+                                        <th class="text-white">Service Unit</th>
+                                        <th class="text-white">Service Price</th>
+                                        <th class="text-white">Subtotal</th>
+                                        <th class="text-white">Discount (%)</th>
+                                        <th class="text-white">Discount ($)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($patientHistories as $patientHistory)
+                                        @foreach ($patientHistory->patient_payment['services'] ?? [] as $index => $service)
+                                            <tr>
+                                                <td>{{ $index + 1 }}</td>
+                                                <td>{{ $service['service_name'] }}</td>
+                                                <td>{{ $service['service_unit'] }}</td>
+                                                <td>$ {{ $service['service_price'] ?? '' }}</td>
+                                                <td>$ {{ $service['subtotal'] ?? '' }}</td>
+                                                <td>{{ $service['discount_percent'] ?? '' }} %</td>
+                                                <td>$ {{ $service['discount_dollar'] ?? '' }}</td>
+                                            </tr>
+                                        @endforeach
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <textarea class="summernote" name="" id="patientsNotedContent"></textarea> 
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     <!-- [Model Detail Patient Service-------------------------] -->
 </div>
 

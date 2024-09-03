@@ -8,6 +8,7 @@ use App\Http\Controllers\Invoice\InvoiceController;
 use App\Http\Controllers\Notification\NotificationController;
 use App\Http\Controllers\Patient\PatientController;
 use App\Http\Controllers\PatientHistory\PatientHistoryController;
+use App\Http\Controllers\PatientSummary\PatientSummaryController;
 use App\Http\Controllers\Payment\PaymentController;
 // use App\Http\Controllers\Profile\ProfileController as ProfileProfileController;
 use App\Http\Controllers\ProfileController;
@@ -82,6 +83,7 @@ use Illuminate\Support\Facades\Route;
             Route::get('/list-patient','view_Patient')->name('list_Patient');
             Route::post('/create-patient','create_Patient')->name('create_Patient');
             Route::post('/update-patient/{id}','update')->name('patient.update');
+            Route::get('/get-patient-history/{id}','getPatientHistory');
         });
     });
 // [patient_controller----------------------------]
@@ -148,11 +150,6 @@ use Illuminate\Support\Facades\Route;
             Route::post('/create-image','store')->name('uploadMultiImage.store');
             Route::get('/get-images/{invoiceId}', 'getImages')->name('uploadMultiImage.view');
             Route::post('/delete-image','deleteImage')->name('uploadMultiImage.destroy');
-
-
         });
     });
 // [uploadMultiImage-----------------------------]
-
-
-
