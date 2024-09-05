@@ -50,11 +50,12 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @php
+                                                use App\Models\Patient;
+                                                $patients = Patient::latest('created_at')->get();
+                                            @endphp
                                             @foreach ($patients as $index => $patient)
-                                            <tr class="row_patient_all_history" 
-                                                data-patient-id="{{ $patient->id }}" 
-                                                data-toggle="modal" 
-                                                data-target="#fire-modal-4">
+                                            <tr>
                                                 <td>{{ $index + 1 }}</td>
                                                 <td>{{ $patient->date }}</td>
                                                 <td>{{ $patient->name }}</td>
@@ -153,138 +154,6 @@
         </div>
     <!-- [Model Edit Patient-------------------------] -->
 
-    <!-- [Model Patient All History-------------------------] -->
-    <div class="modal fade" id="fire-modal-4" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog custom-modal-service-detail">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">All Patient History</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="table-responsive">
-                    <table class="table table-striped table-bordered modelAllPatientHistory" id="">
-                        <thead class="bg-primary">
-                            <tr>
-                                <th class="text-white">Invoice ID</th>
-                                <th class="text-white">Date</th>
-                                <th class="text-white">Doctor</th>
-                                <th class="text-white">Cashier</th>
-                                <th class="text-white">Patient</th>
-                                <th class="text-white">Grand Total</th>
-                                <th class="text-white">Amount Paid</th>
-                                <th class="text-white">Amount Unpaid</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Dynamic Content Here -->
-                        </tbody>
-                    </table>
-                    <div id="notesSection">
-                        <!-- Patient notes will be dynamically inserted here -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- [Model Patient All History-------------------------] -->
-
-
 </div>
 
 @endsection
-
-@push('scripts')
-
-<script>
-
-$(document).on('click', '.row_patient_all_history', function() {
-    var patientId = $(this).data('patient-id'); // Ensure this is correctly set in your HTML
-    var modalBody = $('.modelAllPatientHistory tbody');
-    var notesSection = $('#notesSection');
-    
-    modalBody.empty(); // Clear existing data
-    notesSection.empty(); // Clear existing notes
-
-    $.ajax({
-        url: '/get-patient-history/' + patientId,
-        type: 'GET',
-        success: function(response) {
-            console.log('AJAX Response:', response); // Log the response for debugging
-            
-            if (Array.isArray(response.histories) && response.histories.length > 0) {
-                response.histories.forEach(function(history) {
-                    var payments = history.patient_payment; // Ensure this is an object
-                    
-                    // Log patient_payment for debugging
-                    console.log('Patient Payment Data:', payments);
-                    
-                    if (payments && typeof payments === 'object') {
-                        // Display invoice details
-                        modalBody.append(`
-                            <tr class="invoice-details">
-                                <td>${history.invoice_id || 'N/A'}</td>
-                                <td>${payments.date || 'N/A'}</td>
-                                <td>${history.doctor ? history.doctor.name : 'N/A'}</td>
-                                <td>${history.cashier ? history.cashier.name : 'N/A'}</td>
-                                <td>${payments.customer || 'N/A'}</td>
-                                <td>${payments.grand_total || '$0.00'}</td>
-                                <td>${payments.amount_paid || '$0.00'}</td>
-                                <td>${payments.amount_unpaid || '$0.00'}</td> <!-- Added Data -->
-                            </tr>
-                        `);
-
-                        // Process services array if available
-                        if (Array.isArray(payments.services) && payments.services.length > 0) {
-                            payments.services.forEach(function(service, serviceIndex) {
-                                modalBody.append(`
-                                    <tr class="service-row">
-                                        <td colspan="8">
-                                            <div>
-                                                <strong>Service #${serviceIndex + 1}:</strong>
-                                                <ul>
-                                                    <li><strong>Service Name:</strong> ${service.service_name || 'N/A'}</li>
-                                                    <li><strong>Service Unit:</strong> ${service.service_unit || 'N/A'}</li>
-                                                    <li><strong>Service Price:</strong> ${service.service_price || 'N/A'}</li>
-                                                    <li><strong>Subtotal:</strong> ${service.subtotal || 'N/A'}</li>
-                                                    <li><strong>Discount (%)</strong> ${service.discount_percent || '0%'}</li>
-                                                    <li><strong>Discount ($)</strong> ${service.discount_dollar ? `$${service.discount_dollar}` : '$0.00'}</li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                `);
-                            });
-                        } else {
-                            modalBody.append('<tr><td colspan="8">No service data available.</td></tr>');
-                        }
-                        
-                        // Populate the notes section with HTML content
-                        notesSection.html(`
-                            <h5>Patient Notes:</h5>
-                            <div>${payments.patient_noted || 'No notes available.'}</div>
-                        `);
-                    } else {
-                        modalBody.append('<tr><td colspan="8">No patient payment data available.</td></tr>');
-                    }
-                });
-            } else {
-                modalBody.append('<tr><td colspan="8">No patient history available.</td></tr>');
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error('Error fetching patient history:', status, error);
-            modalBody.append('<tr><td colspan="8">Error loading data.</td></tr>');
-        }
-    });
-});
-
-
-
-</script>
-
-@endpush

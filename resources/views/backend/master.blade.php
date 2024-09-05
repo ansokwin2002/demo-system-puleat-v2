@@ -55,10 +55,16 @@
 </style>
 
 <body>
-    <!-- [loading-----------------------] -->
-        @include('backend.body.loader')
-    <!-- [loading-----------------------] -->
+   
   <div id="app">
+     <!-- [loading-----------------------] -->
+     @include('backend.body.loader')
+    <!-- [loading-----------------------] -->
+        <!-- Loading spinner (initially hidden) -->
+        <div id="loading-spinner" style="display: none; position: fixed; bottom: 9%; right: 3%; z-index: 1000;">
+            <i class="fa fa-spinner fa-spin bg-primary p-2 text-white spinner-shadow" style="font-size: 24px; border-radius: 50%;"></i>
+        </div>
+
      @yield('content')
   </div>
   <script>

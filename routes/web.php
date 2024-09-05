@@ -12,6 +12,7 @@ use App\Http\Controllers\PatientSummary\PatientSummaryController;
 use App\Http\Controllers\Payment\PaymentController;
 // use App\Http\Controllers\Profile\ProfileController as ProfileProfileController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Report\ReportPatientsController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Reports\ReportsController;
 use App\Http\Controllers\Reports\ReportServiceController;
@@ -153,3 +154,12 @@ use Illuminate\Support\Facades\Route;
         });
     });
 // [uploadMultiImage-----------------------------]
+
+// [report-----------------------------]
+    Route::middleware('auth')->group(function () {
+        Route::controller(ReportPatientsController::class)->group(function(){
+            Route::get('/report-patients','index')->name('reports.index');
+            Route::get('/export-patient-history','exportPatientHistory')->name('export.patient.all_history');
+        });
+    });
+// [report-----------------------------]

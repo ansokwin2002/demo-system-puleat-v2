@@ -3205,6 +3205,8 @@ body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li.active ul.dropdown-men
   max-width: 70%;
 }
 
-
+.spinner-shadow {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.515);
+}
 
 

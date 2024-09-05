@@ -46,9 +46,11 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        @php 
-                                            $services = App\Models\Service::all();
+                                        @php
+                                            use App\Models\Service;
+                                            $services = Service::latest('created_at')->get();
                                         @endphp
+
                                         @foreach ($services as $index => $item)
                                             <tr>
                                                 <td>{{ $index +=1 }}</td>

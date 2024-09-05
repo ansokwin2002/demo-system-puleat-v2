@@ -47,9 +47,11 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        @php 
-                                            $doctors = App\Models\Doctor::all();
+                                        @php
+                                            use App\Models\Doctor;
+                                            $doctors = Doctor::latest('created_at')->get();
                                         @endphp
+    
                                         @foreach ($doctors as $index => $doctor)
                                             <tr>
                                                 <td>{{ $index +=1 }}</td>

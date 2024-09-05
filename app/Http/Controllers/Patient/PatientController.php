@@ -51,8 +51,7 @@ class PatientController extends Controller
      */
     public function view_Patient()
     {
-        $patients = Patient::with(['histories', 'histories.doctor'])->orderBy('created_at', 'desc')->get();
-        return view('backend.patient.view_patient', compact('patients'));
+        return view('backend.patient.view_patient');
     }
 
     public function update(Request $request, string $id)
@@ -84,27 +83,5 @@ class PatientController extends Controller
         toastr()->success('Patient updated successfully!');
         return redirect()->back();
     }
-
-    public function getPatientHistory($patientId)
-    {
-        try {
-            // Eager load the related doctor and cashier models
-            $patientHistories = PatientHistory::with(['doctor', 'cashier'])
-                ->where('patient_id', $patientId)
-                ->get();
-    
-            if ($patientHistories->isEmpty()) {
-                return response()->json(['message' => 'No history found for this patient.'], 404);
-            }
-    
-            return response()->json(['histories' => $patientHistories]);
-        } catch (\Exception $e) {
-            // Log the error and return a 500 response
-            \Log::error('Error fetching patient history: ' . $e->getMessage());
-            return response()->json(['error' => 'Internal Server Error'], 500);
-        }
-    }
-    
-
 
 }

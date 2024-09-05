@@ -47,9 +47,11 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        @php 
-                                            $cashiers = App\Models\Cashier::all();
+                                        @php
+                                            use App\Models\Cashier;
+                                            $cashiers = Cashier::latest('created_at')->get();
                                         @endphp
+    
                                         @foreach ($cashiers as $index => $cashier)
                                             <tr>
                                                 <td>{{ $index +=1 }}</td>
