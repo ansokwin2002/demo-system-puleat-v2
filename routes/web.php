@@ -97,6 +97,7 @@ use Illuminate\Support\Facades\Route;
             Route::get('/patient-details/{id}','getPatientDetails')->name('get_patient_details');
             Route::get('/invoice/{invoiceId}','showInvoice')->name('show_invoice');
             Route::get('/get-patient-noted','getPatientNoted')->name('patient_noted');
+            Route::get('/get-patient-history/{invoice_id}','editHistoryPatient')->name('history_patient.edit');
         });
     });
 // [patient_history_controller----------------------------]
@@ -160,6 +161,7 @@ use Illuminate\Support\Facades\Route;
         Route::controller(ReportPatientsController::class)->group(function(){
             Route::get('/report-patients','index')->name('reports.index');
             Route::get('/export-patient-history','exportPatientHistory')->name('export.patient.all_history');
+            Route::get('/search-patient-history','searchPatientHistory')->name('search.patient.all_history');
         });
     });
 // [report-----------------------------]

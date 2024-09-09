@@ -82,4 +82,19 @@ class PatientHistoryController extends Controller
             return response()->json(['patient_noted' => 'No notes found.']);
         }
     }
+
+    public function editHistoryPatient($invoice_id)
+    {
+        $patientHistory = PatientHistory::where('invoice_id', $invoice_id)->first();
+
+        if (!$patientHistory) {
+            return redirect()->route('your.redirect.route')->with('error', 'Patient history not found.');
+        }
+
+        return view('backend.patient.edit_patient_service_history', [
+            'patient_payment' => $patientHistory->patient_payment
+        ]);
+    }
+
+
 }

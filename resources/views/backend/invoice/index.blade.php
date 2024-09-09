@@ -36,13 +36,13 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr style="border-top: 3px solid black;border-bottom: 3px solid black;">
-                                <th style="width: 5%; color:black;">No.</th>
-                                <th style="width: 40%; color:black;">Service Name</th>
-                                <th style="width: 5%; color:black;">Unit</th>
-                                <th style="width: 15%; color:black;">Price</th>
-                                <th style="width: 5%; color:black;">Discount(%)</th>
-                                <th style="width: 5%; color:black;">Discount($)</th>
-                                <th style="width: 40%; color:black;">Subtotal</th>
+                                <th style="width: 5%; color:black;">លេខរៀង</th>
+                                <th style="width: 40%; color:black;">សេវាកម្ម</th>
+                                <th style="width: 5%; color:black;">ចំនួន</th>
+                                <th style="width: 15%; color:black;">តម្លៃ</th>
+                                <th style="width: 5%; color:black;">បញ្ខុះតម្លៃ(%)</th>
+                                <th style="width: 5%; color:black;">បញ្ខុះតម្លៃ($)</th>
+                                <th style="width: 40%; color:black;">ទឹកប្រាក់</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -68,15 +68,15 @@
                         </tbody>
                         <tbody>
                             <tr>
-                                <td colspan="6" style="color: black;"><strong><span class="float-right">Grand Total (USD)</span></strong></td>
+                                <td colspan="6" style="color: black;"><strong><span class="float-right">សរុបរួម / Grand Total (USD)</span></strong></td>
                                 <td><strong id="grand_total">$ {{ $data['patient_payment']['grand_total'] }}</strong></td>
                             </tr>
                             <tr>
-                                <td colspan="6" style="color: black;"><strong><span class="float-right">Amount paid </span></strong></td>
+                                <td colspan="6" style="color: black;"><strong><span class="float-right">ប្រាក់បានបង់​ / Amount paid </span></strong></td>
                                 <td><strong id="amount_paid">$ {{ $data['patient_payment']['amount_paid'] }}</strong></td>
                             </tr>
                             <tr>
-                                <td colspan="6" style="color: black;"><strong><span class="float-right" id="unpaid">Unpaid amount</span></strong></td>
+                                <td colspan="6" style="color: black;"><strong><span class="float-right" id="unpaid">ប្រាក់នៅសល់ / Unpaid amount</span></strong></td>
                                 <td><strong id="amount_unpaid">$ {{ $data['patient_payment']['amount_unpaid'] }}</strong></td>
                             </tr>
                         </tbody>

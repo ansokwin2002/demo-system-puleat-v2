@@ -100,6 +100,9 @@
                                 </div>
                             </div>
                             <div class="form-group mt-3">
+                                <button type="button" class="btn btn-warning" id="search_patient_all_history">
+                                    <i class="fa fa-search"></i> Search
+                                </button>
                                 <button type="button" class="btn btn-primary" id="export_patient_all_history">
                                     <i class="fa fa-save"></i> Export Excel
                                 </button>
@@ -108,6 +111,45 @@
                     </div>
                 </div>
             <!-- [Service_table-------------------------] -->
+            <!-- [Table All Patients After Search-----------------------------------] -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="table-responsive" style="overflow-x: auto;">
+                                    <table class="table table-bordered dataTable" style="width:100%;">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Date</th>
+                                                <th>Patient Name</th>
+                                                <th>Doctor Name</th>
+                                                <th>Cashier Name</th>
+                                                <th>Service Name</th>
+                                                <th>Subtotal</th>
+                                                <th>Unit</th>
+                                                <th>Price</th>
+                                                <th>Discount $</th>
+                                                <th>Discount %</th>
+                                                <th>Amount Paid</th>
+                                                <th>Grand Total</th>
+                                                <th>Amount Unpaid</th>
+                                                <th>Type Service</th>
+                                                <th>Notes</th>
+                                                <th>Next Appointment Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="patient-history-table-body">
+                                            <!-- Dynamic Data Here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <!-- [Table All Patients After Search-----------------------------------] -->
+
 
         </section>
     </div>
@@ -126,7 +168,69 @@
 
 @push('scripts')
 <script>
-  
+    function formatCurrency(value) {
+        // Convert value to float and check if it is greater than zero
+        const floatValue = parseFloat(value);
+        return floatValue > 0 ? `$${floatValue.toFixed(2)}` : '';
+    }
+
+    function formatPercentage(value) {
+        // Convert value to float and check if it is greater than zero
+        const floatValue = parseFloat(value);
+        return floatValue > 0 ? `${floatValue.toFixed(2)}%` : '';
+    }
+
+    function displayPatientHistory(data) {
+        var tableBody = $('#patient-history-table-body');
+        tableBody.empty();
+
+        data.forEach(function(patient, index) {
+            var baseRowSpan = patient.services.length;
+            var firstService = patient.services[0];
+
+            var patientRow = `
+                <tr class="table_search_patient_all_history">
+                    <td rowspan="${baseRowSpan}">${index + 1}</td>
+                    <td rowspan="${baseRowSpan}">${patient.date}</td>
+                    <td rowspan="${baseRowSpan}">${patient.customer}</td>
+                    <td rowspan="${baseRowSpan}">${patient.doctor_name}</td>
+                    <td rowspan="${baseRowSpan}">${patient.cashier_name}</td>
+                    <td>${firstService.service_name}</td>
+                    <td>${formatCurrency(firstService.subtotal)}</td>
+                    <td>${firstService.service_unit}</td>
+                    <td>${formatCurrency(firstService.service_price)}</td>
+                    <td>${formatCurrency(firstService.discount_dollar)}</td>
+                    <td>${formatPercentage(firstService.discount_percent)}</td>
+                    <td rowspan="${baseRowSpan}">${formatCurrency(patient.amount_paid)}</td>
+                    <td rowspan="${baseRowSpan}">${formatCurrency(patient.grand_total)}</td>
+                    <td rowspan="${baseRowSpan}">${formatCurrency(patient.amount_unpaid)}</td>
+                    <td rowspan="${baseRowSpan}">${patient.type_service}</td>
+                    <td rowspan="${baseRowSpan}">${patient.patient_noted}</td>
+                    <td rowspan="${baseRowSpan}">${patient.next_appointment_date}</td>
+                </tr>`;
+
+            tableBody.append(patientRow);
+
+            // Add remaining services for this patient
+            for (var i = 1; i < patient.services.length; i++) {
+                var service = patient.services[i];
+                var serviceRow = `
+                    <tr>
+                        <td>${service.service_name}</td>
+                        <td>${formatCurrency(service.subtotal)}</td>
+                        <td>${service.service_unit}</td>
+                        <td>${formatCurrency(service.service_price)}</td>
+                        <td>${formatCurrency(service.discount_dollar)}</td>
+                        <td>${formatPercentage(service.discount_percent)}</td>
+                    </tr>`;
+                tableBody.append(serviceRow);
+            }
+        });
+    }
+
+
+
+
     $(document).ready(function() {
         function getFirstDayOfMonth() {
             return moment().startOf('month').startOf('day').format('YYYY-MM-DD HH:mm'); 
@@ -155,53 +259,102 @@
             }
         });
 
-    $('#export_patient_all_history').click(function() {
-        $('#loading-spinner').show();
+    // [export_patient_all_history------------------------]
+        $('#export_patient_all_history').click(function() {
+            $('#loading-spinner').show();
 
-        var patientId = $('#patient-select').val();
-        var startDate = $('#start-date').val();
-        var endDate = $('#end-date').val();
+            var patientId = $('#patient-select').val();
+            var startDate = $('#start-date').val();
+            var endDate = $('#end-date').val();
 
-        if (!startDate || !endDate) {
-            alert('Please select a date range.');
-            $('#loading-spinner').hide();
-            return;
-        }
-
-        $.ajax({
-            url: "{{ route('export.patient.all_history') }}",
-            method: 'GET',
-            data: {
-                patient_id: patientId, // Send patient_id if selected, otherwise it will be null
-                start_date: startDate,
-                end_date: endDate
-            },
-            xhrFields: {
-                responseType: 'blob'
-            },
-            success: function(response) {
-                var url = window.URL.createObjectURL(response);
-                var a = document.createElement('a');
-                a.href = url;
-                a.download = 'patient_history.xlsx';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                window.URL.revokeObjectURL(url);
-            },
-            error: function(xhr, status, error) {
-                if (xhr.status === 404) {
-                    alert('No patient history found for the selected date range.');
-                } else {
-                    console.error('An error occurred:', error);
-                    alert('Failed to export data. Please check the console for details.');
-                }
-            },
-            complete: function() {
+            if (!startDate || !endDate) {
+                alert('Please select a date range.');
                 $('#loading-spinner').hide();
+                return;
             }
+
+            $.ajax({
+                url: "{{ route('export.patient.all_history') }}",
+                method: 'GET',
+                data: {
+                    patient_id: patientId, // Send patient_id if selected, otherwise it will be null
+                    start_date: startDate,
+                    end_date: endDate
+                },
+                xhrFields: {
+                    responseType: 'blob'
+                },
+                success: function(response) {
+                    var url = window.URL.createObjectURL(response);
+                    var a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'patient_history.xlsx';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                },
+                error: function(xhr, status, error) {
+                    if (xhr.status === 404) {
+                        alert('No patient history found for the selected date range.');
+                    } else {
+                        console.error('An error occurred:', error);
+                        alert('Failed to export data. Please check the console for details.');
+                    }
+                },
+                complete: function() {
+                    $('#loading-spinner').hide();
+                }
+            });
         });
-    });
+    // [export_patient_all_history------------------------]
+
+    // [search_patient_all_history------------------------]
+        $('#search_patient_all_history').click(function(){
+            $('#loading-spinner').show();
+
+            var patientId = $('#patient-select').val();
+            var startDate = $('#start-date').val();
+            var endDate = $('#end-date').val();
+
+            if (!startDate || !endDate) {
+                alert('Please select a date range.');
+                $('#loading-spinner').hide();
+                return;
+            }
+
+            $.ajax({
+                url: "{{ route('search.patient.all_history') }}",
+                method: 'GET',
+                data: {
+                    patient_id: patientId,
+                    start_date: startDate,
+                    end_date: endDate
+                },
+                success: function(response) {
+                    if (response.error) {
+                        alert(response.error);
+                    } else {
+                        // Display data in your HTML or pass it to the Blade file
+                        displayPatientHistory(response.data);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    if (xhr.status === 404) {
+                        alert('No patient history found for the selected date range.');
+                    } else {
+                        console.error('An error occurred:', error);
+                        alert('Failed to search data. Please check the console for details.');
+                    }
+                },
+                complete: function() {
+                    $('#loading-spinner').hide();
+                }
+            });
+        });
+
+    // [search_patient_all_history------------------------]
+
 });
 
 

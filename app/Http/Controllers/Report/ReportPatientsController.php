@@ -19,99 +19,6 @@ class ReportPatientsController extends Controller
     {
         return view('backend.reports.index');
     }
-    
-    // public function exportPatientHistory(Request $request)
-    // {
-    //     // Validate input fields
-    //     $request->validate([
-    //         'patient_id' => 'nullable|integer|exists:patients,id', // Make patient_id optional
-    //         'start_date' => 'required|date',
-    //         'end_date' => 'required|date',
-    //     ]);
-    
-    //     $patientId = $request->input('patient_id');
-    //     $startDate = $request->input('start_date');
-    //     $endDate = $request->input('end_date');
-    
-    //     if ($patientId) {
-    //         // Fetch all patient history records for the specified patient
-    //         $patientHistories = PatientHistory::where('patient_id', $patientId)
-    //             ->get();
-    //     } else {
-    //         // Fetch all patient history records
-    //         $patientHistories = PatientHistory::all();
-    //     }
-    
-    //     // Filter records based on the 'date' field in the 'patient_payment' JSON
-    //     $filteredHistories = $patientHistories->filter(function($history) use ($startDate, $endDate) {
-    //         $patientPayment = $history->patient_payment;
-    //         $recordDate = $patientPayment['date'] ?? null;
-    
-    //         return $recordDate && $recordDate >= $startDate && $recordDate <= $endDate;
-    //     });
-    
-    //     // Return JSON response with error message if no records found
-    //     if ($filteredHistories->isEmpty()) {
-    //         return response()->json(['error' => 'No patient history found for the selected date range.'], 404);
-    //     }
-    
-    //     // Process the records to extract the data for export
-    //     $exportData = $filteredHistories->map(function($history) {
-    //         $patientPayment = $history->patient_payment; // JSON field
-    
-    //         // Flatten the services array
-    //         $service_name = collect($patientPayment['services'] ?? [])->map(function($service) {
-    //             return $service['service_name'];
-    //         })->implode('; ');
-    
-    //         $service_subtotal = collect($patientPayment['services'] ?? [])->map(function($service) {
-    //             return $service['subtotal'];
-    //         })->implode('; ');
-    
-    //         $service_unit = collect($patientPayment['services'] ?? [])->map(function($service) {
-    //             return $service['service_unit'];
-    //         })->implode('; ');
-    
-    //         $service_price = collect($patientPayment['services'] ?? [])->map(function($service) {
-    //             return $service['service_price'];
-    //         })->implode('; ');
-    
-    //         $service_discount_percent = collect($patientPayment['services'] ?? [])->map(function($service) {
-    //             return $service['discount_percent'];
-    //         })->implode('; ');
-    
-    //         $service_discount_dollar = collect($patientPayment['services'] ?? [])->map(function($service) {
-    //             return  $service['discount_dollar'];
-    //         })->implode('; ');
-    
-    //         // Fetch related names if required
-    //         $doctorName = Doctor::find($history->doctor_id)->name ?? 'N/A';
-    //         $cashierName = Cashier::find($history->cashier_id)->name ?? 'N/A';
-    
-    //         return [
-    //             'id' => $history->id,
-    //             'date' => $patientPayment['date'] ?? 'N/A',
-    //             'customer' => $patientPayment['customer'] ?? 'N/A',
-    //             'doctor_name' => $doctorName,
-    //             'cashier_name' => $cashierName,
-    //             'services' => $service_name,
-    //             'subtotal' => $service_subtotal,
-    //             'service_unit' => $service_unit,
-    //             'service_price' => $service_price,
-    //             'discount_dollar' => $service_discount_dollar,
-    //             'discount_percent' => $service_discount_percent,
-    //             'amount_paid' => $patientPayment['amount_paid'] ?? 0,
-    //             'grand_total' => $patientPayment['grand_total'] ?? 0,
-    //             'type_service' => $patientPayment['type_service'] ?? 'N/A',
-    //             'amount_unpaid' => $patientPayment['amount_unpaid'] ?? 0,
-    //             'patient_noted' => strip_tags($patientPayment['patient_noted'] ?? 'N/A'),
-    //             'next_appointment_date' => $patientPayment['next_appointment_date'] ?? 'N/A',
-    //         ];
-    //     });
-    
-    //     // Use this data to generate the Excel file
-    //     return Excel::download(new PatientAllHistroyExport($exportData->toArray()), 'patient_history.xlsx');
-    // }
     public function exportPatientHistory(Request $request)
     {
         try {
@@ -126,10 +33,12 @@ class ReportPatientsController extends Controller
             $startDate = $request->input('start_date');
             $endDate = $request->input('end_date');
     
+            // Fetch patient histories based on the filters
             $patientHistories = $patientId 
                 ? PatientHistory::where('patient_id', $patientId)->get()
                 : PatientHistory::all();
     
+            // Filter records by date range
             $filteredHistories = $patientHistories->filter(function($history) use ($startDate, $endDate) {
                 $patientPayment = $history->patient_payment;
                 $recordDate = $patientPayment['date'] ?? null;
@@ -141,44 +50,115 @@ class ReportPatientsController extends Controller
                 return response()->json(['error' => 'No patient history found for the selected date range.'], 404);
             }
     
-            $exportData = $filteredHistories->flatMap(function($history) {
+            $exportData = [];
+            foreach ($filteredHistories as $history) {
                 $patientPayment = $history->patient_payment;
+                $services = $patientPayment['services'] ?? [];
     
-                return collect($patientPayment['services'] ?? [])->map(function($service) use ($history, $patientPayment) {
-                    return [
-                        'id' => $history->id,
-                        'date' => $patientPayment['date'] ?? 'N/A',
-                        'customer' => $patientPayment['customer'] ?? 'N/A',
-                        'doctor_name' => Doctor::find($history->doctor_id)->name ?? 'N/A',
-                        'cashier_name' => Cashier::find($history->cashier_id)->name ?? 'N/A',
+                foreach ($services as $index => $service) {
+                    $row = [
+                        'id' => $index === 0 ? $history->id : '',  // Show ID only for the first service
+                        'date' => $index === 0 ? ($patientPayment['date'] ?? '') : '',  // Show Date only for the first service
+                        'customer' => $index === 0 ? ($patientPayment['customer'] ?? '') : '',  // Show Customer only for the first service
+                        'doctor_name' => $index === 0 ? (Doctor::find($history->doctor_id)->name ?? '') : '',  // Show Doctor Name only for the first service
+                        'cashier_name' => $index === 0 ? (Cashier::find($history->cashier_id)->name ?? '') : '',  // Show Cashier Name only for the first service
                         'service_name' => $service['service_name'] ?? '',
                         'subtotal' => $service['subtotal'] ?? 0,
                         'service_unit' => $service['service_unit'] ?? 0,
                         'service_price' => $service['service_price'] ?? 0,
                         'discount_dollar' => $service['discount_dollar'] ?? 0,
                         'discount_percent' => $service['discount_percent'] ?? 0,
-                        'amount_paid' => $patientPayment['amount_paid'] ?? 0,
-                        'grand_total' => $patientPayment['grand_total'] ?? 0,
-                        'type_service' => $patientPayment['type_service'] ?? 'N/A',
-                        'amount_unpaid' => $patientPayment['amount_unpaid'] ?? 0,
-                        'patient_noted' => strip_tags($patientPayment['patient_noted'] ?? 'N/A'),
-                        'next_appointment_date' => $patientPayment['next_appointment_date'] ?? 'N/A',
+                        'amount_paid' => $index === 0 ? ($patientPayment['amount_paid'] ?? 0) : '',  // Show Amount Paid only for the first service
+                        'grand_total' => $index === 0 ? ($patientPayment['grand_total'] ?? 0) : '',  // Show Grand Total only for the first service
+                        'amount_unpaid' => $index === 0 ? ($patientPayment['amount_unpaid'] ?? 0) : '',  // Show Amount Unpaid only for the first service
+                        'type_service' => $index === 0 ? ($patientPayment['type_service'] ?? '') : '',  // Show Type Service only for the first service
+                        'patient_noted' => $index === 0 ? strip_tags($patientPayment['patient_noted'] ?? '') : '',  // Show Patient Noted only for the first service
+                        'next_appointment_date' => $index === 0 ? ($patientPayment['next_appointment_date'] ?? '') : '',  // Show Next Appointment Date only for the first service
                     ];
-                });
-            });
-            return Excel::download(new PatientAllHistroyExport($exportData->toArray()), 'patient_history.xlsx');
+                    $exportData[] = $row;
+                }
+            }
+    
+            // Return the Excel file download
+            return Excel::download(new PatientAllHistroyExport($exportData), 'patient_history.xlsx');
         } catch (\Exception $e) {
             return response()->json(['error' => 'An error occurred while exporting patient history.'], 500);
         }
     }
-    
-    
 
-    
+    public function searchPatientHistory(Request $request)
+{
+    try {
+        // Validate input fields
+        $request->validate([
+            'patient_id' => 'nullable|integer|exists:patients,id',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date',
+        ]);
 
-    
-    
-    
+        $patientId = $request->input('patient_id');
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
+        // Fetch patient histories based on the filters
+        $patientHistories = $patientId 
+            ? PatientHistory::where('patient_id', $patientId)->get()
+            : PatientHistory::all();
+
+        // Filter records by date range
+        $filteredHistories = $patientHistories->filter(function($history) use ($startDate, $endDate) {
+            $patientPayment = $history->patient_payment;
+            $recordDate = $patientPayment['date'] ?? null;
+
+            return $recordDate && $recordDate >= $startDate && $recordDate <= $endDate;
+        });
+
+        if ($filteredHistories->isEmpty()) {
+            return response()->json(['error' => 'No patient history found for the selected date range.'], 404);
+        }
+
+        // Prepare the data for the view with grouped services under each patient
+        $exportData = [];
+        foreach ($filteredHistories as $history) {
+            $patientPayment = $history->patient_payment;
+            $services = $patientPayment['services'] ?? [];
+
+            if (!array_key_exists($history->id, $exportData)) {
+                $exportData[$history->id] = [
+                    'id' => $history->id,
+                    'date' => $patientPayment['date'] ?? '',
+                    'customer' => $patientPayment['customer'] ?? '',
+                    'doctor_name' => Doctor::find($history->doctor_id)->name ?? '',
+                    'cashier_name' => Cashier::find($history->cashier_id)->name ?? '',
+                    'services' => [],
+                    'grand_total' => $patientPayment['grand_total'] ?? 0,
+                    'amount_paid' => $patientPayment['amount_paid'] ?? 0,
+                    'amount_unpaid' => $patientPayment['amount_unpaid'] ?? 0,
+                    'patient_noted' => strip_tags($patientPayment['patient_noted'] ?? ''),
+                    'next_appointment_date' => $patientPayment['next_appointment_date'] ?? '',
+                    'type_service' => $patientPayment['type_service'] ?? '',
+                ];
+            }
+
+            foreach ($services as $service) {
+                $exportData[$history->id]['services'][] = [
+                    'service_name' => $service['service_name'] ?? '',
+                    'subtotal' => $service['subtotal'] ?? 0,
+                    'service_unit' => $service['service_unit'] ?? 0,
+                    'service_price' => $service['service_price'] ?? 0,
+                    'discount_dollar' => $service['discount_dollar'] ?? 0,
+                    'discount_percent' => $service['discount_percent'] ?? 0,
+                ];
+            }
+        }
+
+        return response()->json(['data' => array_values($exportData)], 200);
+
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'An error occurred while exporting patient history.'], 500);
+    }
+}
+
     
 
 }

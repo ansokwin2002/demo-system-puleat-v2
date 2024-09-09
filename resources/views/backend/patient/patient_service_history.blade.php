@@ -74,7 +74,13 @@
                                                     <td>{{ $patientHistory['updated_at'] }}</td>
                                                     <td class="td-action">
                                                         <button class="btn btn-danger" onclick="swal('Cannot Delete', 'Patient\'s history can not delete after creation !', 'error');"><i class="fa fa-trash"></i></button>
-                                                        <button class="btn btn-warning" onclick="swal('Cannot Edit', 'Patient\'s history can not edit after creation !', 'error');"><i class="fa fa-edit"></i></button>
+                                                        <button class="btn btn-warning btn_edit_history_patient" 
+                                                                data-toggle="modal" 
+                                                                data-target="#fire-modal-history-patient" 
+                                                                data-invoice-id="{{ $patientHistory->invoice_id }}">
+                                                            <i class="fa fa-edit"></i>
+                                                        </button>
+
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -144,6 +150,81 @@
             </div>
         </div>
     <!-- [Model Detail Patient Service-------------------------] -->
+
+     <!-- [Model Edit History Patient Service-------------------------] -->
+        <div class="modal fade" id="fire-modal-history-patient" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog custom-modal-service-detail">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Patient History</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <form id="editPatientForm" method="POST">
+                        @csrf
+                        @method('POST')
+                        <div class="modal-body">
+                            <!-- Patient Information -->
+                            <div class="form-group">
+                                <label for="customer">Customer</label>
+                                <input type="text" id="customer" name="customer" class="form-control">
+
+                                <label for="date">Date</label>
+                                <input type="text" id="date" name="date" class="form-control">
+
+                                <label for="next_appointment_date">Next Appointment Date</label>
+                                <input type="text" id="next_appointment_date" name="next_appointment_date" class="form-control">
+
+                                <label for="type_service">Type of Service</label>
+                                <input type="text" id="type_service" name="type_service" class="form-control">
+
+                                <label for="amount_paid">Amount Paid</label>
+                                <input type="text" id="amount_paid" name="amount_paid" class="form-control">
+
+                                <label for="grand_total">Grand Total</label>
+                                <input type="text" id="grand_total" name="grand_total" class="form-control">
+
+                                <label for="amount_unpaid">Amount Unpaid</label>
+                                <input type="text" id="amount_unpaid" name="amount_unpaid" class="form-control">
+                            </div>
+
+                            <!-- Services Table -->
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered" id="servicesTable">
+                                    <thead class="bg-primary">
+                                        <tr>
+                                            <th class="text-white">Service Name</th>
+                                            <th class="text-white">Service Unit</th>
+                                            <th class="text-white">Service Price</th>
+                                            <th class="text-white">Subtotal</th>
+                                            <th class="text-white">Discount (%)</th>
+                                            <th class="text-white">Discount ($)</th>
+                                            <th class="text-white">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="servicesBody">
+                                        <!-- Rows will be populated dynamically -->
+                                    </tbody>
+                                </table>
+                                <button type="button" class="btn btn-success" id="addServiceRow">Add Service</button>
+                            </div>
+
+                            <!-- Patient Note -->
+                            <div class="form-group">
+                                <label for="patient_noted">Patient Note</label>
+                                <textarea class="form-control" id="patient_noted" name="patient_noted"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <!-- [Model Edit History Patient Service-------------------------] -->
 </div>
 
 @endsection

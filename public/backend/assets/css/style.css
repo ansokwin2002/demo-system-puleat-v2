@@ -3210,3 +3210,27 @@ body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li.active ul.dropdown-men
 }
 
 
+.table-responsive {
+    overflow-x: auto; /* Enables horizontal scrolling */
+}
+
+.table th, .table td {
+    white-space: nowrap; /* Ensures text in each cell does not wrap */
+}
+
+/* Specific column widths for better alignment */
+.table th:nth-child(1),
+.table td:nth-child(1) { width: 50px; }
+.table th:nth-child(2),
+.table td:nth-child(2) { width: 100px; }
+.table th:nth-child(3),
+.table td:nth-child(3) { width: 150px; }
+/* Adjust the remaining columns similarly based on content */
+
+.col-equal {
+  width: 100%; /* Ensure columns fill the parent container */
+}
+
+.input-group-text {
+  min-width: 40px; /* Ensures the calendar icon is aligned properly */
+}
