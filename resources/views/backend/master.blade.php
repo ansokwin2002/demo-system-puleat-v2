@@ -45,6 +45,10 @@
   <!-- Template CSS -->
   <link rel="stylesheet" href=" {{ asset('backend/assets/css/style.css') }}">
   <link rel="stylesheet" href=" {{ asset('backend/assets/css/components.css') }}">
+
+  <!-- FullCalendar CSS -->
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.css' rel='stylesheet' />
+
 </head>
 
 <style>
@@ -104,6 +108,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
   <!-- [Gallary--------------------------------------] -->
 
+  <!-- FullCalendar JS -->
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.js'></script>
 
   <!-- Initialize DataTable -->
 
@@ -368,10 +374,36 @@
                     e.preventDefault();
 
                     if ($('#serviceTableBody tr').length === 0) {
-                        swal('Cannot submit', 'Please add at least one service first.', 'error');
+                        swal('Cannot submit', 'Please add at least one service first !', 'error');
                         return; 
                     }
+                    let amountPaid = $('#amount_paid').text().trim();
+                    amountPaid = amountPaid.replace('$','');
+                    amountPaid = parseFloat(amountPaid);
+                    let amountUnpaid = $('#amount_unpaid').text().trim();
+                    amountUnpaid = amountUnpaid.replace('$','');
+                    amountUnpaid = parseFloat(amountUnpaid);
 
+                    let unit = $('.unit').val();
+
+                    if (unit === '') {
+                        swal('Cannot submit', 'Unit Cannot be empty !', 'error');
+                        return; 
+                    }
+                    if (unit == 0) {
+                        swal('Cannot submit', 'Unit Cannot be zero number !', 'error');
+                        return; 
+                    }
+                    if (amountPaid === 0 || amountPaid === '') {
+                        swal('Cannot submit', 'Amount Paid Cannot be zero number !', 'error');
+                        return; 
+                    }
+                
+                    if (amountUnpaid < 0 || amountUnpaid > amountUnpaid) {
+                        swal('Cannot submit', 'Amount Unpaid Cannot be negative or bigger then amount paid !', 'error');
+                        return; 
+                    }
+                    
                     // Get the CSRF token directly from the meta tag
                     let csrfToken = $('meta[name="csrf-token"]').attr('content');
 
@@ -798,36 +830,33 @@
             // [page-list-patient-----------------------------------]
 
                 // [Edit Patinet----------------------------]
-    
-                $('.btn_edit_patient').on('click', function() {
-                    var id = $(this).data('id');
-                    var name = $(this).data('name');
-                    var age = $(this).data('age');
-                    var sex = $(this).data('sex');
-                    var address = $(this).data('address');
-                    var telephone = $(this).data('telephone');
-                    var type_patient = $(this).data('type_patient');
+                    $('.btn_edit_patient').on('click', function() {
+                        var id = $(this).data('id');
+                        var name = $(this).data('name');
+                        var age = $(this).data('age');
+                        var sex = $(this).data('sex');
+                        var address = $(this).data('address');
+                        var telephone = $(this).data('telephone');
+                        var type_patient = $(this).data('type_patient');
 
-                    $('#patient-id').val(id);
-                    $('#patient-name').val(name);
-                    $('#patient-age').val(age);
-                    $('#patient-address').val(address);
-                    $('#patient-telephone').val(telephone);
-                    $('#patient-type_patient').val(type_patient);
+                        $('#patient-id').val(id);
+                        $('#patient-name').val(name);
+                        $('#patient-age').val(age);
+                        $('#patient-address').val(address);
+                        $('#patient-telephone').val(telephone);
+                        $('#patient-type_patient').val(type_patient);
 
-                    // Set the selected value for the dropdown
-                    $('#patient-sex').val(sex).change();
+                        // Set the selected value for the dropdown
+                        $('#patient-sex').val(sex).change();
 
-                    // Update the form action URL to include the patient ID
-                    var formAction = "{{ route('patient.update', ':id') }}";
-                    formAction = formAction.replace(':id', id);
-                    $('#editPatientForm').attr('action', formAction);
+                        // Update the form action URL to include the patient ID
+                        var formAction = "{{ route('patient.update', ':id') }}";
+                        formAction = formAction.replace(':id', id);
+                        $('#editPatientForm').attr('action', formAction);
 
-                    // Show the modal
-                    $('#fire-modal-patient').modal('show');
-                });
-        
-
+                        // Show the modal
+                        $('#fire-modal-patient').modal('show');
+                    });
                 // [Edit Patient----------------------------]
 
             // [page-list-patient-----------------------------------]
@@ -835,7 +864,32 @@
              // [page-history-patient-----------------------------------]
 
                 // [Edit History Patinet----------------------------]
-                    
+                $('.btn_edit_history_patient').on('click', function() {
+                    var invoice_id = $(this).data('invoice-id');
+
+                    $.ajax({
+                        url: "{{ url('/get-patient-all-history') }}/" + invoice_id,
+                        type: 'GET',
+                        success: function(response) {
+                            if (response.error) {
+                                alert(response.error);
+                            } else {
+                                // Example: Redirect to edit page
+                                window.location.href = "{{ route('history_patient.edit', ':invoice_id') }}".replace(':invoice_id', invoice_id);
+                                
+                                // If you want to handle data directly without redirect
+                                console.log(response.patientPaymentData);
+                                // You can use this data to populate your modal or form
+                            }
+                        },
+                        error: function(xhr) {
+                            console.log('An error occurred: ' + xhr.responseText);
+                        }
+                    });
+                });
+
+
+        
         
                 // [Edit History Patient----------------------------]
 

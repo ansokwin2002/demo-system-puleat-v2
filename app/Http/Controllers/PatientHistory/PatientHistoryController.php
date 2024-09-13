@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\PatientHistory;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cashier;
+use App\Models\Doctor;
+use App\Models\Patient;
 use App\Models\PatientHistory;
 use Illuminate\Http\Request;
 
@@ -31,7 +34,7 @@ class PatientHistoryController extends Controller
         ]);
 
         do {
-            $invoiceId = rand(1000, 9999);
+            $invoiceId = rand(10000, 99999);
             $exists = PatientHistory::where('invoice_id', $invoiceId)->exists();
         } while ($exists);
 
@@ -49,22 +52,24 @@ class PatientHistoryController extends Controller
         return response()->json(['invoice_id' => $invoiceId]);
     }
 
-
     public function showInvoice($invoiceId)
     {
+        // Fetch the patient history with related models
         $patientHistory = PatientHistory::where('invoice_id', $invoiceId)
                                         ->with(['patient', 'doctor', 'cashier'])
                                         ->firstOrFail();
-        return view('backend.invoice.index', ['data' => $patientHistory]);
+        return view('backend.invoice.index', [
+            'data' => $patientHistory,
+            'patient_payment' => $patientHistory->patient_payment
+        ]);
     }
-    
 
     /**
      * Display the specified resource.
      */
     public function getPatientDetails($id) {
         $patientHistory = PatientHistory::findOrFail($id);
-        $paymentData = $patientHistory->patient_payment; // Assume it's an array
+        $paymentData = $patientHistory->patient_payment; 
 
         return response()->json([
             'patient_payment' => $paymentData
@@ -86,15 +91,83 @@ class PatientHistoryController extends Controller
     public function editHistoryPatient($invoice_id)
     {
         $patientHistory = PatientHistory::where('invoice_id', $invoice_id)->first();
-
+    
         if (!$patientHistory) {
-            return redirect()->route('your.redirect.route')->with('error', 'Patient history not found.');
+            return redirect()->back()->withErrors(['error' => 'Patient history not found.']);
         }
-
+       
+        if (is_string($patientHistory->patient_payment)) {
+            $patientPaymentData = json_decode($patientHistory->patient_payment, true);
+        } else {
+            $patientPaymentData = $patientHistory->patient_payment;
+        }
+    
+        $doctors = Doctor::all();
+        $patients = Patient::all();
+        $cashiers = Cashier::all();
+    
         return view('backend.patient.edit_patient_service_history', [
-            'patient_payment' => $patientHistory->patient_payment
+            'patientHistory' => $patientHistory,
+            'patientPaymentData' => $patientPaymentData,
+            'doctors' => $doctors,
+            'patients' => $patients,
+            'cashiers' => $cashiers,
+            'invoice_id' => $invoice_id,
         ]);
     }
+    
+    public function updateHistoryPatient(Request $request, $invoice_id)
+    {
+        $validatedData = $request->validate([
+            'patient_id' => 'required|exists:patients,id',
+            'doctor_id' => 'required|exists:doctors,id',
+            'cashier_id' => 'required|exists:cashiers,id',
+            'patient_payment.date' => 'required|date',
+            'patient_payment.services.*.service_name' => 'required|string',
+            'patient_payment.services.*.service_unit' => 'required|numeric',
+            'patient_payment.services.*.service_price' => 'required|numeric',
+            'patient_payment.services.*.subtotal' => 'required|numeric',
+            'patient_payment.grand_total' => 'required|numeric',
+            'patient_payment.amount_paid' => 'required|numeric',
+            'patient_payment.amount_unpaid' => 'required|numeric',
+            'patient_payment.next_appointment_date' => 'nullable|date',
+            'patient_payment.type_service' => 'required|string',
+            'patient_payment.patient_noted' => 'nullable|string',
+            'patient_payment.customer' => 'required|string', 
+            'patient_payment.patientId' => 'required|string'
+        ]);
+    
+        $patientHistory = PatientHistory::where('invoice_id', $invoice_id)->firstOrFail();
+        $patientPaymentData = [
+            'date' => $request->patient_payment['date'],
+            'customer' => $request->patient_payment['customer'],
+            'services' => $request->patient_payment['services'],
+            'patientId' => $request->patient_payment['patientId'],
+            'amount_paid' => $request->patient_payment['amount_paid'],
+            'grand_total' => $request->patient_payment['grand_total'],
+            'type_service' => $request->patient_payment['type_service'],
+            'amount_unpaid' => $request->patient_payment['amount_unpaid'],
+            'patient_noted' => $request->patient_payment['patient_noted'],
+            'next_appointment_date' => $request->patient_payment['next_appointment_date']
+        ];
+        $patientHistory->update([
+            'patient_id' => $request->patient_id,
+            'doctor_id' => $request->doctor_id,
+            'cashier_id' => $request->cashier_id,
+            'patient_payment' => $patientPaymentData
+        ]);
+    
+        toastr()->success('Updated Patient\'s History Successfully !');
+        return response()->json(['invoice_id' => $invoice_id, 'message' => 'Patient history updated successfully']);
+    }
+    
+    
+
+
+
+
+
+        
 
 
 }

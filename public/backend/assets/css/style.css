@@ -2891,14 +2891,21 @@ body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li.active ul.dropdown-men
 
 
 .table tbody tr.row_service_detail {
-    transition: background-color 0.01s ease;
+  transition: background-color 0.3s ease;
+  height: 90px;
 }
 
 .table tbody tr.row_service_detail:hover {
-    background-color: #6777ef; /* Light red background color */
-    cursor: pointer;
-    color:white;
+  background-color: #a0c4ff;
+  color: #000000;
+  cursor: pointer;
 }
+
+.table tbody tr.row_service_detail {
+  vertical-align: middle !important; 
+  text-align: center;
+}
+
 
 .table tbody tr.row_patient_detail {
   transition: background-color 0.01s ease;
@@ -2920,16 +2927,20 @@ body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li.active ul.dropdown-men
   color:white;
 }
 
-
-
 .table tbody tr.row_multi_image {
-  transition: background-color 0.01s ease;
+  transition: background-color 0.3s ease;
+  height: 90px;
 }
 
 .table tbody tr.row_multi_image:hover {
-  background-color: #6777ef; /* Light red background color */
+  background-color: #a0c4ff;
+  color: #000000;
   cursor: pointer;
-  color:white;
+}
+
+.table tbody tr.row_multi_image {
+  vertical-align: middle !important; 
+  text-align: center;
 }
 
 
@@ -2942,6 +2953,7 @@ body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li.active ul.dropdown-men
   background-color: white;
   /* background-color: red; */
 }
+
 
 .box_invoice {
   width:480px;
@@ -3061,6 +3073,11 @@ body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li.active ul.dropdown-men
 .box_invoice {
   width: 60%;
   /* background-color: red; */
+}
+
+.text_font_khmer {
+  font-family: "Noto Sans Khmer", sans-serif;
+  color:black;
 }
 
 /* [loading--------------------------] */
@@ -3234,3 +3251,4 @@ body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li.active ul.dropdown-men
 .input-group-text {
   min-width: 40px; /* Ensures the calendar icon is aligned properly */
 }
+

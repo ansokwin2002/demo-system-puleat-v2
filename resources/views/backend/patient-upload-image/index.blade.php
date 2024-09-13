@@ -57,11 +57,11 @@
                                             @foreach ($patientHistory->patient_payment['services'] ?? [] as $service)
                                                 <tr class="row_multi_image" data-toggle="modal" 
                                                     data-target="#fire-modal-4" data-invoice-id="{{ $patientHistory->invoice_id }}">
-                                                    <td>{{ $paymentData['date'] ?? '' }}</td>
-                                                    <td>{{ $doctorName }}</td>
-                                                    <td>{{ $patientName }}</td>
-                                                    <td>{{ $service['service_name'] }}</td>
-                                                    <td class="td-file-upload">
+                                                    <td class="align-middle text-center">{{ $paymentData['date'] ?? '' }}</td>
+                                                    <td class="align-middle text-center">{{ $doctorName }}</td>
+                                                    <td class="align-middle text-center">{{ $patientName }}</td>
+                                                    <td class="align-middle text-center">{{ $service['service_name'] }}</td>
+                                                    <td class="align-middle text-center" class="td-file-upload">
                                                         <button class="btn btn-success view-images-btn" data-invoice-id="{{ $patientHistory->invoice_id }}"><i class="fa-solid fa-eye"></i></button>
                                                     </td>
                                                 </tr>

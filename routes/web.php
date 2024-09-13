@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Appointment\AppointmentController;
+use App\Http\Controllers\Calendar\CalendarController;
 use App\Http\Controllers\Cashier\CashierController;
 use App\Http\Controllers\Dashbaord\DashboardController;
 use App\Http\Controllers\Doctor\DoctorController;
@@ -97,7 +98,9 @@ use Illuminate\Support\Facades\Route;
             Route::get('/patient-details/{id}','getPatientDetails')->name('get_patient_details');
             Route::get('/invoice/{invoiceId}','showInvoice')->name('show_invoice');
             Route::get('/get-patient-noted','getPatientNoted')->name('patient_noted');
-            Route::get('/get-patient-history/{invoice_id}','editHistoryPatient')->name('history_patient.edit');
+            Route::get('/get-patient-all-history/{invoice_id}','editHistoryPatient')->name('history_patient.edit');
+            Route::post('/edit-patient-all-history/{invoice_id}', 'updateHistoryPatient')->name('history_patient.update');
+
         });
     });
 // [patient_history_controller----------------------------]
@@ -165,3 +168,15 @@ use Illuminate\Support\Facades\Route;
         });
     });
 // [report-----------------------------]
+
+// [Calendar-----------------------------]
+    Route::middleware('auth')->group(function () {
+        Route::controller(CalendarController::class)->group(function(){
+            Route::get('/calendar','index')->name('calendar.index');
+            Route::post('/calendar/store', 'store')->name('calendar.store');
+            Route::get('/calendar/show/{id}', 'show')->name('calendar.show');
+            Route::put('/calendar/update/{id}', 'update')->name('calendar.update');
+            Route::delete('/calendar/destroy{id}', 'destroy')->name('calendar.destroy');
+        });
+    });
+// [Calendar-----------------------------]

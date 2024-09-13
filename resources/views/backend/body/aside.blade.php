@@ -94,6 +94,10 @@
             </li>
         <!-- [report--------------------------------------------------] -->
 
+        <!-- [calendar--------------------------------------------------] -->
+            <li class="{{ Route::is('calendar.index*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('calendar.index') }}"><i class="fa-solid fa-calendar"></i> <span>Calendar</span></a></li>   
+        <!-- [calendar--------------------------------------------------] -->
+
     </ul>
     <!-- <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Blank Page</span></a></li>
     <li class="dropdown">

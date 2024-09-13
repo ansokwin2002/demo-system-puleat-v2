@@ -57,7 +57,7 @@
                                         $patientName = $patientHistory->patient->name ?? '';
                                         $services = $paymentData['services'] ?? [];
                                     @endphp
-                                    <tr class="row_service_detail">
+                                    <tr>
                                         <td>{{ $patientHistory->invoice_id }}</td>
                                         <td>{{ $paymentData['date'] ?? '' }}</td>
                                         <td>{{ $doctorName }}</td>

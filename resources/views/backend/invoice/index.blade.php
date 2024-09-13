@@ -20,33 +20,33 @@
             <div class="box_3">
                 <div class="box_left">
                     <p style="color: black;"><span class="doctor">Doctor :</span> {{ $data->doctor->name ?? 'Unknown' }}</p>
-                    <p style="color: black;" class="date_box"><span class="date">Date :</span> {{ $data['patient_payment']['date'] }}</p>
+                    <p style="color: black;" class="date_box"><span class="date">Date :</span> {{ $patient_payment['date'] }}</p>
                 </div>
                 <div class="box_right">
-                    <p style="color: black;"><span class="patient">Patient :</span> {{ $data['patient_payment']['customer'] }}</p>
-                    <!-- <p><span class="patient_id">Patient ID :</span> {{ $data['patient_payment']['patientId'] }}</p> -->
-                    <p style="color: black;" class="box_invoice_id"><span class="invoice_id">Invoice ID :</span> {{ $data['invoice_id'] ?? '' }}</p>
+                    <p style="color: black;"><span class="patient">Patient :</span> {{ $patient_payment['customer'] }}</p>
+                    <!-- <p><span class="patient_id">Patient ID :</span> {{ $patient_payment['patientId'] }}</p> -->
+                    <p style="color: black;" class="box_invoice_id"><span class="invoice_id">Invoice ID :</span> {{ $data->invoice_id ?? '' }}</p>
                 </div>
                 <div class="box_center">
                     <p style="color: black;" class="box_cashier_id"><span class="cashier_id">Cashier :</span> {{ $data->cashier->name ?? 'Unknown' }}</p>
                 </div>
             </div>
             <div class="box_table">
-            @if(isset($data['patient_payment']))
-                    <table class="table table-bordered">
+            @if(isset($patient_payment))
+                    <table class="table table-bordered invoice">
                         <thead>
                             <tr style="border-top: 3px solid black;border-bottom: 3px solid black;">
-                                <th style="width: 5%; color:black;">លេខរៀង</th>
-                                <th style="width: 40%; color:black;">សេវាកម្ម</th>
-                                <th style="width: 5%; color:black;">ចំនួន</th>
-                                <th style="width: 15%; color:black;">តម្លៃ</th>
-                                <th style="width: 5%; color:black;">បញ្ខុះតម្លៃ(%)</th>
-                                <th style="width: 5%; color:black;">បញ្ខុះតម្លៃ($)</th>
-                                <th style="width: 40%; color:black;">ទឹកប្រាក់</th>
+                                <th class="text_font_khmer text-center" style="width: 5%; color:black;">#</th>
+                                <th class="text_font_khmer text-center" style="width: 40%; color:black;">សេវាកម្ម / Service</th>
+                                <th class="text_font_khmer text-center" style="width: 5%; color:black;">ចំនួន / Unit</th>
+                                <th class="text_font_khmer text-center" style="width: 15%; color:black;">តម្លៃ / Price</th>
+                                <th class="text_font_khmer text-center" style="width: 5%; color:black;">បញ្ខុះតម្លៃ(%) / Discount</th>
+                                <th class="text_font_khmer text-center" style="width: 5%; color:black;">បញ្ខុះតម្លៃ($) / Discount</th>
+                                <th class="text_font_khmer text-center" style="width: 40%; color:black;">ទឹកប្រាក់ / Amount</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($data['patient_payment']['services'] as $index => $service)
+                            @forelse($patient_payment['services'] as $index => $service)
                             <tr>
                                 <td>{{ $index + 1 }}</td> 
                                 <td style="width: 100px;">{{ $service['service_name'] }}</td>
@@ -68,16 +68,16 @@
                         </tbody>
                         <tbody>
                             <tr>
-                                <td colspan="6" style="color: black;"><strong><span class="float-right">សរុបរួម / Grand Total (USD)</span></strong></td>
-                                <td><strong id="grand_total">$ {{ $data['patient_payment']['grand_total'] }}</strong></td>
+                                <td colspan="6" style="color: black;"><strong><span class="float-right text_font_khmer">សរុបរួម / Grand Total (USD)</span></strong></td>
+                                <td><strong id="grand_total">$ {{ $patient_payment['grand_total'] }}</strong></td>
                             </tr>
                             <tr>
-                                <td colspan="6" style="color: black;"><strong><span class="float-right">ប្រាក់បានបង់​ / Amount paid </span></strong></td>
-                                <td><strong id="amount_paid">$ {{ $data['patient_payment']['amount_paid'] }}</strong></td>
+                                <td colspan="6" style="color: black;"><strong><span class="float-right text_font_khmer">ប្រាក់បានបង់​ / Amount paid </span></strong></td>
+                                <td><strong id="amount_paid">$ {{ $patient_payment['amount_paid'] }}</strong></td>
                             </tr>
                             <tr>
-                                <td colspan="6" style="color: black;"><strong><span class="float-right" id="unpaid">ប្រាក់នៅសល់ / Unpaid amount</span></strong></td>
-                                <td><strong id="amount_unpaid">$ {{ $data['patient_payment']['amount_unpaid'] }}</strong></td>
+                                <td colspan="6" style="color: black;"><strong><span class="float-right text_font_khmer" id="unpaid">ប្រាក់នៅសល់ / Unpaid amount</span></strong></td>
+                                <td><strong id="amount_unpaid">$ {{ $patient_payment['amount_unpaid'] }}</strong></td>
                             </tr>
                         </tbody>
                     </table>
@@ -125,9 +125,6 @@
 </style>
 
 <script>
-    // window.onload = function() {
-    //     window.print();
-    // }
     document.getElementById('printButton').addEventListener('click', function() {
         window.print();
     });

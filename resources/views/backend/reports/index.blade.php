@@ -228,9 +228,6 @@
         });
     }
 
-
-
-
     $(document).ready(function() {
         function getFirstDayOfMonth() {
             return moment().startOf('month').startOf('day').format('YYYY-MM-DD HH:mm'); 
@@ -259,104 +256,103 @@
             }
         });
 
-    // [export_patient_all_history------------------------]
-        $('#export_patient_all_history').click(function() {
-            $('#loading-spinner').show();
+        // [export_patient_all_history------------------------]
+            $('#export_patient_all_history').click(function() {
+                $('#loading-spinner').show();
 
-            var patientId = $('#patient-select').val();
-            var startDate = $('#start-date').val();
-            var endDate = $('#end-date').val();
+                var patientId = $('#patient-select').val();
+                var startDate = $('#start-date').val();
+                var endDate = $('#end-date').val();
 
-            if (!startDate || !endDate) {
-                alert('Please select a date range.');
-                $('#loading-spinner').hide();
-                return;
-            }
-
-            $.ajax({
-                url: "{{ route('export.patient.all_history') }}",
-                method: 'GET',
-                data: {
-                    patient_id: patientId, // Send patient_id if selected, otherwise it will be null
-                    start_date: startDate,
-                    end_date: endDate
-                },
-                xhrFields: {
-                    responseType: 'blob'
-                },
-                success: function(response) {
-                    var url = window.URL.createObjectURL(response);
-                    var a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'patient_history.xlsx';
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    window.URL.revokeObjectURL(url);
-                },
-                error: function(xhr, status, error) {
-                    if (xhr.status === 404) {
-                        alert('No patient history found for the selected date range.');
-                    } else {
-                        console.error('An error occurred:', error);
-                        alert('Failed to export data. Please check the console for details.');
-                    }
-                },
-                complete: function() {
+                if (!startDate || !endDate) {
+                    alert('Please select a date range.');
                     $('#loading-spinner').hide();
+                    return;
                 }
+
+                $.ajax({
+                    url: "{{ route('export.patient.all_history') }}",
+                    method: 'GET',
+                    data: {
+                        patient_id: patientId, // Send patient_id if selected, otherwise it will be null
+                        start_date: startDate,
+                        end_date: endDate
+                    },
+                    xhrFields: {
+                        responseType: 'blob'
+                    },
+                    success: function(response) {
+                        var url = window.URL.createObjectURL(response);
+                        var a = document.createElement('a');
+                        a.href = url;
+                        a.download = 'patient_history.xlsx';
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        window.URL.revokeObjectURL(url);
+                    },
+                    error: function(xhr, status, error) {
+                        if (xhr.status === 404) {
+                            alert('No patient history found for the selected date range.');
+                        } else {
+                            console.error('An error occurred:', error);
+                            alert('Failed to export data. Please check the console for details.');
+                        }
+                    },
+                    complete: function() {
+                        $('#loading-spinner').hide();
+                    }
+                });
             });
-        });
-    // [export_patient_all_history------------------------]
+        // [export_patient_all_history------------------------]
 
-    // [search_patient_all_history------------------------]
-        $('#search_patient_all_history').click(function(){
-            $('#loading-spinner').show();
+        // [search_patient_all_history------------------------]
+            $('#search_patient_all_history').click(function(){
+                $('#loading-spinner').show();
 
-            var patientId = $('#patient-select').val();
-            var startDate = $('#start-date').val();
-            var endDate = $('#end-date').val();
+                var patientId = $('#patient-select').val();
+                var startDate = $('#start-date').val();
+                var endDate = $('#end-date').val();
 
-            if (!startDate || !endDate) {
-                alert('Please select a date range.');
-                $('#loading-spinner').hide();
-                return;
-            }
-
-            $.ajax({
-                url: "{{ route('search.patient.all_history') }}",
-                method: 'GET',
-                data: {
-                    patient_id: patientId,
-                    start_date: startDate,
-                    end_date: endDate
-                },
-                success: function(response) {
-                    if (response.error) {
-                        alert(response.error);
-                    } else {
-                        // Display data in your HTML or pass it to the Blade file
-                        displayPatientHistory(response.data);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    if (xhr.status === 404) {
-                        alert('No patient history found for the selected date range.');
-                    } else {
-                        console.error('An error occurred:', error);
-                        alert('Failed to search data. Please check the console for details.');
-                    }
-                },
-                complete: function() {
+                if (!startDate || !endDate) {
+                    alert('Please select a date range.');
                     $('#loading-spinner').hide();
+                    return;
                 }
+
+                $.ajax({
+                    url: "{{ route('search.patient.all_history') }}",
+                    method: 'GET',
+                    data: {
+                        patient_id: patientId,
+                        start_date: startDate,
+                        end_date: endDate
+                    },
+                    success: function(response) {
+                        if (response.error) {
+                            alert(response.error);
+                        } else {
+                            // Display data in your HTML or pass it to the Blade file
+                            displayPatientHistory(response.data);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        if (xhr.status === 404) {
+                            alert('No patient history found for the selected date range.');
+                        } else {
+                            console.error('An error occurred:', error);
+                            alert('Failed to search data. Please check the console for details.');
+                        }
+                    },
+                    complete: function() {
+                        $('#loading-spinner').hide();
+                    }
+                });
             });
-        });
 
-    // [search_patient_all_history------------------------]
+        // [search_patient_all_history------------------------]
 
-});
-
+    });
 
 </script>
 @endpush

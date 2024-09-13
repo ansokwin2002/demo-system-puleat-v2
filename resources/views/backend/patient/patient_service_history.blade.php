@@ -39,17 +39,17 @@
                                     <table class="table table-striped dataTable" id="table_service">
                                         <thead class="bg-primary">
                                             <tr>
-                                                <th class="text-white">Invoice ID</th>
-                                                <th class="text-white">Date</th>
-                                                <th class="text-white">Doctor</th>
-                                                <th class="text-white">Cashier</th>
-                                                <th class="text-white">Patient</th>
-                                                <th class="text-white">Grand Total</th>
-                                                <th class="text-white">Amount Paid</th>
-                                                <th class="text-white">Amount Unpaid</th>
-                                                <th class="text-white">Action</th>
-                                                <th class="text-white">Created_at</th>
-                                                <th class="text-white">Updated_at</th>
+                                                <th class="text-white text-center">Invoice ID</th>
+                                                <th class="text-white text-center">Date</th>
+                                                <th class="text-white text-center">Doctor</th>
+                                                <th class="text-white text-center">Cashier</th>
+                                                <th class="text-white text-center">Patient</th>
+                                                <th class="text-white text-center">Grand Total</th>
+                                                <th class="text-white text-center">Amount Paid</th>
+                                                <th class="text-white text-center">Amount Unpaid</th>
+                                                <th class="text-white text-center">Created_at</th>
+                                                <th class="text-white text-center">Updated_at</th>
+                                                <th class="text-white text-center">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -62,25 +62,24 @@
                                                 @endphp
                                                 <tr class="row_service_detail" data-toggle="modal" 
                                                     data-target="#fire-modal-4" data-id="{{ $patientHistory->id }}">
-                                                    <td>{{ $patientHistory->invoice_id }}</td>
-                                                    <td>{{ $paymentData['date'] ?? '' }}</td>
-                                                    <td>{{ $doctorName }}</td>
-                                                    <td>{{ $cashierName }}</td>
-                                                    <td>{{ $patientName }}</td>
-                                                    <td>${{ $paymentData['grand_total'] ?? '' }}</td>
-                                                    <td>${{ $paymentData['amount_paid'] ?? '' }}</td>
-                                                    <td>${{ $paymentData['amount_unpaid'] ?? '' }}</td>
-                                                    <td>{{ $patientHistory['created_at'] }}</td>
-                                                    <td>{{ $patientHistory['updated_at'] }}</td>
-                                                    <td class="td-action">
-                                                        <button class="btn btn-danger" onclick="swal('Cannot Delete', 'Patient\'s history can not delete after creation !', 'error');"><i class="fa fa-trash"></i></button>
+                                                    <td class="align-middle text-center">{{ $patientHistory->invoice_id }}</td>
+                                                    <td class="align-middle text-center">{{ $paymentData['date'] ?? '' }}</td>
+                                                    <td class="align-middle text-center"><span class="badge badge-dark">{{ $doctorName }}</span></td>
+                                                    <td class="align-middle text-center"><span class="badge badge-success">{{ $cashierName }}</span></td>
+                                                    <td class="align-middle text-center"><span class="badge badge-info">{{ $patientName }}</span></td>
+                                                    <td class="align-middle text-center">${{ $paymentData['grand_total'] ?? '' }}</td>
+                                                    <td class="align-middle text-center">${{ $paymentData['amount_paid'] ?? '' }}</td>
+                                                    <td class="align-middle text-center">${{ $paymentData['amount_unpaid'] ?? '' }}</td>
+                                                    <td class="align-middle text-center">{{ $patientHistory['created_at'] }}</td>
+                                                    <td class="align-middle text-center">{{ $patientHistory['updated_at'] }}</td>
+                                                    <td class="align-middle text-center td-action">
+                                                        <button class="btn btn-danger" onclick="swal('Cannot Delete', 'Patient\'s history cannot be deleted after creation!', 'error');">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
                                                         <button class="btn btn-warning btn_edit_history_patient" 
-                                                                data-toggle="modal" 
-                                                                data-target="#fire-modal-history-patient" 
                                                                 data-invoice-id="{{ $patientHistory->invoice_id }}">
                                                             <i class="fa fa-edit"></i>
                                                         </button>
-
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -92,7 +91,6 @@
                     </div>
                 </div>
             <!--[Patient_table-------------------------]-->
-
         </section>
     </div>
     <!-- [main_content------------------------------] -->
@@ -133,11 +131,11 @@
                                             <tr>
                                                 <td>{{ $index + 1 }}</td>
                                                 <td>{{ $service['service_name'] }}</td>
-                                                <td>{{ $service['service_unit'] }}</td>
-                                                <td>$ {{ $service['service_price'] ?? '' }}</td>
-                                                <td>$ {{ $service['subtotal'] ?? '' }}</td>
-                                                <td>{{ $service['discount_percent'] ?? '' }} %</td>
-                                                <td>$ {{ $service['discount_dollar'] ?? '' }}</td>
+                                                <td>{{ $service['service_unit'] ?? 'N/A' }}</td>
+                                                <td>$ {{ $service['service_price'] ?? '0.00' }}</td>
+                                                <td>$ {{ $service['subtotal'] ?? '0.00' }}</td>
+                                                <td>{{ $service['discount_percent'] ?? '0' }} %</td>
+                                                <td>$ {{ $service['discount_dollar'] ?? '0.00' }}</td>
                                             </tr>
                                         @endforeach
                                     @endforeach
