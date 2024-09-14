@@ -39,13 +39,13 @@
                             <table class="table table-striped dataTable" id="table_appoinment">
                                 <thead class="bg-primary">
                                     <tr>
-                                        <th class="text-white">Invoice ID</th>
-                                        <th class="text-white">Date</th>
-                                        <th class="text-white">Doctor</th>
-                                        <th class="text-white">Patient</th>
-                                        <th class="text-white">Service</th>
-                                        <th class="text-white">Next Appointment</th>
-                                        <th class="text-white">Action</th>
+                                        <th class="text-white align-middle text-center">Invoice ID</th>
+                                        <th class="text-white align-middle text-center">Date</th>
+                                        <th class="text-white align-middle text-center">Doctor</th>
+                                        <th class="text-white align-middle text-center">Patient</th>
+                                        <th class="text-white align-middle text-center">Service</th>
+                                        <th class="text-white align-middle text-center">Next Appointment</th>
+                                        <th class="text-white align-middle text-center">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -64,7 +64,7 @@
                                         <td class="align-middle text-center"><span class="badge badge-info">{{ $patientName }}</span></td>
                                         <td class="align-middle text-center">
                                             @foreach($services as $service)
-                                                <span class="badge badge-success">{{ $service['service_name'] ?? 'N/A' }}</span><br><br>
+                                                <span class="badge badge-danger">{{ $service['service_name'] ?? 'N/A' }}</span><br><br>
                                             @endforeach
                                         </td>
                                         <td class="align-middle text-center">{{ $paymentData['next_appointment_date'] ?? '' }}</td>
