@@ -298,40 +298,37 @@
                     </div>
                 </div>
             <!--[Service_table-------------------------]-->
-
         </section>
     </div>
     <!-- [main_content------------------------------] -->
 
     <!-- [footer------------------------------] -->
-    <footer class="main-footer">
-        @include('backend.body.footer')
-    </footer>
+        <footer class="main-footer">
+            @include('backend.body.footer')
+        </footer>
     <!-- [footer------------------------------] -->
 
-   
-    
-    <!-- Modal -->
-    <div class="modal fade" id="fire-modal-4" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Amount paid <sup class="text-danger">★</sup></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <input type="text" class="form-control form_paid" id="form_paid" inputmode="numeric" pattern="\d*" title="Please enter a number">
-                </div>
-                <div class="modal-footer bg-whitesmoke br">
-                    <button type="button" class="btn btn-primary btn_paid" data-dismiss="modal"><i class="fa fa-save"></i> Save</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa-solid fa-times"></i> Close</button>
+    <!-- [Amount Paid-------------------------] -->
+        <div class="modal fade" id="fire-modal-4" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Amount paid <sup class="text-danger">★</sup></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" class="form-control form_paid" id="form_paid" inputmode="numeric" pattern="\d*" title="Please enter a number">
+                    </div>
+                    <div class="modal-footer bg-whitesmoke br">
+                        <button type="button" class="btn btn-primary btn_paid" data-dismiss="modal"><i class="fa fa-save"></i> Save</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa-solid fa-times"></i> Close</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
+    <!-- [Amount Paid-------------------------] -->
 
 
 </div>

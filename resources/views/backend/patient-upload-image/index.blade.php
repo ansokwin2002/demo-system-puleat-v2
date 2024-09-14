@@ -30,52 +30,51 @@
             </div>
             <!-- [header] -->
 
-            <!-- [Patient_table] -->
-            <div class="row mt-4">
-                <div class="col-12">
-                    <div class="card p-4">
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped dataTable" id="table_upload">
-                                    <thead class="bg-primary">
-                                        <tr>
-                                            <th class="text-white">Date</th>
-                                            <th class="text-white">Doctor</th>
-                                            <th class="text-white">Patient</th>
-                                            <th class="text-white">Service</th>
-                                            <th class="text-white">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($patientHistories as $patientHistory)
-                                            @php
-                                                $paymentData = $patientHistory->patient_payment;
-                                                $doctorName = $patientHistory->doctor->name ?? '';
-                                                $patientName = $patientHistory->patient->name ?? '';
-                                            @endphp
-             
-                                            @foreach ($patientHistory->patient_payment['services'] ?? [] as $service)
-                                                <tr class="row_multi_image" data-toggle="modal" 
-                                                    data-target="#fire-modal-4" data-invoice-id="{{ $patientHistory->invoice_id }}">
-                                                    <td class="align-middle text-center">{{ $paymentData['date'] ?? '' }}</td>
-                                                    <td class="align-middle text-center">{{ $doctorName }}</td>
-                                                    <td class="align-middle text-center">{{ $patientName }}</td>
-                                                    <td class="align-middle text-center">{{ $service['service_name'] }}</td>
-                                                    <td class="align-middle text-center" class="td-file-upload">
-                                                        <button class="btn btn-success view-images-btn" data-invoice-id="{{ $patientHistory->invoice_id }}"><i class="fa-solid fa-eye"></i></button>
-                                                    </td>
-                                                </tr>
+            <!-- [patient_upload_image] -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card p-4">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped dataTable" id="table_upload">
+                                        <thead class="bg-primary">
+                                            <tr>
+                                                <th class="text-white align-middle text-center">Date</th>
+                                                <th class="text-white align-middle text-center">Doctor</th>
+                                                <th class="text-white align-middle text-center">Patient</th>
+                                                <th class="text-white align-middle text-center">Service</th>
+                                                <th class="text-white align-middle text-center">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($patientHistories as $patientHistory)
+                                                @php
+                                                    $paymentData = $patientHistory->patient_payment;
+                                                    $doctorName = $patientHistory->doctor->name ?? '';
+                                                    $patientName = $patientHistory->patient->name ?? '';
+                                                @endphp
+                
+                                                @foreach ($patientHistory->patient_payment['services'] ?? [] as $service)
+                                                    <tr class="row_multi_image" data-toggle="modal" 
+                                                        data-target="#fire-modal-4" data-invoice-id="{{ $patientHistory->invoice_id }}">
+                                                        <td class="align-middle text-center">{{ $paymentData['date'] ?? '' }}</td>
+                                                        <td class="align-middle text-center">{{ $doctorName }}</td>
+                                                        <td class="align-middle text-center">{{ $patientName }}</td>
+                                                        <td class="align-middle text-center">{{ $service['service_name'] }}</td>
+                                                        <td class="align-middle text-center" class="td-file-upload">
+                                                            <button class="btn btn-success view-images-btn" data-invoice-id="{{ $patientHistory->invoice_id }}"><i class="fa-solid fa-eye"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
                                             @endforeach
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- [Patient_table] -->
-
+            <!-- [patient_upload_image] -->
         </section>
     </div>
     <!-- [main_content] -->
@@ -101,7 +100,7 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-header">
-                                    <span class="text-danger">*Upload Multiple Images: Select and upload multiple images at once. Drag and drop or choose files from your device*</span>
+                                    <span class="text-danger">*Note: You can upload multiple images at once by selecting them from your device. Please ensure that all images are in JPEG, PNG, or JPG format, and that each file is no larger than 10MB.*</span>
                                     </div>
                                     <div class="card-body">
                                         <form id="uploadForm" action="{{ route('uploadMultiImage.store') }}" method="POST" enctype="multipart/form-data">
@@ -145,8 +144,6 @@
             </div>
         </div>
     <!-- [Modal View Images] -->
-
-
 </div>
 
 @endsection
@@ -154,11 +151,11 @@
 @push('scripts')
 <script>
 
-    // [dataTable_Upload---------------------]
-        $('#table_upload').DataTable({
-            "pageLength": 50,
-        });
-    // [dataTable_Upload---------------------]
+// [dataTable_Upload---------------------]
+    $('#table_upload').DataTable({
+        "pageLength": 10,
+    });
+// [dataTable_Upload---------------------]
 
 
 // [model_upload_multi_image---------------------------------]

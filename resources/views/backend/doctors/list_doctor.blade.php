@@ -38,12 +38,13 @@
                                     <table class="table table-striped dataTable" id="table_doctor">
                                         <thead class="bg-primary">
                                             <tr>
-                                                <th class="text-white">#</th>
-                                                <th class="text-white">Name</th>
-                                                <th class="text-white">Specialization</th>
-                                                <th class="text-white">Phone</th>
-                                                <th class="text-white">Email</th>
-                                                <th class="text-white">Action</th>
+                                                <th class="text-white align-middle text-center">#</th>
+                                                <th class="text-white align-middle text-center">Name</th>
+                                                <th class="text-white align-middle text-center">Sex</th>
+                                                <th class="text-white align-middle text-center">Specialization</th>
+                                                <th class="text-white align-middle text-center">Phone</th>
+                                                <th class="text-white align-middle text-center">Email</th>
+                                                <th class="text-white align-middle text-center">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -53,28 +54,29 @@
                                         @endphp
     
                                         @foreach ($doctors as $index => $doctor)
-                                            <tr>
-                                                <td>{{ $index +=1 }}</td>
-                                                <td>{{ $doctor->name }}</td>
-                                                <td>{{ $doctor->specialization }}</td>
-                                                <td>{{ $doctor->phone }}</td>
-                                                <td>{{ $doctor->email }}</td>
-                                                <td>
-                                                    
-                                                <button class="btn btn-danger" onclick="swal('Cannot Delete', 'Doctor can only be updated after creation !', 'error');">
-                                                    <i class="fa fa-trash"></i>
-                                                </button>
+                                            <tr class="row_list_doctor">
+                                                <td class="align-middle text-center">{{ $index +=1 }}</td>
+                                                <td class="align-middle text-center"><span class="badge badge-dark">{{ $doctor->name }}</span></td>
+                                                <td class="align-middle text-center">{{ $doctor->sex }}</td>
+                                                <td class="align-middle text-center"><span class="badge badge-light">{{ $doctor->specialization }}</span></td>
+                                                <td class="align-middle text-center">{{ $doctor->phone }}</td>
+                                                <td class="align-middle text-center">{{ $doctor->email }}</td>
+                                                <td class="align-middle text-center">
+                                                    <button class="btn btn-danger" onclick="swal('Cannot Delete', 'Doctor can only be updated after creation !', 'error');">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
 
-                                                <button class="btn btn-warning btn_edit_doctor" 
-                                                        data-toggle="modal" 
-                                                        data-target="#fire-modal-doctor"
-                                                        data-id="{{ $doctor->id }}"
-                                                        data-name="{{ $doctor->name }}"
-                                                        data-specialization="{{ $doctor->specialization }}"
-                                                        data-phone="{{ $doctor->phone }}"
-                                                        data-email="{{ $doctor->email }}">
-                                                    <i class="fa fa-edit"></i>
-                                                </button>
+                                                    <button class="btn btn-warning btn_edit_doctor" 
+                                                            data-toggle="modal" 
+                                                            data-target="#fire-modal-doctor"
+                                                            data-id="{{ $doctor->id }}"
+                                                            data-name="{{ $doctor->name }}"
+                                                            data-sex="{{ $doctor->sex }}"
+                                                            data-specialization="{{ $doctor->specialization }}"
+                                                            data-phone="{{ $doctor->phone }}"
+                                                            data-email="{{ $doctor->email }}">
+                                                        <i class="fa fa-edit"></i>
+                                                    </button>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -98,7 +100,7 @@
     <!-- [footer------------------------------] -->
     <!-- [Model Edit Doctor-------------------------] -->
         <div class="modal fade" id="fire-modal-doctor" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-            <div class="modal-dialog custom-modal-service-detail">
+            <div class="modal-dialog custom-modal-edit-doctor">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Edit Doctor</h5>
@@ -115,6 +117,14 @@
                                 <input type="text" name="name" id="doctor-name" class="form-control" required>
                             </div>
                             <div class="form-group">
+                                <label for="sex">Sex:</label>
+                                <select id="doctor-select" name="sex"  class="form-control" style="width: 100%;" required>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label for="specialization">Specialization:</label>
                                 <input type="text" name="specialization" id="doctor-specialization" class="form-control" required>
                             </div>
@@ -127,7 +137,7 @@
                                 <input type="email" name="email" id="doctor-email" class="form-control" required>
                             </div>
                             <div class="modal-footer">
-                                <button type="submit" class="btn btn-success">Update <i class="fa fa-edit"></i></button>
+                                <button type="submit" class="btn btn-success"><i class="fa fa-edit"></i> Update</button>
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa-solid fa-times"></i> Close</button>
                             </div>
                         </form>
@@ -154,8 +164,8 @@
                         <form id="deleteForm" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i> Delete</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-remove"></i> Cancel</button>
                         </form>
                     </div>
                 </div>

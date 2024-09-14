@@ -38,44 +38,44 @@
                                     <table class="table table-striped dataTable" id="table_cashier">
                                         <thead class="bg-primary">
                                             <tr>
-                                                <th class="text-white">#</th>
-                                                <th class="text-white">Cashier's Name</th>
-                                                <th class="text-white">Sex</th>
-                                                <th class="text-white">Email</th>
-                                                <th class="text-white">Telephone</th>
-                                                <th class="text-white">Action</th>
+                                                <th class="text-white align-middle text-center">#</th>
+                                                <th class="text-white align-middle text-center">Cashier's Name</th>
+                                                <th class="text-white align-middle text-center">Sex</th>
+                                                <th class="text-white align-middle text-center">Email</th>
+                                                <th class="text-white align-middle text-center">Telephone</th>
+                                                <th class="text-white align-middle text-center">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        @php
-                                            use App\Models\Cashier;
-                                            $cashiers = Cashier::latest('created_at')->get();
-                                        @endphp
-    
-                                        @foreach ($cashiers as $index => $cashier)
-                                            <tr>
-                                                <td>{{ $index +=1 }}</td>
-                                                <td>{{ $cashier->name }}</td>
-                                                <td>{{ $cashier->sex }}</td>
-                                                <td>{{ $cashier->email }}</td>
-                                                <td>{{ $cashier->telephone }}</td>
-                                                <td>
-                                                    <button class="btn btn-danger" onclick="swal('Cannot Delete', 'Cashier can only be updated after creation !', 'error');">
-                                                        <i class="fa fa-trash"></i>
-                                                    </button>
-                                                    <button class="btn btn-warning btn_edit_cashier" 
-                                                            data-toggle="modal" 
-                                                            data-target="#fire-modal-cashier"
-                                                            data-id="{{ $cashier->id }}"
-                                                            data-name="{{ $cashier->name }}"
-                                                            data-sex="{{ $cashier->sex }}"
-                                                            data-email="{{ $cashier->email }}"
-                                                            data-telephone="{{ $cashier->telephone }}">
-                                                        <i class="fa fa-edit"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        @endforeach
+                                            @php
+                                                use App\Models\Cashier;
+                                                $cashiers = Cashier::latest('created_at')->get();
+                                            @endphp
+        
+                                            @foreach ($cashiers as $index => $cashier)
+                                                <tr class="row_list_cashier">
+                                                    <td class="align-middle text-center">{{ $index +=1 }}</td>
+                                                    <td class="align-middle text-center"><span class="badge badge-success">{{ $cashier->name }}</span></td>
+                                                    <td class="align-middle text-center">{{ $cashier->sex }}</td>
+                                                    <td class="align-middle text-center">{{ $cashier->email }}</td>
+                                                    <td class="align-middle text-center">{{ $cashier->telephone }}</td>
+                                                    <td class="align-middle text-center">
+                                                        <button class="btn btn-danger" onclick="swal('Cannot Delete', 'Cashier can only be updated after creation !', 'error');">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                        <button class="btn btn-warning btn_edit_cashier" 
+                                                                data-toggle="modal" 
+                                                                data-target="#fire-modal-cashier"
+                                                                data-id="{{ $cashier->id }}"
+                                                                data-name="{{ $cashier->name }}"
+                                                                data-sex="{{ $cashier->sex }}"
+                                                                data-email="{{ $cashier->email }}"
+                                                                data-telephone="{{ $cashier->telephone }}">
+                                                            <i class="fa fa-edit"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -115,10 +115,10 @@
                             </div>
                             <div class="form-group">
                                 <label for="sex">Sex:</label>
-                                <select id="cashier-select" name="sex"  class="form-control select2" style="width: 100%;">
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                    <option value="Unknown">Unknown</option>
+                                <select id="cashier-select" name="sex"  class="form-control" style="width: 100%;" required>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -130,7 +130,7 @@
                                 <input type="text" name="telephone" id="cashier-telephone" class="form-control" required>
                             </div>
                             <div class="modal-footer">
-                                <button type="submit" class="btn btn-success">Update <i class="fa fa-edit"></i></button>
+                                <button type="submit" class="btn btn-success"><i class="fa fa-edit"></i> Update</button>
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa-solid fa-times"></i> Close</button>
                             </div>
                         </form>

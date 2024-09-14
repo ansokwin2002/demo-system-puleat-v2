@@ -38,47 +38,41 @@
                                     <table class="table table-striped dataTable" id="table_service">
                                         <thead class="bg-primary">
                                             <tr>
-                                                <th class="text-white">#</th>
-                                                <th class="text-white">Service</th>
-                                                <th class="text-white">Unit</th>
-                                                <th class="text-white">Price</th>
-                                                <th class="text-white">Action</th>
+                                                <th class="text-white align-middle text-center">#</th>
+                                                <th class="text-white align-middle text-center">Service</th>
+                                                <th class="text-white align-middle text-center">Unit</th>
+                                                <th class="text-white align-middle text-center">Price</th>
+                                                <th class="text-white align-middle text-center">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        @php
-                                            use App\Models\Service;
-                                            $services = Service::latest('created_at')->get();
-                                        @endphp
+                                            @php
+                                                use App\Models\Service;
+                                                $services = Service::latest('created_at')->get();
+                                            @endphp
 
-                                        @foreach ($services as $index => $item)
-                                            <tr>
-                                                <td>{{ $index +=1 }}</td>
-                                                <td>{{ $item->name }}</td>
-                                                <td>{{ $item->unit }}</td>
-                                                <td>{{ $item->price }}</td>
-                                                <td>
-                                                    
-                                                <button class="btn btn-danger" data-toggle="modal" data-target="#ModelDeleteService" data-id="{{ $item->id }}">
-                                                    <i class="fa fa-trash"></i>
-                                                </button>
-
-
-                                                    <button class="btn btn-warning btn_edit_service" 
-                                                            data-toggle="modal" 
-                                                            data-target="#fire-modal-service"
-                                                            data-id="{{ $item->id }}"
-                                                            data-name="{{ $item->name }}"
-                                                            data-unit="{{ $item->unit }}"
-                                                            data-price="{{ $item->price }}">
-                                                        <i class="fa fa-edit"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            
-
-
-                                        @endforeach
+                                            @foreach ($services as $index => $item)
+                                                <tr class="row_list_service">
+                                                    <td class="align-middle text-center">{{ $index +=1 }}</td>
+                                                    <td class="align-middle text-center"><span class="badge badge-danger">{{ $item->name }}</span></td>
+                                                    <td class="align-middle text-center">{{ $item->unit }}</td>
+                                                    <td class="align-middle text-center"><span class="badge badge-dark">${{ $item->price }}</span></td>
+                                                    <td class="align-middle text-center">
+                                                        <button class="btn btn-danger" data-toggle="modal" data-target="#ModelDeleteService" data-id="{{ $item->id }}">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                        <button class="btn btn-warning btn_edit_service" 
+                                                                data-toggle="modal" 
+                                                                data-target="#fire-modal-service"
+                                                                data-id="{{ $item->id }}"
+                                                                data-name="{{ $item->name }}"
+                                                                data-unit="{{ $item->unit }}"
+                                                                data-price="{{ $item->price }}">
+                                                            <i class="fa fa-edit"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -124,7 +118,7 @@
                                 <input type="text" name="price" id="service-price" class="form-control" required>
                             </div>
                             <div class="modal-footer">
-                                <button type="submit" class="btn btn-success">Update <i class="fa fa-edit"></i></button>
+                                <button type="submit" class="btn btn-success"><i class="fa fa-edit"></i> Update</button>
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa-solid fa-times"></i> Close</button>
                             </div>
                         </form>
@@ -151,8 +145,8 @@
                         <form id="deleteForm" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash"></i> Delete</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa-solid fa-times"></i> Cancel</button>
                         </form>
                     </div>
                 </div>

@@ -62,7 +62,7 @@
             <!-- End of Form -->
 
             <div class="text-center mt-4 mb-3">
-              <div class="text-job text-muted">Login With Social</div>
+              <!-- <div class="text-job text-muted">Login With Social</div> -->
             </div>
             <div class="row sm-gutters">
               <div class="col-6">
@@ -83,7 +83,7 @@
           Don't have an account? <a href="{{ route('register') }}">Create One</a>
         </div>
         <div class="simple-footer">
-          Copyright by An Sokwin ({{ date('Y') }});
+          Copyright by An Sokwin ({{ date('Y') }})
         </div>
       </div>
     </div>

@@ -300,13 +300,10 @@
                                     </div>
                                 </div>
                             <!-- [patient-noted-----------------------------------] -->
-
                                 <div class="form-group">
-                                    <button class="btn btn-primary" id="save_patient_history"><i class="fa fa-save"></i> Update</button>
+                                    <button class="btn btn-primary" id="update_patient_history"><i class="fa fa-save"></i> Update</button>
                                 </div>
                             <!-- [table_service-----------------------] -->
-                        
-
                         </div>
                     </div>
                 </div>
@@ -314,6 +311,34 @@
         </section>
     </div>
     <!-- [main_content------------------------------] -->
+    <!-- [footer------------------------------] -->
+        <footer class="main-footer">
+            @include('backend.body.footer')
+        </footer>
+    <!-- [footer------------------------------] -->
+
+    <!-- [Amount Paid-------------------------] -->
+        <div class="modal fade" id="fire-modal-4" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Amount paid <sup class="text-danger">★</sup></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" class="form-control form_paid" id="form_paid" inputmode="numeric" pattern="\d*" title="Please enter a number">
+                    </div>
+                    <div class="modal-footer bg-whitesmoke br">
+                        <button type="button" class="btn btn-primary btn_paid" data-dismiss="modal"><i class="fa fa-save"></i> Save</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa-solid fa-times"></i> Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- [Amount Paid-------------------------] -->
+
 </div>
 
 @endsection
@@ -325,7 +350,7 @@
     $(document).ready(function() {
         
         // [Select_Service---------------------]
-            $('#serviceSelect').on('change', function() {
+            $('#serviceSelect').off('change', function() {
                 const selectedOption = $(this).find('option:selected');
                 const serviceName = selectedOption.data('name-service');
                 const serviceUnit = selectedOption.data('unit-service');
@@ -511,117 +536,128 @@
 
         // [Submit_Patient_history------------------------------]    
    
-        $('#save_patient_history').click(function(e) {
-    e.preventDefault();
+            $('#update_patient_history').click(function(e) {
+                e.preventDefault();
+                if ($('#serviceTableBody tr').length === 0) {
+                    swal('Cannot submit', 'Please add at least one service first.', 'error');
+                    return;
+                }
+                let amountPaid = $('#amount_paid').text().trim();
+                amountPaid = amountPaid.replace('$','');
+                amountPaid = parseFloat(amountPaid);
+                let amountUnpaid = $('#amount_unpaid').text().trim();
+                amountUnpaid = amountUnpaid.replace('$','');
+                amountUnpaid = parseFloat(amountUnpaid);
 
+                let unit = $('.unit').val();
 
-    // Ensure at least one service is added
-    if ($('#serviceTableBody tr').length === 0) {
-        swal('Cannot submit', 'Please add at least one service first.', 'error');
-        return;
-    }
+                if (unit === '') {
+                    swal('Cannot submit', 'Unit Cannot be empty !', 'error');
+                    return; 
+                }
+                if (unit == 0) {
+                    swal('Cannot submit', 'Unit Cannot be zero number !', 'error');
+                    return; 
+                }
+                if (amountPaid === 0) {
+                    swal('Cannot submit', 'Amount Paid Cannot be zero number !', 'error');
+                    return; 
+                }
+                if (amountPaid === '') {
+                    swal('Cannot submit', 'Amount Paid Cannot be empty !', 'error');
+                    return; 
+                }
+                if (amountUnpaid < 0) {
+                    swal('Cannot submit', 'Amount Unpaid Cannot be negative number !', 'error');
+                    return; 
+                }
+                if (amountUnpaid > amountUnpaid) {
+                    swal('Cannot submit', 'Amount Unpaid Cannot be bigger then amount paid !', 'error');
+                    return; 
+                }
+                let csrfToken = $('meta[name="csrf-token"]').attr('content');
+                let patientId = $('#patient-select').val();
+                let date = $('#date').val();
+                let doctorId = $('#doctor').val();
+                let cashierId = $('#cashier-select').val();
+                let next_appointment_date = $('#next_appointment_date').val();
+                let type_service = $('#type_service').val();
+                let patient_noted = $('#patient_noted').val();
+                let grand_total = $('#grand_total').text().trim().replace('$', '');
+                let amount_paid = $('#amount_paid').text().trim().replace('$', '');
+                let amount_unpaid = $('#amount_unpaid').text().trim().replace('$', '');
+                let customer = $('#patient-select option:selected').text(); 
+                if (!patientId || !doctorId || !cashierId || !date) {
+                    swal('Error', 'Please fill in all required fields.', 'error');
+                    return;
+                }
+                let services = [];
+                $('#serviceTableBody tr').each(function() {
+                    let row = $(this);
+                    let serviceName = row.find('td').eq(1).text().trim();
+                    let serviceUnit = row.find('.unit').val();
+                    let servicePrice = row.find('.price p').text().trim().replace('$ ', '');
+                    let discountPercent = row.find('.discount-percent').val();
+                    let discountDollar = row.find('.discount-dollar').val();
+                    let subtotalRow = row.find('.subtotal').text().trim().replace('$ ', '');
 
-    // Get the CSRF token directly from the meta tag
-    let csrfToken = $('meta[name="csrf-token"]').attr('content');
-
-    // Get form data
-    let patientId = $('#patient-select').val();
-    let date = $('#date').val();
-    let doctorId = $('#doctor').val();
-    let cashierId = $('#cashier-select').val();
-    let next_appointment_date = $('#next_appointment_date').val();
-    let type_service = $('#type_service').val();
-    let patient_noted = $('#patient_noted').val();
-    let grand_total = $('#grand_total').text().trim().replace('$', '');
-    let amount_paid = $('#amount_paid').text().trim().replace('$', '');
-    let amount_unpaid = $('#amount_unpaid').text().trim().replace('$', '');
-    let customer = $('#patient-select option:selected').text(); // Ensure this gets the text correctly
-
-    // Validate required fields
-    if (!patientId || !doctorId || !cashierId || !date) {
-        swal('Error', 'Please fill in all required fields.', 'error');
-        return;
-    }
-
-    // Collect data from each row in the service table
-    let services = [];
-    $('#serviceTableBody tr').each(function() {
-        let row = $(this);
-        let serviceName = row.find('td').eq(1).text().trim();
-        let serviceUnit = row.find('.unit').val();
-        let servicePrice = row.find('.price p').text().trim().replace('$ ', '');
-        let discountPercent = row.find('.discount-percent').val();
-        let discountDollar = row.find('.discount-dollar').val();
-        let subtotalRow = row.find('.subtotal').text().trim().replace('$ ', '');
-
-        services.push({
-            service_name: serviceName,
-            service_unit: serviceUnit,
-            service_price: servicePrice,
-            discount_percent: discountPercent || 0,
-            discount_dollar: discountDollar || 0,
-            subtotal: subtotalRow
-        });
-    });
-
-    // Get the invoice_id from the URL
-    let invoiceId = getInvoiceIdFromUrl(); // Use the function we defined earlier
-
-    // Organize data to be sent, including the CSRF token
-    let paymentData = {
-        _token: csrfToken,
-        patient_id: patientId,
-        doctor_id: doctorId,
-        cashier_id: cashierId,
-        patient_payment: {
-            patientId: patientId, // Include patientId in the payment data
-            next_appointment_date: next_appointment_date,
-            type_service: type_service,
-            patient_noted: patient_noted,
-            date: date,
-            customer: customer,
-            grand_total: grand_total,
-            amount_paid: amount_paid,
-            amount_unpaid: amount_unpaid,
-            services: services
-        }
-    };
-
-    // Dynamic URL for the AJAX request (with the dynamic invoice_id)
-    let url = `/edit-patient-all-history/${invoiceId}`;
-
-    // AJAX request to save patient history
-    $.ajax({
-        url: url,
-        method: 'POST',
-        data: paymentData,
-        success: function(response) {
-            if (response.invoice_id) {
-                window.location.href = `/invoice/${response.invoice_id}`;
-            } else {
-                swal('Error', 'Unexpected response from the server. Please try again.', 'error');
-            }
-        },
-        error: function(xhr) {
-            if (xhr.status === 419) { // CSRF token mismatch
-                swal('Error', 'There was an issue with your session. Please try again.', 'error');
-            } else if (xhr.status === 422) { // Validation errors
-                let errors = xhr.responseJSON.errors;
-                let errorMessage = 'Please fix the following errors:\n';
-                $.each(errors, function(key, value) {
-                    errorMessage += `- ${value}\n`;
+                    services.push({
+                        service_name: serviceName,
+                        service_unit: serviceUnit,
+                        service_price: servicePrice,
+                        discount_percent: discountPercent || 0,
+                        discount_dollar: discountDollar || 0,
+                        subtotal: subtotalRow
+                    });
                 });
-                swal('Error', errorMessage, 'error');
-            } else {
-                swal('Error', 'Error saving patient history: ' + xhr.responseJSON.message, 'error');
-            }
-        }
-    });
-});
-
-
+                let invoiceId = getInvoiceIdFromUrl(); 
+                let paymentData = {
+                    _token: csrfToken,
+                    patient_id: patientId,
+                    doctor_id: doctorId,
+                    cashier_id: cashierId,
+                    patient_payment: {
+                        patientId: patientId, 
+                        next_appointment_date: next_appointment_date,
+                        type_service: type_service,
+                        patient_noted: patient_noted,
+                        date: date,
+                        customer: customer,
+                        grand_total: grand_total,
+                        amount_paid: amount_paid,
+                        amount_unpaid: amount_unpaid,
+                        services: services
+                    }
+                };
+                let url = `/edit-patient-all-history/${invoiceId}`;
+                $.ajax({
+                    url: url,
+                    method: 'POST',
+                    data: paymentData,
+                    success: function(response) {
+                        if (response.invoice_id) {
+                            window.location.href = `/invoice/${response.invoice_id}`;
+                        } else {
+                            swal('Error', 'Unexpected response from the server. Please try again.', 'error');
+                        }
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 419) { // CSRF token mismatch
+                            swal('Error', 'There was an issue with your session. Please try again.', 'error');
+                        } else if (xhr.status === 422) { // Validation errors
+                            let errors = xhr.responseJSON.errors;
+                            let errorMessage = 'Please fix the following errors:\n';
+                            $.each(errors, function(key, value) {
+                                errorMessage += `- ${value}\n`;
+                            });
+                            swal('Error', errorMessage, 'error');
+                        } else {
+                            swal('Error', 'Error saving patient history: ' + xhr.responseJSON.message, 'error');
+                        }
+                    }
+                });
+            });
         // [Submit_Patient_history------------------------------]
-
 
         // [Button Paid---------------------------]
             $('.btn_paid').on('click', function() {

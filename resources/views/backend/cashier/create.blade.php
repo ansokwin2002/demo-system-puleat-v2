@@ -65,10 +65,10 @@
                                                             <i class="fas fa-user-md"></i>
                                                         </div>
                                                     </div>
-                                                    <select name="sex" class="form-control select2">
-                                                        <option>Male</option>
-                                                        <option>Female</option>
-                                                        <option>Unknown</option>
+                                                    <select name="sex" class="form-control">
+                                                        <option value="male">Male</option>
+                                                        <option value="female">Female</option>
+                                                        <option value="other">Other</option>
                                                     </select>
                                                 </div>
                                             </div>

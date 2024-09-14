@@ -54,6 +54,30 @@
                                             </div>
                                             </div>
                                         </div>
+                                        <!-- [sex-------------------------------------] -->
+                                            <div class="form-group row">
+                                                <h6 class="col-sm-3 col-form-label">Sex :</h6>
+                                                <div class="col-sm-9">
+                                                <div class="flex-grow-1">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text">
+                                                                <i class="fas fa-user-md"></i>
+                                                            </div>
+                                                        </div>
+                                                        <select name="sex" class="form-control">
+                                                            <option value="male">Male</option>
+                                                            <option value="female">Female</option>
+                                                            <option value="other">Other</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="invalid-feedback">
+                                                    Please fill Patient sex !
+                                                </div>
+                                                </div>
+                                            </div>
+                                        <!-- [sex-------------------------------------] -->
                                         <div class="form-group row">
                                             <h6 class="col-sm-3 col-form-label">Specialization :</h6>
                                             <div class="col-sm-9">

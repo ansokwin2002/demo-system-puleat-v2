@@ -145,7 +145,7 @@
 
             // [dataTable_Service---------------------]
                 $('#table_service').DataTable({
-                    "pageLength": 50,
+                    "pageLength": 10,
                 });
             // [dataTable_Service---------------------]
 
@@ -182,6 +182,12 @@
             // [dataTable_Patient_History---------------------]
                 $('#table_patient_all_history').DataTable({
                     "pageLength": 50,
+                });
+            // [dataTable_Patient_History---------------------]
+
+            // [dataTable_Patient_History---------------------]
+                $('#table_notification').DataTable({
+                        "pageLength": 50,
                 });
             // [dataTable_Patient_History---------------------]
 
@@ -394,16 +400,22 @@
                         swal('Cannot submit', 'Unit Cannot be zero number !', 'error');
                         return; 
                     }
-                    if (amountPaid === 0 || amountPaid === '') {
+                    if (amountPaid === 0) {
                         swal('Cannot submit', 'Amount Paid Cannot be zero number !', 'error');
                         return; 
                     }
-                
-                    if (amountUnpaid < 0 || amountUnpaid > amountUnpaid) {
-                        swal('Cannot submit', 'Amount Unpaid Cannot be negative or bigger then amount paid !', 'error');
+                    if (amountPaid === '') {
+                        swal('Cannot submit', 'Amount Paid Cannot be empty !', 'error');
                         return; 
                     }
-                    
+                    if (amountUnpaid < 0) {
+                        swal('Cannot submit', 'Amount Unpaid Cannot be negative number !', 'error');
+                        return; 
+                    }
+                    if (amountUnpaid > amountUnpaid) {
+                        swal('Cannot submit', 'Amount Unpaid Cannot be bigger then amount paid !', 'error');
+                        return; 
+                    }
                     // Get the CSRF token directly from the meta tag
                     let csrfToken = $('meta[name="csrf-token"]').attr('content');
 
@@ -726,6 +738,7 @@
                     $('.btn_edit_doctor').on('click', function() {
                         var id = $(this).data('id');
                         var name = $(this).data('name');
+                        var sex = $(this).data('sex');
                         var specialization = $(this).data('specialization');
                         var phone = $(this).data('phone');
                         var email = $(this).data('email');
@@ -735,6 +748,7 @@
                         $('#doctor-specialization').val(specialization);
                         $('#doctor-phone').val(phone);
                         $('#doctor-email').val(email);
+                        $('#doctor-select').val(sex).change();
 
                         // Update the form action URL to include the doctor ID
                         var formAction = "{{ route('doctor.update', ':id') }}";
@@ -773,6 +787,7 @@
                         $('#cashier-sex').val(sex);
                         $('#cashier-email').val(email);
                         $('#cashier-telephone').val(telephone);
+                        $('#cashier-select').val(sex).change();
 
                         var formAction = "{{ route('cashier.update', ':id') }}";
                         formAction = formAction.replace(':id', id);

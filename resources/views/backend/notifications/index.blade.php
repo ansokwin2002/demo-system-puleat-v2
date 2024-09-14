@@ -39,38 +39,38 @@
                             <!-- Check if there are any notifications -->
                             @if($appointmentNotifications->isNotEmpty())
                                 <div class="table-responsive">
-                                    <table class="table table-striped dataTable" id="table_service">
+                                    <table class="table table-striped dataTable" id="table_notification">
                                         <thead class="bg-primary">
                                             <tr>
-                                                <th class="text-white">#</th>
-                                                <th class="text-white">Patient Name</th>
-                                                <th class="text-white">Telephone</th>
-                                                <th class="text-white">Doctor Name</th>
-                                                <th class="text-white">Register Date</th>
-                                                <th class="text-white">Next Appointment</th>
-                                                <th class="text-white">Services</th>
-                                                <th class="text-white">Actions</th>
+                                                <th class="text-white align-middle text-center">#</th>
+                                                <th class="text-white align-middle text-center">Patient Name</th>
+                                                <th class="text-white align-middle text-center">Telephone</th>
+                                                <th class="text-white align-middle text-center">Doctor Name</th>
+                                                <th class="text-white align-middle text-center">Register Date</th>
+                                                <th class="text-white align-middle text-center">Next Appointment</th>
+                                                <th class="text-white align-middle text-center">Services</th>
+                                                <th class="text-white align-middle text-center">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach($appointmentNotifications as $index => $notification)
-                                            <tr>
-                                                <td>{{ $index + 1 }}</td>
-                                                <td>{{ $notification['patient_name'] }}</td>
-                                                <td>{{ $notification['patient_phone'] }}</td>
-                                                <td>{{ $notification['doctor_name'] }}</td>
-                                                <td>{{ $notification['register_date'] }}</td>
-                                                <td>{{ $notification['next_appointment'] }}</td>
-                                                <td>
+                                            <tr class="row_notification">
+                                                <td class="align-middle text-center">{{ $index + 1 }}</td>
+                                                <td class="align-middle text-center"><span class="badge badge-info">{{ $notification['patient_name'] }}</span></td>
+                                                <td class="align-middle text-center">{{ $notification['patient_phone'] }}</td>
+                                                <td class="align-middle text-center"><span class="badge badge-dark">{{ $notification['doctor_name'] }}</span></td>
+                                                <td class="align-middle text-center">{{ $notification['register_date'] }}</td>
+                                                <td class="align-middle text-center">{{ $notification['next_appointment'] }}</td>
+                                                <td class="align-middle text-center">
                                                     @if($notification['services']->isEmpty())
                                                         <span class="badge badge-warning">No services found.</span>
                                                     @else
                                                         @foreach($notification['services'] as $service)
-                                                            <span class="badge badge-dark">{{ $service['service_name'] ?? '' }}</span><br>
+                                                            <span class="badge badge-success">{{ $service['service_name'] ?? '' }}</span><br><br>
                                                         @endforeach
                                                     @endif
                                                 </td>
-                                                <td>
+                                                <td class="align-middle text-center">
                                                     <button class="btn btn-danger btn_hide_notification"><i class="fa fa-trash"></i></button>
                                                 </td>
                                             </tr>

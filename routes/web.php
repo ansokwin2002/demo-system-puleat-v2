@@ -33,7 +33,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 // [Admin---------------------------------]
-    Route::get('/', function () {
+    Route::get('/dashboard', function () {
         return view('backend.dashboard');
     })->middleware(['auth', 'verified'])->name('backend.dashboard');
 
@@ -100,7 +100,6 @@ use Illuminate\Support\Facades\Route;
             Route::get('/get-patient-noted','getPatientNoted')->name('patient_noted');
             Route::get('/get-patient-all-history/{invoice_id}','editHistoryPatient')->name('history_patient.edit');
             Route::post('/edit-patient-all-history/{invoice_id}', 'updateHistoryPatient')->name('history_patient.update');
-
         });
     });
 // [patient_history_controller----------------------------]

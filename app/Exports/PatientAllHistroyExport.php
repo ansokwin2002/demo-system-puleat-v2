@@ -54,6 +54,8 @@ class PatientAllHistroyExport implements FromCollection, WithHeadings, WithMappi
     {
         static $counter = 0;
         $counter++;
+        $discountDollar = isset($row['discount_dollar']) && is_numeric($row['discount_dollar']) ? $row['discount_dollar'] : 0;
+        $discountPercent = isset($row['discount_percent']) && is_numeric($row['discount_percent']) ? $row['discount_percent'] : 0;
         return [
             $counter,
             $row['date'] ?? '',
@@ -64,8 +66,8 @@ class PatientAllHistroyExport implements FromCollection, WithHeadings, WithMappi
             $row['subtotal'] ?? 0, 
             $row['service_unit'] ?? 0, 
             $row['service_price'] ?? 0,
-            $row['discount_dollar'] ?? 0, 
-            $row['discount_percent'] ?? 0,
+            $discountDollar, 
+            $discountPercent,
             $row['amount_paid'] ?? 0,
             $row['grand_total'] ?? 0, 
             $row['amount_unpaid'] ?? 0, 
@@ -75,162 +77,15 @@ class PatientAllHistroyExport implements FromCollection, WithHeadings, WithMappi
         ];
     }
 
-    // public function styles(Worksheet $sheet)
-    // {
-    //     $headerStyle = [
-    //         'fill' => [
-    //             'fillType' => Fill::FILL_SOLID,
-    //             'startColor' => ['rgb' => '42cef5'], // Light blue color for the header
-    //         ],
-    //         'font' => [
-    //             'color' => ['rgb' => '000000'], // Black text
-    //             'bold' => true,
-    //         ],
-    //         'alignment' => [
-    //             'horizontal' => Alignment::HORIZONTAL_CENTER,
-    //             'vertical' => Alignment::VERTICAL_CENTER,
-    //         ],
-    //         'borders' => [
-    //             'allBorders' => [
-    //                 'borderStyle' => Border::BORDER_THIN,
-    //                 'color' => ['rgb' => '000000'], // Black border color
-    //             ],
-    //         ],
-    //     ];
-
-    //     $sheet->getStyle('A1:Q1')->applyFromArray($headerStyle);
-    //     $sheet->getRowDimension(1)->setRowHeight(40);
-
-    //     // Set column widths
-    //     $columnWidths = [
-    //         'A' => 10,  // ID
-    //         'B' => 20,  // Date
-    //         'C' => 35,  // Patient Name
-    //         'D' => 20,  // Doctor Name
-    //         'E' => 20,  // Cashier Name
-    //         'F' => 40,  // Service Name
-    //         'G' => 20,  // Subtotal
-    //         'H' => 10,  // Unit
-    //         'I' => 15,  // Price
-    //         'J' => 15,  // Discount Dollar
-    //         'K' => 20,  // Discount Percent
-    //         'L' => 15,  // Amount Paid
-    //         'M' => 20,  // Grand Total
-    //         'N' => 20,  // Amount Unpaid
-    //         'O' => 30,  // Type Service
-    //         'P' => 30,  // Patient Noted
-    //         'Q' => 30,  // Next Appointment Date
-    //     ];
-
-    //     foreach ($columnWidths as $column => $width) {
-    //         $sheet->getColumnDimension($column)->setWidth($width);
-    //     }
-
-    //     // Apply styles to patient info and services
-    //     $highestRow = $sheet->getHighestRow();
-    //     $rowIndex = 2;
-    //     while ($rowIndex <= $highestRow) {
-    //         $currentRow = $sheet->getRowIterator($rowIndex)->current();
-    //         $cellValue = $sheet->getCell('A' . $rowIndex)->getValue();
-            
-    //         // Merge cells for patient info if needed
-    //         if (empty($cellValue)) {
-    //             $prevRow = $rowIndex - 1;
-    //             $sheet->mergeCells('A' . $prevRow . ':A' . $rowIndex);
-    //             $sheet->mergeCells('B' . $prevRow . ':B' . $rowIndex);
-    //             $sheet->mergeCells('C' . $prevRow . ':C' . $rowIndex);
-    //             $sheet->mergeCells('D' . $prevRow . ':D' . $rowIndex);
-    //             $sheet->mergeCells('E' . $prevRow . ':E' . $rowIndex);
-
-    //             $sheet->mergeCells('L' . $prevRow . ':L' . $rowIndex);
-    //             $sheet->mergeCells('M' . $prevRow . ':M' . $rowIndex);
-    //             $sheet->mergeCells('N' . $prevRow . ':N' . $rowIndex);
-    //             $sheet->mergeCells('O' . $prevRow . ':O' . $rowIndex);
-    //             $sheet->mergeCells('P' . $prevRow . ':P' . $rowIndex);
-    //             $sheet->mergeCells('Q' . $prevRow . ':Q' . $rowIndex);
-
-    //             // Apply background color, center alignment, and border to merged cells
-    //             $sheet->getStyle('A' . $prevRow . ':E' . $rowIndex)->applyFromArray([
-    //                 'fill' => [
-    //                     'fillType' => Fill::FILL_SOLID,
-    //                     'startColor' => ['rgb' => 'FFFF00'], // Yellow background color for merged cells
-    //                 ],
-    //                 'alignment' => [
-    //                     'horizontal' => Alignment::HORIZONTAL_CENTER,
-    //                     'vertical' => Alignment::VERTICAL_CENTER,
-    //                 ],
-    //                 'borders' => [
-    //                     'allBorders' => [
-    //                         'borderStyle' => Border::BORDER_THIN,
-    //                         'color' => ['rgb' => '000000'], // Black border color
-    //                     ],
-    //                 ],
-    //             ]);
-
-    //             $sheet->getStyle('L' . $prevRow . ':Q' . $rowIndex)->applyFromArray([
-    //                 'fill' => [
-    //                     'fillType' => Fill::FILL_SOLID,
-    //                     'startColor' => ['rgb' => 'FFFF00'], // Yellow background color for merged cells
-    //                 ],
-    //                 'alignment' => [
-    //                     'horizontal' => Alignment::HORIZONTAL_CENTER,
-    //                     'vertical' => Alignment::VERTICAL_CENTER,
-    //                 ],
-    //                 'borders' => [
-    //                     'allBorders' => [
-    //                         'borderStyle' => Border::BORDER_THIN,
-    //                         'color' => ['rgb' => '000000'], // Black border color
-    //                     ],
-    //                 ],
-    //             ]);
-    //         }
-
-    //         // Style alternating row colors
-    //         $fillColor = ($rowIndex % 2 == 0) ? 'F2F2F2' : 'FFFFFF';
-    //         $sheet->getStyle('A' . $rowIndex . ':Q' . $rowIndex)->applyFromArray([
-    //             'fill' => [
-    //                 'fillType' => Fill::FILL_SOLID,
-    //                 'startColor' => ['rgb' => $fillColor],
-    //             ],
-    //             'alignment' => [
-    //                 'horizontal' => Alignment::HORIZONTAL_CENTER,
-    //                 'vertical' => Alignment::VERTICAL_CENTER,
-    //             ],
-    //             'borders' => [
-    //                 'allBorders' => [
-    //                     'borderStyle' => Border::BORDER_THIN,
-    //                     'color' => ['rgb' => '000000'], // Black border color
-    //                 ],
-    //             ],
-    //         ]);
-
-    //         // Set row height
-    //         $sheet->getRowDimension($rowIndex)->setRowHeight(30);
-    //         $rowIndex++;
-    //     }
-    //     // Apply center alignment to specific columns
-    //     $sheet->getStyle('F:F')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-    //     $sheet->getStyle('G:G')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-    //     $sheet->getStyle('H:H')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-    //     $sheet->getStyle('I:I')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-    //     $sheet->getStyle('J:J')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-    //     $sheet->getStyle('K:K')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-    //     $sheet->getStyle('L:L')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-    //     $sheet->getStyle('M:M')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-    //     $sheet->getStyle('N:N')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-    //     $sheet->getStyle('O:O')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-    //     $sheet->getStyle('P:P')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-    //     $sheet->getStyle('Q:Q')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-    // }
     public function styles(Worksheet $sheet)
     {
         $headerStyle = [
             'fill' => [
                 'fillType' => Fill::FILL_SOLID,
-                'startColor' => ['rgb' => '42cef5'], // Light blue color for the header
+                'startColor' => ['rgb' => '6372E6'], 
             ],
             'font' => [
-                'color' => ['rgb' => '000000'], // Black text
+                'color' => ['rgb' => 'FFFFFF'],
                 'bold' => true,
             ],
             'alignment' => [
@@ -240,7 +95,7 @@ class PatientAllHistroyExport implements FromCollection, WithHeadings, WithMappi
             'borders' => [
                 'allBorders' => [
                     'borderStyle' => Border::BORDER_THIN,
-                    'color' => ['rgb' => '000000'], // Black border color
+                    'color' => ['rgb' => 'CCCCCC'], // Black border color
                 ],
             ],
         ];
@@ -265,13 +120,16 @@ class PatientAllHistroyExport implements FromCollection, WithHeadings, WithMappi
             'M' => 20,  // Grand Total
             'N' => 20,  // Amount Unpaid
             'O' => 30,  // Type Service
-            'P' => 30,  // Patient Noted
+            'P' => 90,  // Patient Noted
             'Q' => 30,  // Next Appointment Date
         ];
     
         foreach ($columnWidths as $column => $width) {
             $sheet->getColumnDimension($column)->setWidth($width);
         }
+
+        $sheet->getStyle('F:F')->getAlignment()->setWrapText(true); // Service Name
+        $sheet->getStyle('P:P')->getAlignment()->setWrapText(true); // Patient Noted
     
         // Manage merging based on patient ID changes
         $highestRow = $sheet->getHighestRow();
@@ -307,12 +165,12 @@ class PatientAllHistroyExport implements FromCollection, WithHeadings, WithMappi
                 'borders' => [
                     'allBorders' => [
                         'borderStyle' => Border::BORDER_THIN,
-                        'color' => ['rgb' => '000000'], // Black border color
+                        'color' => ['rgb' => 'CCCCCC'], // Black border color
                     ],
                 ],
             ]);
     
-            $sheet->getRowDimension($rowIndex)->setRowHeight(30);  // Set row height
+            $sheet->getRowDimension($rowIndex)->setRowHeight(50);  // Set row height
         }
     
         // Apply number formats

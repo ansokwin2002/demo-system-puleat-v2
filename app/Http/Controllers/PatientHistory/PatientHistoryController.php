@@ -8,6 +8,7 @@ use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\PatientHistory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PatientHistoryController extends Controller
 {
@@ -19,7 +20,6 @@ class PatientHistoryController extends Controller
             ->get();
         return view('backend.patient.patient_service_history', compact('patientHistories'));
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -34,7 +34,7 @@ class PatientHistoryController extends Controller
         ]);
 
         do {
-            $invoiceId = rand(10000, 99999);
+            $invoiceId = rand(100000, 999999);
             $exists = PatientHistory::where('invoice_id', $invoiceId)->exists();
         } while ($exists);
 
@@ -49,6 +49,7 @@ class PatientHistoryController extends Controller
         $patientHistory->invoice_id = $invoiceId;
         $patientHistory->save();
 
+        toastr()->success('Added Patient\'s History Successfully !');
         return response()->json(['invoice_id' => $invoiceId]);
     }
 
@@ -160,14 +161,4 @@ class PatientHistoryController extends Controller
         toastr()->success('Updated Patient\'s History Successfully !');
         return response()->json(['invoice_id' => $invoice_id, 'message' => 'Patient history updated successfully']);
     }
-    
-    
-
-
-
-
-
-        
-
-
 }

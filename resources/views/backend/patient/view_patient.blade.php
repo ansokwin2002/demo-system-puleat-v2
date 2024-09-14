@@ -38,15 +38,15 @@
                                     <table class="table table-striped dataTable" id="table_patient">
                                         <thead class="bg-primary">
                                             <tr>
-                                                <th class="text-white">Patient's ID</th>
-                                                <th class="text-white">Date</th>
-                                                <th class="text-white">Patient's Name</th>
-                                                <th class="text-white">Age</th>
-                                                <th class="text-white">Sex</th>
-                                                <th class="text-white">Address</th>
-                                                <th class="text-white">Telephone</th>
-                                                <th class="text-white">Type Patient</th>
-                                                <th class="text-white">Action</th>
+                                                <th class="text-white align-middle text-center ">Patient's ID</th>
+                                                <th class="text-white align-middle text-center ">Date</th>
+                                                <th class="text-white align-middle text-center ">Patient's Name</th>
+                                                <th class="text-white align-middle text-center ">Age</th>
+                                                <th class="text-white align-middle text-center ">Sex</th>
+                                                <th class="text-white align-middle text-center ">Address</th>
+                                                <th class="text-white align-middle text-center ">Telephone</th>
+                                                <th class="text-white align-middle text-center ">Type Patient</th>
+                                                <th class="text-white align-middle text-center ">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -55,16 +55,16 @@
                                                 $patients = Patient::latest('created_at')->get();
                                             @endphp
                                             @foreach ($patients as $index => $patient)
-                                            <tr>
-                                                <td>{{ $index + 1 }}</td>
-                                                <td>{{ $patient->date }}</td>
-                                                <td>{{ $patient->name }}</td>
-                                                <td>{{ $patient->age }}</td>
-                                                <td>{{ $patient->sex }}</td>
-                                                <td>{{ $patient->address }}</td>
-                                                <td>{{ $patient->telephone }}</td>
-                                                <td><span class="badge badge-secondary">{{ $patient->type_patient }}</span></td>
-                                                <td class="td-action">
+                                            <tr class="row_list_patients">
+                                                <td class="align-middle text-center">{{ $index + 1 }}</td>
+                                                <td class="align-middle text-center">{{ $patient->date }}</td>
+                                                <td class="align-middle text-center"><span class="badge badge-info">{{ $patient->name }}</span></td>
+                                                <td class="align-middle text-center">{{ $patient->age }}</td>
+                                                <td class="align-middle text-center">{{ $patient->sex }}</td>
+                                                <td class="align-middle text-center">{{ $patient->address }}</td>
+                                                <td class="align-middle text-center">{{ $patient->telephone }}</td>
+                                                <td class="align-middle text-center"><span class="badge badge-secondary">{{ $patient->type_patient }}</span></td>
+                                                <td class="align-middle text-center" class="td-action">
                                                     <button class="btn btn-danger" onclick="swal('Cannot Delete', 'Patient can only be updated after creation!', 'error');">
                                                         <i class="fa fa-trash"></i>
                                                     </button>
@@ -144,8 +144,8 @@
                                 <input type="text" name="type_patient" id="patient-type_patient" class="form-control" required>
                             </div>
                             <div class="modal-footer">
-                                <button type="submit" class="btn btn-success">Update <i class="fa fa-edit"></i></button>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-success"><i class="fa fa-edit"></i> Update</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-remove"></i> Close</button>
                             </div>
                         </form>
                     </div>

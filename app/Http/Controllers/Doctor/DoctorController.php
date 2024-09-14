@@ -23,6 +23,7 @@ class DoctorController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
+            'sex' => 'required|string|max:15',
             'specialization' => 'required|string|max:255',
             'phone' => 'required|string|max:15|unique:doctors,phone',
             'email' => 'required|email|unique:doctors,email',
@@ -31,6 +32,7 @@ class DoctorController extends Controller
         try {
             $doctor = new Doctor();
             $doctor->name = $validatedData['name'];
+            $doctor->sex = $validatedData['sex'];
             $doctor->specialization = $validatedData['specialization'];
             $doctor->phone = $validatedData['phone'];
             $doctor->email = $validatedData['email'];
@@ -67,6 +69,7 @@ class DoctorController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'sex' => 'required|string|max:15',
             'specialization' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
             'email' => 'required|email|max:255',
@@ -74,6 +77,7 @@ class DoctorController extends Controller
 
         $doctor = Doctor::findOrFail($id);
         $doctor->name = $request->input('name');
+        $doctor->sex = $request->input('sex');
         $doctor->specialization = $request->input('specialization');
         $doctor->phone = $request->input('phone');
         $doctor->email = $request->input('email');

@@ -57,18 +57,18 @@
                                         $patientName = $patientHistory->patient->name ?? '';
                                         $services = $paymentData['services'] ?? [];
                                     @endphp
-                                    <tr>
-                                        <td>{{ $patientHistory->invoice_id }}</td>
-                                        <td>{{ $paymentData['date'] ?? '' }}</td>
-                                        <td>{{ $doctorName }}</td>
-                                        <td>{{ $patientName }}</td>
-                                        <td>
+                                    <tr class="row_appointment">
+                                        <td class="align-middle text-center">{{ $patientHistory->invoice_id }}</td>
+                                        <td class="align-middle text-center">{{ $paymentData['date'] ?? '' }}</td>
+                                        <td class="align-middle text-center"><span class="badge badge-dark">{{ $doctorName }}</span></td>
+                                        <td class="align-middle text-center"><span class="badge badge-info">{{ $patientName }}</span></td>
+                                        <td class="align-middle text-center">
                                             @foreach($services as $service)
-                                                {{ $service['service_name'] ?? 'N/A' }}<br>
+                                                <span class="badge badge-success">{{ $service['service_name'] ?? 'N/A' }}</span><br><br>
                                             @endforeach
                                         </td>
-                                        <td>{{ $paymentData['next_appointment_date'] ?? '' }}</td>
-                                        <td class="td-action">
+                                        <td class="align-middle text-center">{{ $paymentData['next_appointment_date'] ?? '' }}</td>
+                                        <td class="td-action align-middle text-center">
                                             <button class="btn btn-danger" onclick="swal('Cannot Delete', 'Appointment can only be updated after creation !', 'error');"><i class="fa fa-trash"></i></button>
                                             <button class="btn btn-warning btn_edit_appointment" 
                                                 data-toggle="modal" 
@@ -100,42 +100,41 @@
     </footer>
     <!-- [footer------------------------------] -->
     <!-- [Model Detail Patient Appointment-------------------------] -->
-    <div class="modal fade" id="fire-modal-appointment" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog custom-modal-service-detail">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Edit Appointment</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-            <form id="editAppointmentForm" method="post">
-                @csrf
-                @method('PUT') <!-- Added method spoofing -->
-                <input type="hidden" name="id" id="appointment-id">
-                <div class="form-group">
-                    <label for="name">Next Appointment:</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">
-                                <i class="fas fa-calendar"></i>
+        <div class="modal fade" id="fire-modal-appointment" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog custom-modal-appointment">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Appointment</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                    <form id="editAppointmentForm" method="post">
+                        @csrf
+                        @method('PUT') <!-- Added method spoofing -->
+                        <input type="hidden" name="id" id="appointment-id">
+                        <div class="form-group">
+                            <label for="name">Next Appointment:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-calendar"></i>
+                                    </div>
+                                </div>
+                                <input type="text" name="appointment_date" id="appointment-date" class="form-control datepicker" required>
                             </div>
                         </div>
-                        <input type="text" name="appointment_date" id="appointment-date" class="form-control datepicker" required>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success"><i class="fa fa-edit"></i> Update</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-remove"></i> Close</button>
+                        </div>
+                    </form>
+
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-success">Update <i class="fa fa-edit"></i></button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </form>
-
             </div>
         </div>
-    </div>
-</div>
-
     <!-- [Model Detail Patient Appointment-------------------------] -->
 </div>
 
