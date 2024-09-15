@@ -66,7 +66,7 @@
                                                         <span class="badge badge-warning">No services found.</span>
                                                     @else
                                                         @foreach($notification['services'] as $service)
-                                                            <span class="badge badge-success">{{ $service['service_name'] ?? '' }}</span><br><br>
+                                                            <span class="badge badge-danger">{{ $service['service_name'] ?? '' }}</span><br><br>
                                                         @endforeach
                                                     @endif
                                                 </td>

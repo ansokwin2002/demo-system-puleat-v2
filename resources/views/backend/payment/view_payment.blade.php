@@ -205,7 +205,7 @@
                                         <div class="col-12 col-sm-5 col-md-8 col-lg-12">
                                             <div class="card_service">
                                                 <div class="icon_service">
-                                                    <button class="btn btn-primary" style="width: 100%;height:100%;">Choose Service</button>
+                                                    <button class="btn btn-primary" style="width: 100%;height:100%;">Services</button>
                                                 </div>
                                                 <div class="select_service">
                                                     @php 

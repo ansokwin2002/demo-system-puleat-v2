@@ -210,7 +210,7 @@
                         <tr>
                             <td></td>
                             <td style="width:700px;">${serviceName}<button class="btn btn-danger remove-row float-right"><i class="fa fa-trash"></i></button></td>
-                            <td style="width:120px;"><input type="text" class="form-control unit" inputmode="numeric" pattern="\d*" title="Please enter a number"></td>
+                            <td style="width:120px;"><input type="text" class="form-control unit" value="1" inputmode="numeric" pattern="\d*" title="Please enter a number"></td>
                             <td class="price"><p>$ ${servicePrice}</p></td>
                             <td class="d-flex">
                                 <div class="form-check form-check-lg">
@@ -236,6 +236,7 @@
                     updateRowNumbers(); 
                     updateInputState();
                     calculateSubtotal();
+                    updateGrandTotal();
                 });
 
                 function calculateSubtotal() {
@@ -266,6 +267,8 @@
                 $('#serviceTableBody').on('click', '.remove-row', function() {
                     $(this).closest('tr').remove();
                     updateRowNumbers(); 
+                    $('#amount_paid').text('$ 0.00');
+                    $('#amount_unpaid').text('$ 0.00');
                 });
 
                 function updateRowNumbers() {
@@ -336,6 +339,8 @@
                     } else {
                         $row.find('#subtotal').text('$ 0.00'); 
                     }
+                    $('#amount_paid').text('$ 0.00');
+                    $('#amount_unpaid').text('$ 0.00');
                 });
             // [Unit-----------------------]
 
@@ -347,6 +352,8 @@
                     if (value !== numericValue) {
                         $(this).val(numericValue); 
                     }
+                    $('#amount_paid').text('$ 0.00');
+                    $('#amount_unpaid').text('$ 0.00');
                 });
 
                 $('#serviceTableBody').on('blur', '.unit, .discount-percent, .discount-dollar', function() {

@@ -139,6 +139,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="gallery gallery-md"></div>
+                        <center><p class="no-image-msg text-danger" style="display:none;"><b>No images available yet. Please add images to display here !</b></p></center>
                     </div>
                 </div>
             </div>
@@ -331,7 +332,18 @@
     });
 // [view-btn-image--------------------------------]
 
-
+// [display_message_image_available_or_not--------------------------------]
+    $(document).ready(function() {
+        $('#view-images-modal').on('show.bs.modal', function() {
+            var gallery = $(this).find('.gallery');
+            if (gallery.is(':empty')) {
+                $('.no-image-msg').show();
+            } else {
+                $('.no-image-msg').hide();
+            }
+        });
+    });
+// [display_message_image_available_or_not--------------------------------]
 
 
 </script>

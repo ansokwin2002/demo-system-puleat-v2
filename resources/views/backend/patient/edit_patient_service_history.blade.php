@@ -183,7 +183,7 @@
                                         <div class="col-12 col-sm-5 col-md-8 col-lg-12">
                                             <div class="card_service">
                                                 <div class="icon_service">
-                                                    <button class="btn btn-primary" style="width: 100%;height:100%;">Choose Service</button>
+                                                    <button class="btn btn-primary" style="width: 100%;height:100%;">Services</button>
                                                 </div>
                                                 <div class="select_service">
                                                     <select id="serviceSelect" class="form-control select2" style="width: 100%;">
@@ -387,6 +387,7 @@
                 updateRowNumbers(); 
                 updateInputState();
                 calculateSubtotal();
+                updateGrandTotal();
             });
 
             function calculateSubtotal() {
@@ -471,6 +472,8 @@
                 $(this).closest('tr').remove(); 
                 updateRowNumbers();
                 updateGrandTotal();
+                $('#amount_paid').text('$ 0.00');
+                $('#amount_unpaid').text('$ 0.00');
             });
         // [Update Grand Total------------------------]
 
@@ -487,6 +490,8 @@
                 } else {
                     $row.find('#subtotal').text('$ 0.00'); 
                 }
+                $('#amount_paid').text('$ 0.00');
+                $('#amount_unpaid').text('$ 0.00');
             });
         // [Unit-----------------------]
 
@@ -498,6 +503,8 @@
                 if (value !== numericValue) {
                     $(this).val(numericValue); 
                 }
+                $('#amount_paid').text('$ 0.00');
+                $('#amount_unpaid').text('$ 0.00');
             });
 
             $('#serviceTableBody').on('blur', '.unit, .discount-percent, .discount-dollar', function() {
