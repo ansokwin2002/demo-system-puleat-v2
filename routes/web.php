@@ -33,9 +33,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 // [Admin---------------------------------]
-    Route::get('/dashboard', function () {
+    Route::get('/', function () {
         return view('backend.dashboard');
-    })->middleware(['auth', 'verified'])->name('backend.dashboard');
+    })->middleware(['auth', 'verified'])->name('dashboard');
 
     Route::middleware('auth')->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -49,7 +49,7 @@ use Illuminate\Support\Facades\Route;
 // [dashboard_controller----------------------------]
     Route::middleware('auth')->group(function () {
         Route::controller(DashboardController::class)->group(function(){
-            Route::get('/dashboard', 'dashboard')->name('dashboard');
+            Route::get('/', 'dashboard')->name('dashboard');
         });
     });
 // [dashboard_controller----------------------------]

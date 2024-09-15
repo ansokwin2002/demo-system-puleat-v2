@@ -58,9 +58,9 @@
                                                     <tr class="row_multi_image" data-toggle="modal" 
                                                         data-target="#fire-modal-4" data-invoice-id="{{ $patientHistory->invoice_id }}">
                                                         <td class="align-middle text-center">{{ $paymentData['date'] ?? '' }}</td>
-                                                        <td class="align-middle text-center">{{ $doctorName }}</td>
-                                                        <td class="align-middle text-center">{{ $patientName }}</td>
-                                                        <td class="align-middle text-center">{{ $service['service_name'] }}</td>
+                                                        <td class="align-middle text-center"><span class="badge badge-dark">{{ $doctorName }}</span></td>
+                                                        <td class="align-middle text-center"><span class="badge badge-info">{{ $patientName }}</span></td>
+                                                        <td class="align-middle text-center"><span class="badge badge-danger">{{ $service['service_name'] }}</span></td>
                                                         <td class="align-middle text-center" class="td-file-upload">
                                                             <button class="btn btn-success view-images-btn" data-invoice-id="{{ $patientHistory->invoice_id }}"><i class="fa-solid fa-eye"></i></button>
                                                         </td>
