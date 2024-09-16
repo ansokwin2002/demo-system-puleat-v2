@@ -14,8 +14,6 @@
 
 function setActive(array $routes) {
     $currentRoute = request()->route()->getName();
-    // Debugging
-    \Log::info('Current route name: ' . $currentRoute);
     foreach ($routes as $route) {
         if (request()->routeIs($route)) {
             return 'active';
