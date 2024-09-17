@@ -7,7 +7,6 @@ use App\Models\PatientHistory;
 use App\Models\uploadMultiImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log; // Import the Log facade
 use Illuminate\Support\Facades\Storage;
 
 class uploadMultiImageController extends Controller
@@ -87,21 +86,19 @@ class uploadMultiImageController extends Controller
         }
     }
 
-
     public function getImages($invoiceId)
     {
-        // Replace with your actual logic to get images by invoice ID
         $images = uploadMultiImage::where('invoice_id', $invoiceId)->get();
 
-        // Format the data as needed for the front end
         $imageData = $images->map(function ($image) {
             return [
-                'url' => Storage::url($image->path) // Adjust based on your storage setup
+                'url' => asset('storage/' . $image->path) // Use asset to generate URLs
             ];
         });
 
         return response()->json(['images' => $imageData]);
     }
+
     public function deleteImage(Request $request)
     {
         $request->validate([
@@ -125,10 +122,4 @@ class uploadMultiImageController extends Controller
 
         return response()->json(['success' => true]);
     }
-
-
-
-    
-   
-
 }

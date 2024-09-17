@@ -1,2 +1,17 @@
+# Ignore all files and directories
 *
+
+# Do not ignore the .gitignore file
 !.gitignore
+
+# Do not ignore the storage directory
+!storage/
+
+# Do not ignore the backend directory within storage
+!storage/backend/
+
+# Do not ignore the images directory within storage/backend
+!storage/backend/images/
+
+# Optionally, if you want to ensure all files within these directories are included
+!storage/**/
