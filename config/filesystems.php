@@ -44,6 +44,14 @@ return [
             'throw' => false,
         ],
 
+        'images' => [ // Custom disk for storing images in public/images
+            'driver' => 'local',
+            'root' => public_path('images'), // Path to public/images folder
+            'url' => env('APP_URL').'/images', // URL to access images
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

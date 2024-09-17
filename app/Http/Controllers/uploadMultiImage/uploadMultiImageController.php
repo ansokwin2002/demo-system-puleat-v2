@@ -8,6 +8,8 @@ use App\Models\uploadMultiImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+
 
 class uploadMultiImageController extends Controller
 {
@@ -55,17 +57,20 @@ class uploadMultiImageController extends Controller
                     throw new \Exception('File size exceeds the 10 MB limit.');
                 }
 
-                $filePath = $file->store('images', 'public'); // Store in 'public/images'
+                // Generate a unique file name
+                $fileName = time() . '_' . $file->getClientOriginalName();
 
-                if (!$filePath) {
-                    throw new \Exception('Failed to store file.');
-                }
+                // Define the file path to public/images
+                $destinationPath = public_path('images'); // Public directory path
+
+                // Move the file to public/images
+                $file->move($destinationPath, $fileName);
 
                 // Save file information to database
                 uploadMultiImage::create([
                     'invoice_id' => $invoiceId,
-                    'filename' => $file->getClientOriginalName(),
-                    'path' => $filePath,
+                    'filename' => $fileName,
+                    'path' => 'images/' . $fileName, // Relative path
                 ]);
             }
 
@@ -88,17 +93,32 @@ class uploadMultiImageController extends Controller
 
     public function getImages($invoiceId)
     {
-        $images = uploadMultiImage::where('invoice_id', $invoiceId)->get();
-
-        $imageData = $images->map(function ($image) {
-            return [
-                'url' => asset('storage/' . $image->path) // Use asset to generate URLs
-            ];
-        });
-
-        return response()->json(['images' => $imageData]);
+        try {
+            // Fetch images from the database
+            $images = uploadMultiImage::where('invoice_id', $invoiceId)->get();
+            
+            // Map images to include URLs
+            $imageData = $images->map(function ($image) {
+                return [
+                    'url' => asset('images/' . $image->filename) // Correct URL for images in public/images
+                ];
+            });
+    
+            // Log the image data
+            Log::info('Fetched images for invoice ID ' . $invoiceId, ['imageData' => $imageData]);
+    
+            // Return the image data as JSON
+            return response()->json(['images' => $imageData]);
+    
+        } catch (\Exception $e) {
+            // Log the error
+            Log::error('Error fetching images for invoice ID ' . $invoiceId . ': ' . $e->getMessage());
+    
+            // Return a JSON response with error
+            return response()->json(['error' => 'Failed to fetch images'], 500);
+        }
     }
-
+    
     public function deleteImage(Request $request)
     {
         $request->validate([
@@ -108,18 +128,22 @@ class uploadMultiImageController extends Controller
         $url = $request->input('url');
         $filename = basename($url);
         
-        // Delete from storage
+        // Delete from the public/images directory
         $filePath = 'images/' . $filename;
-        if (Storage::exists($filePath)) {
-            Storage::delete($filePath);
+        $fullPath = public_path($filePath);
+
+        if (file_exists($fullPath)) {
+            unlink($fullPath); // Delete the file using PHP's unlink method since it's in public now
         }
 
-        // Delete from database
-        $image = uploadMultiImage::where('path', $filePath)->first();
+        // Delete from the database
+        $image = uploadMultiImage::where('path', $filename)->first(); // Assuming path contains just the filename
         if ($image) {
             $image->delete();
         }
 
         return response()->json(['success' => true]);
     }
+
+
 }
