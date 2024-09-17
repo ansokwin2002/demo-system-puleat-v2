@@ -124,26 +124,44 @@ class uploadMultiImageController extends Controller
         $request->validate([
             'url' => 'required|string',
         ]);
-
+    
         $url = $request->input('url');
         $filename = basename($url);
         
-        // Delete from the public/images directory
+        // Define the path to the image file in the public directory
         $filePath = 'images/' . $filename;
         $fullPath = public_path($filePath);
-
+    
+        // Initialize response
+        $response = ['success' => false, 'message' => ''];
+    
+        // Attempt to delete the file from the public directory
         if (file_exists($fullPath)) {
-            unlink($fullPath); // Delete the file using PHP's unlink method since it's in public now
+            if (unlink($fullPath)) {
+                $response['success'] = true;
+            } else {
+                $response['message'] = 'Failed to delete file from directory.';
+            }
+        } else {
+            $response['message'] = 'File not found in directory.';
         }
-
-        // Delete from the database
-        $image = uploadMultiImage::where('path', $filename)->first(); // Assuming path contains just the filename
+    
+        // Attempt to delete the image record from the database
+        $image = uploadMultiImage::where('filename', $filename)->first(); // Adjust if needed to match your column name
         if ($image) {
-            $image->delete();
+            try {
+                $image->delete();
+                $response['success'] = $response['success'] && true;
+            } catch (\Exception $e) {
+                $response['message'] .= ' Database deletion failed: ' . $e->getMessage();
+                Log::error('Error deleting image from database: ' . $e->getMessage());
+            }
+        } else {
+            $response['message'] .= ' Image record not found in database.';
         }
-
-        return response()->json(['success' => true]);
+    
+        return response()->json($response);
     }
-
+    
 
 }
