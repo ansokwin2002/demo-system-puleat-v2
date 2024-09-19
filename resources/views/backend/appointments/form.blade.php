@@ -21,11 +21,10 @@
         <section class="section">
             <!-- [header-------------------------] -->
             <div class="section-header">
-                <h1>Patient Service History</h1>
+                <h1>Appointment</h1>
                 <div class="section-header-breadcrumb">
-                    <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="#">Patient</a></div>
-                    <div class="breadcrumb-item">Patient Service History</div>
+                    <div class="breadcrumb-item active"><a href="{{ route('dashboard') }}">Dashboard</a></div>
+                    <div class="breadcrumb-item">Appointment</div>
                 </div>
             </div>
             <!-- [header-------------------------] -->

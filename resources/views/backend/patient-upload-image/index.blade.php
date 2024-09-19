@@ -21,11 +21,10 @@
         <section class="section">
             <!-- [header] -->
             <div class="section-header">
-                <h1>Upload</h1>
+                <h1>Upload Image</h1>
                 <div class="section-header-breadcrumb">
-                    <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="#">Upload</a></div>
-                    <div class="breadcrumb-item">Upload Patient's file</div>
+                    <div class="breadcrumb-item active"><a href="{{ route('dashboard') }}">Dashboard</a></div>
+                    <div class="breadcrumb-item">Upload Image</div>
                 </div>
             </div>
             <!-- [header] -->

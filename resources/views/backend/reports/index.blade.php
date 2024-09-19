@@ -22,9 +22,9 @@
             <div class="section-header">
                 <h1>Reports</h1>
                 <div class="section-header-breadcrumb">
-                    <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="#">Report Patients</a></div>
-                    <div class="breadcrumb-item">Report Patients Download</div>
+                    <div class="breadcrumb-item active"><a href="{{ route('dashboard') }}">Dashboard</a></div>
+                    <div class="breadcrumb-item"><a href="{{ route('reports.index') }}">Report</a></div>
+                    <div class="breadcrumb-item">Report Patient</div>
                 </div>
             </div>
             <!-- [header-------------------------] -->

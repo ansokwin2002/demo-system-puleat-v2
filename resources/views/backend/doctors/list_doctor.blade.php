@@ -22,8 +22,8 @@
             <div class="section-header">
                 <h1>List Doctor</h1>
                 <div class="section-header-breadcrumb">
-                    <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="#">Doctor</a></div>
+                    <div class="breadcrumb-item active"><a href="{{ route('dashboard') }}">Dashboard</a></div>
+                    <div class="breadcrumb-item"><a href="{{ route('doctor.list') }}">Doctor</a></div>
                     <div class="breadcrumb-item">List Doctor</div>
                 </div>
             </div>

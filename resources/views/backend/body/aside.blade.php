@@ -12,7 +12,7 @@
         <li class="{{ Route::is('view_Payment*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('view_Payment') }}"><i class="fa-solid fa-money-bill"></i> <span>Payment</span></a></li>   
         <li class="{{ Route::is('notifications.index*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('notifications.index') }}"><i class="fa-solid fa-bell"></i> <span>Notification</span></a></li>   
         <li class="{{ Route::is('appointments.form*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('appointments.form') }}"><i class="fa-solid fa-calendar-days"></i> <span>Appointment</span></a></li>   
-        <li class="{{ Route::is('uploadMultiImage.index*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('uploadMultiImage.index') }}"><i class="fa-solid fa-upload"></i> <span>Upload</span></a></li>   
+        <li class="{{ Route::is('uploadMultiImage.index*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('uploadMultiImage.index') }}"><i class="fa-solid fa-upload"></i> <span>Upload Image</span></a></li>   
         
         <li class="dropdown {{ Route::is('list_Patient*','patient_service_history*') ? 'active' : '' }}">
             <a href="#" class="nav-link has-dropdown" data-toggle="dropdown">
@@ -32,11 +32,11 @@
             <li class="dropdown {{ Route::is('view_Service*', 'add_Service*') ? 'active' : '' }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown">
                     <i class="fa fa-heart"></i>
-                    <span>Services</span>
+                    <span>Service</span>
                 </a>
                 <ul class="dropdown-menu">
                     <li class="{{ Route::is('add_Service*') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('add_Service') }}">Create Service</a>
+                        <a class="nav-link" href="{{ route('add_Service') }}">Add Service</a>
                     </li>
                     <li class="{{ Route::is('view_Service*') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('view_Service') }}">List Service</a>
@@ -53,7 +53,7 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li class="{{ Route::is('doctor.index*') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('doctor.index') }}">Create Doctor</a>
+                        <a class="nav-link" href="{{ route('doctor.index') }}">Add Doctor</a>
                     </li>
                     <li class="{{ Route::is('doctor.list*') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('doctor.list') }}">List Doctor</a>
@@ -70,7 +70,7 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li class="{{ Route::is('cashier.index*') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('cashier.index') }}">Create Cashier</a>
+                        <a class="nav-link" href="{{ route('cashier.index') }}">Add Cashier</a>
                     </li>
                     <li class="{{ Route::is('cashier.list*') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('cashier.list') }}">List Cashier</a>
@@ -83,11 +83,11 @@
             <li class="dropdown {{ Route::is('reports.index*') ? 'active' : '' }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown">
                     <i class="fa-solid fa-file-excel"></i>
-                    <span>Reports</span>
+                    <span>Report</span>
                 </a>
                 <ul class="dropdown-menu">
                     <li class="{{ Route::is('reports.index*') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('reports.index') }}">Report Patients</a>
+                        <a class="nav-link" href="{{ route('reports.index') }}">Report Patient</a>
                     </li>
                 </ul>
             </li>

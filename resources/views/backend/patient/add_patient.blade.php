@@ -23,7 +23,6 @@
                     <h1>Add Patient</h1>
                     <div class="section-header-breadcrumb">
                         <div class="breadcrumb-item active"><a href="{{ route('dashboard') }}">Dashboard</a></div>
-                        <div class="breadcrumb-item"><a href="{{ route('add_Patient') }}">Patient</a></div>
                         <div class="breadcrumb-item">Add Patient</div>
                     </div>
                 </div>
