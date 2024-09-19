@@ -124,18 +124,12 @@ class uploadMultiImageController extends Controller
         $request->validate([
             'url' => 'required|string',
         ]);
-    
         $url = $request->input('url');
-        $filename = basename($url);
-        
-        // Define the path to the image file in the public directory
+        $filename = basename(urldecode($url));
         $filePath = 'images/' . $filename;
         $fullPath = public_path($filePath);
-    
-        // Initialize response
         $response = ['success' => false, 'message' => ''];
-    
-        // Attempt to delete the file from the public directory
+
         if (file_exists($fullPath)) {
             if (unlink($fullPath)) {
                 $response['success'] = true;
@@ -145,23 +139,17 @@ class uploadMultiImageController extends Controller
         } else {
             $response['message'] = 'File not found in directory.';
         }
-    
-        // Attempt to delete the image record from the database
-        $image = uploadMultiImage::where('filename', $filename)->first(); // Adjust if needed to match your column name
+        $image = uploadMultiImage::where('filename', $filename)->first();
         if ($image) {
             try {
                 $image->delete();
                 $response['success'] = $response['success'] && true;
             } catch (\Exception $e) {
                 $response['message'] .= ' Database deletion failed: ' . $e->getMessage();
-                Log::error('Error deleting image from database: ' . $e->getMessage());
             }
         } else {
             $response['message'] .= ' Image record not found in database.';
         }
-    
         return response()->json($response);
     }
-    
-
 }
