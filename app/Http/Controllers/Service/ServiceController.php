@@ -19,22 +19,35 @@ class ServiceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function create_Service(Request $request) {
-        $request = $request->validate([
-            'name'  => 'required|string|max:255',
-            'unit'  => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
-        ]);
+    public function create_Service(Request $request) 
+    {
+        try {
+            $validated = $request->validate([
+                'name'  => 'required|string|max:255|unique:services,name',
+                'unit'  => 'required|string|max:255',
+                'price' => 'required|numeric|min:0',
+            ]);
+            Service::create([
+                'name'  => $validated['name'],
+                'unit'  => $validated['unit'],
+                'price' => $validated['price'],
+            ]);
 
-        Service::create([
-            'name'  => $request['name'],
-            'unit'  => $request['unit'],
-            'price' => $request['price'],
-        ]);
-
-        toastr()->success('Add Service Successfully!');
+            toastr()->success('Service added successfully!');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $errors = $e->validator->errors();
+            if ($errors->has('name')) {
+                toastr()->error('This service name is already registered. Please choose a different name.');
+            } else {
+                toastr()->error('Validation failed: ' . $e->getMessage());
+            }
+        } catch (\Exception $e) {
+            toastr()->error('An error occurred while adding the service: ' . $e->getMessage());
+        }
         return redirect()->back();
     }
+
+    
 
     /**
      * Show the form for creating a new resource.
