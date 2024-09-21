@@ -362,7 +362,7 @@
                         <td></td>
                         <td style="width:700px;">${serviceName}<button class="btn btn-danger remove-row float-right"><i class="fa fa-trash"></i></button></td>
                         <td style="width:120px;"><input type="text" class="form-control unit" inputmode="numeric" pattern="\d*" title="Please enter a number"></td>
-                        <td class="price"><input type="text" class="form-control" value="${servicePrice}"></td>
+                        <td class="price"><input type="text" class="form-control price" value="${servicePrice}"></td>
                         <td class="d-flex">
                             <div class="form-check form-check-lg">
                                 <input class="form-check-input discount-type" type="radio" name="discount${serviceId}" id="discountPercent${serviceId}" checked>
@@ -507,7 +507,7 @@
         // [Price-------------------------]
 
         // [Validation_Unit---------------------]
-            $('#serviceTableBody').on('input', '.unit, .discount-percent, .discount-dollar', function() {
+            $('#serviceTableBody').on('input', '.unit, .price, .price-input, .discount-percent, .discount-dollar', function() {
                 var value = $(this).val();
                 var numericValue = value.replace(/[^0-9.]/g, ''); 
 
@@ -518,7 +518,7 @@
                 $('#amount_unpaid').text('$ 0.00');
             });
 
-            $('#serviceTableBody').on('blur', '.unit, .discount-percent, .discount-dollar', function() {
+            $('#serviceTableBody').on('blur', '.unit, .price, .price-input, .discount-percent, .discount-dollar', function() {
                 var value = $(this).val();
                 if (isNaN(value) || value.trim() === '') {
                     $(this).val(''); 

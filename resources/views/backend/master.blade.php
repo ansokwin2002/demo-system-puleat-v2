@@ -217,7 +217,7 @@
                             <td></td>
                             <td style="width:700px;">${serviceName}<button class="btn btn-danger remove-row float-right"><i class="fa fa-trash"></i></button></td>
                             <td style="width:120px;"><input type="text" class="form-control unit" value="1" inputmode="numeric" pattern="\d*" title="Please enter a number"></td>
-                            <td class="price"><input type="text" class="form-control" value="${servicePrice}"></td>
+                            <td class="price"><input type="text" class="form-control price" value="${servicePrice}"></td>
                             <td class="d-flex">
                                 <div class="form-check form-check-lg">
                                     <input class="form-check-input discount-type" type="radio" name="discount${serviceId}" id="discountPercent${serviceId}" checked>
@@ -362,7 +362,7 @@
             // [Price-------------------------]
 
             // [Validation_Unit---------------------]
-                $('#serviceTableBody').on('input', '.unit, .discount-percent, .discount-dollar', function() {
+                $('#serviceTableBody').on('input', '.unit, .price, .discount-percent, .discount-dollar', function() {
                     var value = $(this).val();
                     var numericValue = value.replace(/[^0-9.]/g, ''); 
 
@@ -373,7 +373,7 @@
                     $('#amount_unpaid').text('$ 0.00');
                 });
 
-                $('#serviceTableBody').on('blur', '.unit, .discount-percent, .discount-dollar', function() {
+                $('#serviceTableBody').on('blur', '.unit, .price, .discount-percent, .discount-dollar', function() {
                     var value = $(this).val();
                     if (isNaN(value) || value.trim() === '') {
                         $(this).val(''); 
@@ -576,8 +576,8 @@
                                             <td>${service.service_unit}</td>
                                             <td>${service.service_price ? '$' + parseFloat(service.service_price).toFixed(2) : ''}</td>
                                             <td>${service.subtotal ? '$' + service.subtotal : ''}</td>
-                                            <td>${service.discount_percent ? parseFloat(service.discount_percent).toFixed(2) + '%' : ''}</td>
-                                            <td>${service.discount_dollar ? '$' + parseFloat(service.discount_dollar).toFixed(2) : ''}</td>
+                                            <td>${service.discount_percent ? parseFloat(service.discount_percent).toFixed(2) + '%' : '0.00%'}</td>
+                                            <td>${service.discount_dollar ? '$' + parseFloat(service.discount_dollar).toFixed(2) : '$0.00'}</td>
                                         </tr>
                                     `);
                                 });
