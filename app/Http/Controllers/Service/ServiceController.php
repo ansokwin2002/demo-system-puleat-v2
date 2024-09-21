@@ -13,7 +13,10 @@ class ServiceController extends Controller
      */
     public function add_Service()
     {
-        return view('backend.service.add_service');
+        // [Page_title----------------------------------]
+            $pageTitle = 'Add Service | Laor-Prornit-Clinic-Dental';
+        // [Page_title----------------------------------]
+        return view('backend.service.add_service',compact('pageTitle'));
     }
 
     /**
@@ -54,7 +57,10 @@ class ServiceController extends Controller
      */
     public function view_Service()
     {
-        return view('backend.service.list_service');
+        // [Page_title----------------------------------]
+            $pageTitle = 'List Service | Laor-Prornit-Clinic-Dental';
+        // [Page_title----------------------------------]
+        return view('backend.service.list_service',compact('pageTitle'));
     }
 
     /**

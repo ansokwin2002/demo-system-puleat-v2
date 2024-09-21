@@ -14,7 +14,10 @@ class PatientController extends Controller
      */
     public function add_Patient()
     {
-        return view('backend.patient.add_patient');
+        // [Page_title----------------------------------]
+            $pageTitle = 'Add Patient | Laor-Prornit-Clinic-Dental';
+        // [Page_title----------------------------------]
+        return view('backend.patient.add_patient',compact('pageTitle'));
     }
 
     /**
@@ -51,7 +54,10 @@ class PatientController extends Controller
      */
     public function view_Patient()
     {
-        return view('backend.patient.view_patient');
+        // [Page_title----------------------------------]
+            $pageTitle = 'List Patient | Laor-Prornit-Clinic-Dental';
+        // [Page_title----------------------------------]
+        return view('backend.patient.view_patient',compact('pageTitle'));
     }
 
     public function update(Request $request, string $id)

@@ -15,10 +15,14 @@ class PatientHistoryController extends Controller
     
     public function patientServiceHistory()
     {
+        // [Page_title----------------------------------]
+            $pageTitle = 'Patient-History | Laor-Prornit-Clinic-Dental';
+        // [Page_title----------------------------------]
+
         $patientHistories = PatientHistory::with(['doctor', 'cashier', 'patient'])
             ->orderBy('created_at', 'desc')
             ->get();
-        return view('backend.patient.patient_service_history', compact('patientHistories'));
+        return view('backend.patient.patient_service_history', compact('patientHistories','pageTitle'));
     }
 
     /**

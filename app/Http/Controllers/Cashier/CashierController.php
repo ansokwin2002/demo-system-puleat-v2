@@ -10,7 +10,10 @@ class CashierController extends Controller
 {
     public function index()
     {
-        return view('backend.cashier.create');
+        // [Page_title----------------------------------]
+            $pageTitle = 'Add Cashier | Laor-Prornit-Clinic-Dental';
+        // [Page_title----------------------------------]
+        return view('backend.cashier.create',compact('pageTitle'));
     }
 
     public function create(Request $request)
@@ -35,7 +38,10 @@ class CashierController extends Controller
 
     public function list()
     {
-        return view('backend.cashier.list_cashier');
+        // [Page_title----------------------------------]
+            $pageTitle = 'List Cashier | Laor-Prornit-Clinic-Dental';
+        // [Page_title----------------------------------]
+        return view('backend.cashier.list_cashier',compact('pageTitle'));
     }
 
     public function update(Request $request, $id)

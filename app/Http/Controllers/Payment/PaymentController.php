@@ -13,10 +13,13 @@ class PaymentController extends Controller
      */
     public function view_Payment(Request $request)
     {
+        // [Page_title----------------------------------]
+            $pageTitle = 'Payment | Laor-Prornit-Clinic-Dental';
+        // [Page_title----------------------------------]
         $selectedPatientId = $request->input('selected_patient');
         $patients = Patient::all();
     
-        return view('backend.payment.view_payment', compact('patients', 'selectedPatientId'));
+        return view('backend.payment.view_payment', compact('patients', 'selectedPatientId','pageTitle'));
     }
     
 

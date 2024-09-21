@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-  <title>Clinic System Puleat V2</title>
+  <title>{{ $pageTitle ?? 'Laor-Prornit-Clinic-Dental' }}</title>
   <link rel="icon" href="{{ asset('backend/assets/img/invoice/logo_icon.png') }}" sizes="16x16">
 
   <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -53,6 +53,10 @@
 </head>
 
 <style>
+    ::selection {
+        background-color: #6777ef;
+        color: #fff; 
+    }
     .disabled-input {
         background-color: #e9ecef;
         cursor: not-allowed;

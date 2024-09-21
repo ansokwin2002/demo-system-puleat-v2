@@ -17,7 +17,10 @@ class ReportPatientsController extends Controller
 {
     public function index()
     {
-        return view('backend.reports.index');
+        // [Page_title----------------------------------]
+            $pageTitle = 'Report-Patient | Laor-Prornit-Clinic-Dental';
+        // [Page_title----------------------------------]
+        return view('backend.reports.index',compact('pageTitle'));
     }
     public function exportPatientHistory(Request $request)
     {

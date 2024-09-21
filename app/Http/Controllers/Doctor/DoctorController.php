@@ -13,7 +13,10 @@ class DoctorController extends Controller
      */
     public function index()
     {
-        return view('backend.doctors.index');
+        // [Page_title----------------------------------]
+            $pageTitle = 'Add Doctor | Laor-Prornit-Clinic-Dental';
+        // [Page_title----------------------------------]
+        return view('backend.doctors.index',compact('pageTitle'));
     }
 
     /**
@@ -51,7 +54,10 @@ class DoctorController extends Controller
      */
     public function list()
     {
-        return view('backend.doctors.list_doctor');
+        // [Page_title----------------------------------]
+            $pageTitle = 'List Doctor | Laor-Prornit-Clinic-Dental';
+        // [Page_title----------------------------------]
+        return view('backend.doctors.list_doctor',compact('pageTitle'));
     }
 
     /**

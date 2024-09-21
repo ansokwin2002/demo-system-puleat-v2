@@ -14,13 +14,17 @@ class AppointmentController extends Controller
 {
     public function showForm()
     {
+        // [Page_title----------------------------------]
+            $pageTitle = 'Appointment | Laor-Prornit-Clinic-Dental';
+        // [Page_title----------------------------------]
+
         $patientHistories = PatientHistory::with(['doctor', 'cashier', 'patient'])->get();
         foreach ($patientHistories as $patientHistory) {
             if (is_string($patientHistory->patient_payment)) {
                 $patientHistory->patient_payment = json_decode($patientHistory->patient_payment, true);
             }
         }
-        return view('backend.appointments.form', compact('patientHistories'));
+        return view('backend.appointments.form', compact('patientHistories','pageTitle'));
     }
 
 

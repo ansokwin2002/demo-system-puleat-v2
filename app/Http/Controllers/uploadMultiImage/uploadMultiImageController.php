@@ -13,9 +13,14 @@ use Illuminate\Support\Facades\Log;
 
 class uploadMultiImageController extends Controller
 {
-    public function index(){
+    public function index()
+    {
+        // [Page_title----------------------------------]
+            $pageTitle = 'Upload-Image | Laor-Prornit-Clinic-Dental';
+        // [Page_title----------------------------------]
+
         $patientHistories = PatientHistory::with(['doctor', 'cashier', 'patient'])->get();
-        return view('backend.patient-upload-image.index',compact('patientHistories'));
+        return view('backend.patient-upload-image.index',compact('patientHistories','pageTitle'));
     }
 
     public function store(Request $request)

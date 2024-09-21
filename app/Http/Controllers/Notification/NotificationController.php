@@ -11,6 +11,10 @@ class NotificationController extends Controller
 {
     public function index()
     {
+        // [Page_title----------------------------------]
+            $pageTitle = 'Notification | Laor-Prornit-Clinic-Dental';
+        // [Page_title----------------------------------]
+
         // Get today's date
         $today = Carbon::today()->format('Y-m-d');
         // Retrieve patient histories with related doctor and patient
@@ -45,6 +49,7 @@ class NotificationController extends Controller
 
         return view('backend.notifications.index', [
             'appointmentNotifications' => $appointmentNotifications,
+            'pageTitle' => $pageTitle
         ]);
     }
 }
