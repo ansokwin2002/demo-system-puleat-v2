@@ -18,7 +18,9 @@ class AppointmentController extends Controller
             $pageTitle = 'Appointment | Laor-Prornit-Clinic-Dental';
         // [Page_title----------------------------------]
 
-        $patientHistories = PatientHistory::with(['doctor', 'cashier', 'patient'])->get();
+        $patientHistories = PatientHistory::with(['doctor', 'cashier', 'patient']) 
+            ->orderBy('created_at', 'desc')
+            ->get();
         foreach ($patientHistories as $patientHistory) {
             if (is_string($patientHistory->patient_payment)) {
                 $patientHistory->patient_payment = json_decode($patientHistory->patient_payment, true);

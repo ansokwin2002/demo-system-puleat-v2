@@ -241,7 +241,7 @@
                                                                     <input type="text" id="unit" class="form-control unit" value="{{ $service['service_unit'] }}">
                                                                 </td>
                                                                 <td class="price">
-                                                                    <p>$ {{ number_format($service['service_price'], 2) }}</p>
+                                                                    <input type="text" class="form-control price-input" value="{{ number_format($service['service_price'], 2) }}">
                                                                 </td>
                                                                 <td class="d-flex">
                                                                     <div class="form-check form-check-lg">
@@ -362,7 +362,7 @@
                         <td></td>
                         <td style="width:700px;">${serviceName}<button class="btn btn-danger remove-row float-right"><i class="fa fa-trash"></i></button></td>
                         <td style="width:120px;"><input type="text" class="form-control unit" inputmode="numeric" pattern="\d*" title="Please enter a number"></td>
-                        <td class="price"><p>$ ${servicePrice}</p></td>
+                        <td class="price"><input type="text" class="form-control" value="${servicePrice}"></td>
                         <td class="d-flex">
                             <div class="form-check form-check-lg">
                                 <input class="form-check-input discount-type" type="radio" name="discount${serviceId}" id="discountPercent${serviceId}" checked>
@@ -388,11 +388,13 @@
                 updateInputState();
                 calculateSubtotal();
                 updateGrandTotal();
+                $('#amount_paid').text('$ 0.00');
+                $('#amount_unpaid').text('$ 0.00');
             });
 
             function calculateSubtotal() {
                 $('#serviceTableBody').find('tr').each(function() {
-                    const servicePrice = parseFloat($(this).find('.price p').text().replace('$ ', ''));
+                    const servicePrice = parseFloat($(this).find('.price input').val()) || 0; 
                     const unit = parseFloat($(this).find('.unit').val()) || 0;
                     const discountPercent = parseFloat($(this).find('.discount-percent').val()) || 0;
                     const discountDollar = parseFloat($(this).find('.discount-dollar').val()) || 0;
@@ -494,6 +496,15 @@
                 $('#amount_unpaid').text('$ 0.00');
             });
         // [Unit-----------------------]
+
+        // [Price-------------------------]
+            $('#serviceTableBody').on('keyup', '.price input', function() {
+                calculateSubtotal(); 
+                updateGrandTotal();
+                $('#amount_paid').text('$ 0.00');
+                $('#amount_unpaid').text('$ 0.00');
+            });
+        // [Price-------------------------]
 
         // [Validation_Unit---------------------]
             $('#serviceTableBody').on('input', '.unit, .discount-percent, .discount-dollar', function() {
@@ -603,7 +614,7 @@
                     let row = $(this);
                     let serviceName = row.find('td').eq(1).text().trim();
                     let serviceUnit = row.find('.unit').val();
-                    let servicePrice = row.find('.price p').text().trim().replace('$ ', '');
+                    let servicePrice = row.find('.price input').val().trim() || 0;
                     let discountPercent = row.find('.discount-percent').val();
                     let discountDollar = row.find('.discount-dollar').val();
                     let subtotalRow = row.find('.subtotal').text().trim().replace('$ ', '');

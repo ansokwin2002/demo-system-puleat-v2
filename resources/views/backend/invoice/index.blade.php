@@ -48,7 +48,7 @@
                         <td class="id text_font_khmer">{{ $index + 1 }}</td>
                         <td class="service_name text_font_khmer">{{ $service['service_name'] }}</td>
                         <td class="unit text_font_khmer">{{ $service['service_unit'] }}</td>
-                        <td class="price text_font_khmer">${{ $service['service_price'] }}</td>
+                        <td class="price text_font_khmer">${{ number_format($service['service_price'] ?? 0, 2) }}</td>
                         <td class="dis_percent text_font_khmer">{{ number_format($service['discount_percent'] ?? 0, 2) }}%</td>
                         <td class="dis_dollar text_font_khmer">${{ number_format($service['discount_dollar'] ?? 0, 2) }}</td>
                         <td class="subtotal text_font_khmer">${{ $service['subtotal'] }}</td>

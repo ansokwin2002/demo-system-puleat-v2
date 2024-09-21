@@ -174,13 +174,15 @@
 
             // [dataTable_Appoinment---------------------]
                 $('#table_appoinment').DataTable({
-                    "pageLength": 50,
+                    "pageLength": 50,       // Number of rows per page
+                    "order": [[1, 'desc']], 
                 });
             // [dataTable_Appoinment---------------------]
 
             // [dataTable_Patient_History---------------------]
-                $('#table_patient_history').DataTable({
-                     "pageLength": 50,
+                $('#table_history').DataTable({
+                    "pageLength": 50,       // Number of rows per page
+                    "order": [[9, 'desc']], // Sort by the 'updated_at' column (10th column) in descending order
                 });
             // [dataTable_Patient_History---------------------]
 
@@ -190,18 +192,17 @@
                 });
             // [dataTable_Patient_History---------------------]
 
-            // [dataTable_Patient_History---------------------]
+            // [dataTable_table_notification---------------------]
                 $('#table_notification').DataTable({
                         "pageLength": 50,
                 });
-            // [dataTable_Patient_History---------------------]
+            // [dataTable_table_notification---------------------]
 
             // [summernote-------------------------------]
                 $('.summernote').summernote({
                     height: 100 
                 });
             // [summernote-------------------------------]
-
 
             // [Select_Service---------------------]
                 $('#serviceSelect').on('change', function() {
@@ -216,7 +217,7 @@
                             <td></td>
                             <td style="width:700px;">${serviceName}<button class="btn btn-danger remove-row float-right"><i class="fa fa-trash"></i></button></td>
                             <td style="width:120px;"><input type="text" class="form-control unit" value="1" inputmode="numeric" pattern="\d*" title="Please enter a number"></td>
-                            <td class="price"><p>$ ${servicePrice}</p></td>
+                            <td class="price"><input type="text" class="form-control" value="${servicePrice}"></td>
                             <td class="d-flex">
                                 <div class="form-check form-check-lg">
                                     <input class="form-check-input discount-type" type="radio" name="discount${serviceId}" id="discountPercent${serviceId}" checked>
@@ -242,11 +243,13 @@
                     updateInputState();
                     calculateSubtotal();
                     updateGrandTotal();
+                    $('#amount_paid').text('$ 0.00');
+                    $('#amount_unpaid').text('$ 0.00');
                 });
 
                 function calculateSubtotal() {
                     $('#serviceTableBody').find('tr').each(function() {
-                        const servicePrice = parseFloat($(this).find('.price p').text().replace('$ ', ''));
+                        const servicePrice = parseFloat($(this).find('.price input').val()) || 0; 
                         const unit = parseFloat($(this).find('.unit').val()) || 0;
                         const discountPercent = parseFloat($(this).find('.discount-percent').val()) || 0;
                         const discountDollar = parseFloat($(this).find('.discount-dollar').val()) || 0;
@@ -349,6 +352,15 @@
                 });
             // [Unit-----------------------]
 
+            // [Price-------------------------]
+                $('#serviceTableBody').on('keyup', '.price input', function() {
+                    calculateSubtotal();
+                    updateGrandTotal();
+                    $('#amount_paid').text('$ 0.00');
+                    $('#amount_unpaid').text('$ 0.00');
+                });
+            // [Price-------------------------]
+
             // [Validation_Unit---------------------]
                 $('#serviceTableBody').on('input', '.unit, .discount-percent, .discount-dollar', function() {
                     var value = $(this).val();
@@ -448,9 +460,9 @@
                     let services = [];
                     $('#serviceTableBody tr').each(function() {
                         let row = $(this);
-                        let serviceName = row.find('td').eq(1).text().trim(); // Adjust index if necessary
+                        let serviceName = row.find('td').eq(1).text().trim(); 
                         let serviceUnit = row.find('.unit').val();
-                        let servicePrice = row.find('.price p').text().trim().replace('$ ', '');
+                        let servicePrice = row.find('.price input').val().trim() || 0;
                         let discountPercent = row.find('.discount-percent').val();
                         let discountDollar = row.find('.discount-dollar').val();
                         let subtotalRow = row.find('.subtotal').text().trim().replace('$ ', '');
@@ -511,6 +523,9 @@
                         }
                     });
                 });
+                $('#table_history').on('click', '.td-action', function(event) {
+                    event.stopPropagation(); // Prevent the click event from reaching the row
+                });
             // [Submit_Patient_history------------------------------]
 
             // [Button Paid---------------------------]
@@ -532,9 +547,9 @@
                     $('#fire-modal-4').modal('hide');
                 });
             // [Button Paid---------------------------]
-
+         
             // [Detail_Patient_Service--------------------------]
-                $('#table_service').on('click', '.row_service_detail', function(event) {
+                $('#table_history').on('click', '.row_service_detail', function(event) {
                     if ($(event.target).closest('.td-action').length > 0) {
                         return; // Exit the function if an action td-action was clicked
                     }
@@ -559,10 +574,10 @@
                                             <td>${i++}</td>
                                             <td>${service.service_name}</td>
                                             <td>${service.service_unit}</td>
-                                            <td>${service.service_price ? '$ ' + service.service_price : ''}</td>
-                                            <td>${service.subtotal ? '$ ' + service.subtotal : ''}</td>
-                                            <td>${service.discount_percent ? service.discount_percent + ' %' : ''}</td>
-                                            <td>${service.discount_dollar ? '$ ' + service.discount_dollar : ''}</td>
+                                            <td>${service.service_price ? '$' + parseFloat(service.service_price).toFixed(2) : ''}</td>
+                                            <td>${service.subtotal ? '$' + service.subtotal : ''}</td>
+                                            <td>${service.discount_percent ? parseFloat(service.discount_percent).toFixed(2) + '%' : ''}</td>
+                                            <td>${service.discount_dollar ? '$' + parseFloat(service.discount_dollar).toFixed(2) : ''}</td>
                                         </tr>
                                     `);
                                 });
@@ -575,7 +590,7 @@
                         }
                     });
                 });
-                $('#table_service').on('click', '.td-action', function(event) {
+                $('#table_history').on('click', '.td-action', function(event) {
                     event.stopPropagation(); // Prevent the click event from reaching the row
                 });
             // [Detail_Patient_Service--------------------------]
@@ -637,7 +652,7 @@
 
                 // [patient-detail-------------------------]
 
-                    $('#table_service').on('click', '.row_service_detail', function(event) {
+                    $('#table_history').on('click', '.row_service_detail', function(event) {
                         if ($(event.target).closest('.td-action').length > 0) {
                             return; // Exit the function if an action td-action was clicked
                         }
@@ -662,7 +677,7 @@
                         });
                     });
 
-                    $('#table_service').on('click', '.td-action', function(event) {
+                    $('#table_history').on('click', '.td-action', function(event) {
                         event.stopPropagation(); // Prevent the click event from reaching the row
                     });
 
