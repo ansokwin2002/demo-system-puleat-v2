@@ -63,7 +63,7 @@
                                                         <i class="fa fa-hashtag"></i>
                                                     </div>
                                                 </div>
-                                                <input type="text" name="unit" class="form-control" required="">
+                                                <input type="text" name="unit" class="form-control service_unit" required="">
                                             </div>
                                             <div class="invalid-feedback">
                                                 Please fill service unit !
@@ -79,7 +79,7 @@
                                                         <i class="fa fa-tags"></i>
                                                     </div>
                                                 </div>
-                                                <input type="text" name="price" class="form-control" required="">
+                                                <input type="text" name="price" class="form-control service_price" required="">
                                             </div>
                                             <div class="invalid-feedback">
                                                 Please fill service price !
@@ -115,3 +115,25 @@
 </div>
 
 @endsection
+
+@push('scripts')
+<script>
+    // [Validation_Unit_and_Price---------------------]
+    $(document).on('input', '.service_unit, .service_price', function() {
+        var value = $(this).val();
+        var numericValue = value.replace(/[^0-9.]/g, ''); // Allow only numbers and dots
+
+        if (value !== numericValue) {
+            $(this).val(numericValue); // Replace invalid input with numeric value
+        }
+    });
+
+    $(document).on('blur', '.service_unit, .service_price', function() {
+        var value = $(this).val();
+        if (isNaN(value) || value.trim() === '') {
+            $(this).val(''); // Clear the field if the value is not valid
+        }
+    });
+    // [Validation_Unit_and_Price---------------------]
+</script>
+@endpush
