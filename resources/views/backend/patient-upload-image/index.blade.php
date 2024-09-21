@@ -153,7 +153,8 @@
 
 // [dataTable_Upload---------------------]
     $('#table_upload').DataTable({
-        "pageLength": 10,
+        "pageLength": 50,       
+        "order": [[0, 'desc']], 
     });
 // [dataTable_Upload---------------------]
 

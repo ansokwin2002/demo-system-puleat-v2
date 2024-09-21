@@ -19,7 +19,9 @@ class uploadMultiImageController extends Controller
             $pageTitle = 'Upload-Image | Laor-Prornit-Clinic-Dental';
         // [Page_title----------------------------------]
 
-        $patientHistories = PatientHistory::with(['doctor', 'cashier', 'patient'])->get();
+        $patientHistories = PatientHistory::with(['doctor', 'cashier', 'patient'])
+            ->orderBy('created_at', 'desc')
+            ->get();
         return view('backend.patient-upload-image.index',compact('patientHistories','pageTitle'));
     }
 
