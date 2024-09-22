@@ -51,20 +51,24 @@
                                                     $paymentData = $patientHistory->patient_payment;
                                                     $doctorName = $patientHistory->doctor->name ?? '';
                                                     $patientName = $patientHistory->patient->name ?? '';
+                                                    $services = $paymentData['services'] ?? [];
                                                 @endphp
-                
-                                                @foreach ($patientHistory->patient_payment['services'] ?? [] as $service)
-                                                    <tr class="row_multi_image" data-toggle="modal" 
-                                                        data-target="#fire-modal-4" data-invoice-id="{{ $patientHistory->invoice_id }}">
-                                                        <td class="align-middle text-center">{{ $paymentData['date'] ?? '' }}</td>
-                                                        <td class="align-middle text-center"><span class="badge badge-dark">{{ $doctorName }}</span></td>
-                                                        <td class="align-middle text-center"><span class="badge badge-info">{{ $patientName }}</span></td>
-                                                        <td class="align-middle text-center"><span class="badge badge-danger">{{ $service['service_name'] }}</span></td>
-                                                        <td class="align-middle text-center" class="td-file-upload">
-                                                            <button class="btn btn-success view-images-btn" data-invoice-id="{{ $patientHistory->invoice_id }}"><i class="fa-solid fa-eye"></i></button>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
+                                                <tr class="row_multi_image" data-toggle="modal" 
+                                                    data-target="#fire-modal-4" data-invoice-id="{{ $patientHistory->invoice_id }}">
+                                                    <td class="align-middle text-center">{{ $paymentData['date'] ?? '' }}</td>
+                                                    <td class="align-middle text-center"><span class="badge badge-dark">{{ $doctorName }}</span></td>
+                                                    <td class="align-middle text-center"><span class="badge badge-info">{{ $patientName }}</span></td>
+                                                    <td class="align-middle text-center">
+                                                        @foreach($services as $service)
+                                                            <span class="badge badge-danger">{{ $service['service_name'] ?? 'N/A' }}</span><br><br>
+                                                        @endforeach
+                                                    </td>
+                                                    <td class="align-middle text-center td-file-upload">
+                                                        <button class="btn btn-success view-images-btn" data-invoice-id="{{ $patientHistory->invoice_id }}">
+                                                            <i class="fa-solid fa-eye"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
