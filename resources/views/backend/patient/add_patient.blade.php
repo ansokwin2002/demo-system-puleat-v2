@@ -66,7 +66,7 @@
                                                             <i class="fa fa-hashtag"></i>
                                                         </div>
                                                     </div>
-                                                    <input type="text" name="age" class="form-control" required="">
+                                                    <input type="text" name="age" class="form-control age" required="">
                                                 </div>
                                                 <div class="invalid-feedback">
                                                     Please fill Patient age !
@@ -129,7 +129,7 @@
                                                             <i class="fa fa-phone"></i>
                                                         </div>
                                                     </div>
-                                                    <input type="text" name="telephone" class="form-control" required="">
+                                                    <input type="text" name="telephone" class="form-control tel" required="">
                                                 </div>
                                                 <div class="invalid-feedback">
                                                     Please fill Patient telephone !
@@ -213,3 +213,25 @@
 </div>
 
 @endsection
+
+@push('scripts')
+<script>
+    // [Validation Form paid--------------------]
+        $(document).on('input', '.age, .tel', function() {
+            var value = $(this).val();
+            var numericValue = value.replace(/[^0-9.]/g, ''); 
+
+            if (value !== numericValue) {
+                $(this).val(numericValue); 
+            }
+        });
+
+        $(document).on('blur', '.age, .tel', function() {
+            var value = $(this).val();
+            if (isNaN(value) || value.trim() === '') {
+                $(this).val(''); 
+            }
+        });
+    // [Validation Form paid--------------------]
+</script>
+@endpush
