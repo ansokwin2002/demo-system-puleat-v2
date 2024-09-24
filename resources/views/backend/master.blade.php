@@ -424,8 +424,21 @@
                         swal('Cannot submit', 'Unit Cannot be zero number !', 'error');
                         return; 
                     }
-                    if (amountPaid === 0) {
-                        swal('Cannot submit', 'Amount Paid Cannot be zero number !', 'error');
+                    // Collect all subtotals and check if any are greater than 0
+                    let hasNonZeroSubtotal = false;
+                    $('#serviceTableBody tr').each(function() {
+                        let row = $(this);
+                        let subtotalRow = row.find('.subtotal').text().trim().replace('$', '');
+                        let subtotal = parseFloat(subtotalRow);
+
+                        if (subtotal > 0) {
+                            hasNonZeroSubtotal = true;
+                        }
+                    });
+
+                    // Condition to block submission if amountPaid is 0 and there's at least one non-zero subtotal
+                    if (amountPaid === 0 && hasNonZeroSubtotal) {
+                        swal('Cannot submit', 'Amount Paid Cannot be zero number!', 'error');
                         return; 
                     }
                     if (amountPaid === '') {
@@ -595,7 +608,6 @@
                 });
             // [Detail_Patient_Service--------------------------]
 
-            
             // [page-add-pateint---------------------------]
 
                 // [type-patient----------------------------]
@@ -903,7 +915,7 @@
 
             // [page-list-patient-----------------------------------]
 
-             // [page-history-patient-----------------------------------]
+            // [page-history-patient-----------------------------------]
 
                 // [Edit History Patinet----------------------------]
                 $('.btn_edit_history_patient').on('click', function() {

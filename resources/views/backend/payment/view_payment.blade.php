@@ -213,7 +213,7 @@
                                                     @endphp
 
                                                     <select id="serviceSelect" class="form-control select2" style="width: 100%;">
-                                                        <option>Select a Service</option>
+                                                        <option disabled>Select a Service</option>
                                                         @foreach ($Services as $service)
                                                             <option value="{{ $service->id }}" 
                                                             data-name-service="{{ $service->name }}"
@@ -232,7 +232,7 @@
                                 </div>
                             </div>
                             <!-- [table_service-----------------------] -->
-                                <div class="" style="width: 100%;">
+                                <div class="horizontal-scroll-container" style="width: 100%; overflow-x: auto;" >
                                     <div class="container-fluid pl-0 pr-0 mt-3 table_service">
                                         <div class="row">
                                             <div class="col-12 col-md-6 col-lg-12">

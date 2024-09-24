@@ -3149,7 +3149,7 @@ body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li.active ul.dropdown-men
 }
 
 .box_invoice {
-  width: 60%;
+  width: 75%;
   /* background-color: red; */
 }
 
@@ -3157,6 +3157,9 @@ body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li.active ul.dropdown-men
   font-family: "Noto Sans Khmer", sans-serif;
   color:black;
 }
+
+
+
 
 /* [loading--------------------------] */
 
