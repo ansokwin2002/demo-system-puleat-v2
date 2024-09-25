@@ -250,7 +250,7 @@ tfoot td {
                     @php $totalPrice = 0; @endphp <!-- Initialize total price -->
                     @forelse($patient_payment['services'] as $index => $service)
                         @php 
-                            $totalPrice += $service['service_price'] ?? 0;
+                            $totalPrice += ($service['service_price'] ?? 0) * ($service['service_unit'] ?? 1);
                             $discountDollar = $service['discount_dollar'] ?? 0;
                             if ($discountDollar == 0 && isset($service['discount_percent']) && isset($service['service_price'])) {
                                 $discountDollar = ($service['service_price'] * $service['discount_percent']) / 100;
