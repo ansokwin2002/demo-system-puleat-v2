@@ -6,6 +6,7 @@
     <title>Invoice</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href=" {{ asset('backend/assets/modules/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href=" {{ asset('backend/assets/modules/fontawesome/css/all.min.css') }}">
 </head>
 <style>
     body {
@@ -180,8 +181,8 @@ tfoot td {
                             <td style="text-align: center; border: 1px solid #000000;"><strong>Invoice NO</strong></td>
                         </tr>
                         <tr>
-                            <td style="text-align: center; border: 1px solid #000000;">21.09.2024</td>
-                            <td style="text-align: center; border: 1px solid #000000;">023434</td>
+                            <td style="text-align: center; border: 1px solid #000000;">{{ $patient_payment['date'] }}</td>
+                            <td style="text-align: center; border: 1px solid #000000;">{{ $data->invoice_id ?? '' }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -189,11 +190,11 @@ tfoot td {
 
 
             <div class="header-center">
-                <p class="clinic-name" style="font-size: 25px;">ល្អប្រណីត Dental Clinic</p>
-                <p>#59, st261, Teuklaok3, ToulKork, Phnom Penh, Tel : 078813564, 010692869</p>
+                <p class="clinic-name" style="font-size: 25px;"><span style="font-family: Noto Sans Khmer,sans-serif;">ល្អប្រណីត</span> Dental Clinic</p>
+                <p>#59, st261, Teuklaok3, ToulKork, Phnom Penh,Tel : 010692869,078813564</p>
                 <p>Telegram Phone: 078813564</p>
-                <p>Facebook: ល្អប្រណីត Dental Clinic</p>
-                <p style="background-color: #90EE90;padding:2px;">Treatment By Dr. IM SOKLEAT</p>
+                <p>Facebook: <span style="font-family: Noto Sans Khmer,sans-serif;">ល្អប្រណីត</span> Dental Clinic</p>
+                <p style="background-color: #90EE90;padding:2px;">Treatment By Dr. {{ $data->doctor->name ?? '' }}</p>
             </div>
             <div class="header-right">
                 <img class="invoice_logo" width="120px" src="{{ asset('backend/assets/img/invoice/logo.png') }}" alt="">
@@ -203,7 +204,7 @@ tfoot td {
         <!-- Bill To Section as Table -->
 
         <section class="bill-to">
-            <table class="bill-to-table" >
+            <table class="bill-to-table">
                 <tbody>
                     <tr style="background-color: #B2E0F6;">
                         <td style="text-align: left;"><strong>Bill To</strong></td>
@@ -211,24 +212,23 @@ tfoot td {
                     </tr>
                     <tr>
                         <td style="text-align: left; background-color: #B2E0F6;"><strong>Name</strong></td>
-                        <td style="text-align: center; padding-left: 50px; "><strong>Rith chanthaRong</strong></td>
+                        <td style="text-align: center; padding-left: 50px;"><strong>{{ $patient_info->name }}</strong></td>
                     </tr>
                     <tr>
                         <td style="text-align: left; background-color: #B2E0F6;"><strong>Sex</strong></td>
-                        <td style="text-align: center; padding-left: 50px;"><strong>M</strong></td>
+                        <td style="text-align: center; padding-left: 50px;"><strong>{{ $patient_info->sex }}</strong></td>
                     </tr>
                     <tr>
                         <td style="text-align: left; background-color: #B2E0F6;"><strong>Address</strong></td>
-                        <td style="text-align: center; padding-left: 50px;"><strong></strong></td>
+                        <td style="text-align: center; padding-left: 50px;"><strong>{{ $patient_info->address }}</strong></td>
                     </tr>
                     <tr>
                         <td style="text-align: left; background-color: #B2E0F6;"><strong>Phone</strong></td>
-                        <td style="text-align: center; padding-left: 50px;"><strong></strong></td>
+                        <td style="text-align: center; padding-left: 50px;"><strong>{{ $patient_info->telephone }}</strong></td>
                     </tr>
                 </tbody>
             </table>
         </section>
-
 
 
       <!-- Services Table -->
@@ -247,45 +247,42 @@ tfoot td {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>អង្កត់បៃតង</td>
-                        <td>$ 50.00</td>
-                        <td>1</td>
-                        <td>$ 50.00</td>
-                        <td>$ 20.00</td>
-                        <td>$ 30.00</td>
-                        <td>$ 30.00</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>បណ្ណសិក</td>
-                        <td>$ 30.00</td>
-                        <td>2</td>
-                        <td>$ 30.00</td>
-                        <td>20%</td>
-                        <td>$ 6.00</td>
-                        <td>$ 24.00</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Very long service description that might need to wrap into multiple lines</td>
-                        <td>$ 40.00</td>
-                        <td>1</td>
-                        <td>$ 40.00</td>
-                        <td>$ 10.00</td>
-                        <td>$ 30.00</td>
-                        <td>$ 30.00</td>
-                    </tr>
+                    @php $totalPrice = 0; @endphp <!-- Initialize total price -->
+                    @forelse($patient_payment['services'] as $index => $service)
+                        @php 
+                            $totalPrice += $service['service_price'] ?? 0;
+                            $discountDollar = $service['discount_dollar'] ?? 0;
+                            if ($discountDollar == 0 && isset($service['discount_percent']) && isset($service['service_price'])) {
+                                $discountDollar = ($service['service_price'] * $service['discount_percent']) / 100;
+                            }
+                        @endphp
+
+                        <tr>
+                            <td class="id text_font_khmer">{{ $index + 1 }}</td>
+                            <td class="service_name text_font_khmer" style="font-family: Noto Sans Khmer,sans-serif;">{{ $service['service_name'] }}</td>
+                            <td class="unit text_font_khmer">${{ number_format($service['service_price'] ?? 0, 2) }}</td>
+                            <td class="price text_font_khmer">{{ $service['service_unit'] }}</td>
+                            <td class="dis_percent text_font_khmer">${{ number_format($service['service_price'] ?? 0, 2) }}</td>
+                            <td class="dis_dollar text_font_khmer">{{ number_format($service['discount_percent'] ?? 0, 2) }}%</td>
+                            <td class="dis_dollar text_font_khmer">${{ number_format($discountDollar, 2) }}</td> 
+                            <td class="subtotal text_font_khmer">${{ number_format($service['subtotal'] ?? 0, 2) }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="text-center">No services available</td>
+                        </tr>
+                    @endforelse
                 </tbody>
                 <tfoot>
                     <tr>
                         <td colspan="4" style="background-color: #B2E0F6;"><strong>Total</strong></td>
-                        <td style="color:#ff9f00 ;">$ 80</td>
+                        <td style="color:#ff9f00 ;">${{ number_format($totalPrice, 2) }}</td> <!-- Display total price -->
                         <td colspan="2" style="background-color: #B2E0F6;">After Discount</td>
-                        <td style="color:#ff9f00 ;">$ 54.00</td>
+                        <td style="color:#ff9f00 ;">${{ $patient_payment['grand_total'] }}</td>
                     </tr>
                 </tfoot>
+
+
             </table>
         </section>
         <!-- Footer Section as Table -->
@@ -295,16 +292,16 @@ tfoot td {
                     <tr>
                         <th style="background-color: #B2E0F6;text-align: left;width: 295px;">Received by</th>
                         <th></th>
-                        <th style="background-color: #B2E0F6;text-align: left;width: 372px;">Paid ($) &nbsp;&nbsp;&nbsp;(បាន ថ្លៃបង់សេវ៉ា)</th>
-                        <th style="text-align: right;">$ 54.00 &nbsp;&nbsp;&nbsp;&nbsp;</th>
+                        <th style="background-color: #B2E0F6;text-align: left;width: 372px;">Paid ($) &nbsp;&nbsp;&nbsp;( <span style="font-family: Noto Sans Khmer,sans-serif;">បាន ថ្លៃបង់សេវ៉ា</span> )</th>
+                        <th style="text-align: right;">${{ $patient_payment['amount_paid'] }} &nbsp;&nbsp;&nbsp;&nbsp;</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td style="background-color: #B2E0F6;text-align: left;width: 295px;"><strong>Note</strong></td>
                         <td></td>
-                        <td style="background-color: #B2E0F6;text-align: left;"><strong>Due ($) &nbsp;&nbsp;&nbsp;(នៅសល់ ថ្លៃសេវ៉ា)</strong></td>
-                        <td></td>
+                        <td style="background-color: #B2E0F6;text-align: left;"><strong>Due ($) &nbsp;&nbsp;&nbsp;( <span style="font-family: Noto Sans Khmer,sans-serif;">នៅសល់ ថ្លៃសេវ៉ា</span> )</strong></td>
+                        <th style="text-align: right;">${{ $patient_payment['amount_unpaid'] }} &nbsp;&nbsp;&nbsp;&nbsp;</th>
                     </tr>
                     
                 </tbody>
@@ -312,14 +309,19 @@ tfoot td {
             <br>
             <strong style="background-color: #90EE90;padding:10px 40px 10px 40px;float:right;">Signature</strong>
             <br><br>
-            <br><br>
-            <br><br>
+            <br>
         </footer>
     </div>
-    <button class="btn btn-warning" id="printButton" style="width: 100%;"><i class="fa fa-print"></i> Print</button>
-    <a href="{{ route('patient_service_history') }}" style="width: 100%;">
-        <button class="btn btn-success" id="printButton" style="width: 100%;"><i class="fa fa-arrow-left"></i> Back</button>
-    </a>
+    <div style="position: fixed; top:2%; right: 10px;">
+        <button class="btn btn-warning" id="printButton" style="width: 90px;">
+            <i class="fa fa-print"></i> Print
+        </button>
+        
+        <a href="{{ route('patient_service_history') }}" class="btn btn-success" style="width: 90px; display: inline-block; text-align: center;">
+            <i class="fa fa-arrow-left"></i> Back
+        </a>
+    </div>
+
     </body>
 </html>
 <style>

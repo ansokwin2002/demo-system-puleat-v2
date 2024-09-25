@@ -54,7 +54,7 @@
                                             @foreach ($services as $index => $item)
                                                 <tr class="row_list_service">
                                                     <td class="align-middle text-center">{{ $index +=1 }}</td>
-                                                    <td class="align-middle text-center"><span class="badge badge-danger">{{ $item->name }}</span></td>
+                                                    <td class="align-middle text-left"><span class="badge badge-danger">{{ $item->name }}</span></td>
                                                     <td class="align-middle text-center">{{ $item->unit }}</td>
                                                     <td class="align-middle text-center"><span class="badge badge-dark">${{ $item->price }}</span></td>
                                                     <td class="align-middle text-center">

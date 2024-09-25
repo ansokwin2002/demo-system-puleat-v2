@@ -213,7 +213,7 @@
                                                     @endphp
 
                                                     <select id="serviceSelect" class="form-control select2" style="width: 100%;">
-                                                        <option disabled>Select a Service</option>
+                                                        <option>Select a Service</option>
                                                         @foreach ($Services as $service)
                                                             <option value="{{ $service->id }}" 
                                                             data-name-service="{{ $service->name }}"

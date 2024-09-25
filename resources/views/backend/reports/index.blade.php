@@ -208,7 +208,7 @@
                             <td class="align-middle text-center" rowspan="${baseRowSpan}"><span class="badge badge-info">${patient.customer}</span></td>
                             <td class="align-middle text-center" rowspan="${baseRowSpan}"><span class="badge badge-dark">${patient.doctor_name}</span></td>
                             <td class="align-middle text-center" rowspan="${baseRowSpan}"><span class="badge badge-success">${patient.cashier_name}</span></td>
-                            <td class="align-middle text-center"><span class="badge badge-danger">${firstService.service_name}</span></td>
+                            <td class="align-middle text-left"><span class="badge badge-danger">${firstService.service_name}</span></td>
                             <td class="align-middle text-center">${formatCurrency(firstService.subtotal)}</td>
                             <td class="align-middle text-center">${firstService.service_unit}</td>
                             <td class="align-middle text-center">${formatCurrency(firstService.service_price)}</td>

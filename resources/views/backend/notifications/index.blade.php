@@ -61,7 +61,7 @@
                                                 <td class="align-middle text-center"><span class="badge badge-dark">{{ $notification['doctor_name'] }}</span></td>
                                                 <td class="align-middle text-center">{{ $notification['register_date'] }}</td>
                                                 <td class="align-middle text-center">{{ $notification['next_appointment'] }}</td>
-                                                <td class="align-middle text-center">
+                                                <td class="align-middle text-left">
                                                     @if($notification['services']->isEmpty())
                                                         <span class="badge badge-warning">No services found.</span>
                                                     @else

@@ -63,9 +63,11 @@ class PatientHistoryController extends Controller
         $patientHistory = PatientHistory::where('invoice_id', $invoiceId)
                                         ->with(['patient', 'doctor', 'cashier'])
                                         ->firstOrFail();
+        $patient = $patientHistory->patient;
         return view('backend.invoice.index', [
             'data' => $patientHistory,
-            'patient_payment' => $patientHistory->patient_payment
+            'patient_payment' => $patientHistory->patient_payment,
+            'patient_info' => $patient
         ]);
     }
 

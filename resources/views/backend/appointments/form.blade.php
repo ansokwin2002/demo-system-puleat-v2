@@ -61,7 +61,7 @@
                                         <td class="align-middle text-center">{{ $paymentData['date'] ?? '' }}</td>
                                         <td class="align-middle text-center"><span class="badge badge-dark">{{ $doctorName }}</span></td>
                                         <td class="align-middle text-center"><span class="badge badge-info">{{ $patientName }}</span></td>
-                                        <td class="align-middle text-center">
+                                        <td class="align-middle text-left">
                                             @foreach($services as $service)
                                                 <span class="badge badge-danger">{{ $service['service_name'] ?? 'N/A' }}</span><br><br>
                                             @endforeach
