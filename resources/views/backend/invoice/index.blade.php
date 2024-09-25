@@ -253,7 +253,7 @@ tfoot td {
                             $totalPrice += ($service['service_price'] ?? 0) * ($service['service_unit'] ?? 1);
                             $discountDollar = $service['discount_dollar'] ?? 0;
                             if ($discountDollar == 0 && isset($service['discount_percent']) && isset($service['service_price'])) {
-                                $discountDollar = ($service['service_price'] * $service['discount_percent']) / 100;
+                                $discountDollar = (($service['service_price'] * $service['service_unit']) * $service['discount_percent']) / 100;
                             }
                         @endphp
 
@@ -262,10 +262,16 @@ tfoot td {
                             <td class="service_name text_font_khmer" style="font-family: Noto Sans Khmer,sans-serif;">{{ $service['service_name'] }}</td>
                             <td class="unit text_font_khmer">${{ number_format($service['service_price'] ?? 0, 2) }}</td>
                             <td class="price text_font_khmer">{{ $service['service_unit'] }}</td>
-                            <td class="dis_percent text_font_khmer">${{ number_format(($service['service_price'] ?? 0) * ($service['service_unit'] ?? 1), 2) }}</td>
+                            <td class="dis_percent text_font_khmer">
+                                ${{ number_format(($service['service_price'] ?? 0) * ($service['service_unit'] ?? 1), 2) }}
+                            </td>
                             <td class="dis_dollar text_font_khmer">{{ number_format($service['discount_percent'] ?? 0, 2) }}%</td>
-                            <td class="dis_dollar text_font_khmer">${{ number_format($discountDollar, 2) }}</td> 
-                            <td class="subtotal text_font_khmer">${{ number_format($service['subtotal'] ?? 0, 2) }}</td>
+                            <td class="dis_dollar text_font_khmer">
+                                ${{ number_format($discountDollar, 2) }} <!-- Discount based on unit and percentage -->
+                            </td> 
+                            <td class="subtotal text_font_khmer">
+                                ${{ number_format($service['subtotal'] ?? 0, 2) }}
+                            </td>
                         </tr>
                     @empty
                         <tr>
@@ -273,6 +279,7 @@ tfoot td {
                         </tr>
                     @endforelse
                 </tbody>
+
                 <tfoot>
                     <tr>
                         <td colspan="4" style="background-color: #B2E0F6;"><strong>Total</strong></td>
