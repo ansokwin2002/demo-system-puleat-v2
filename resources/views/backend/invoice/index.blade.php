@@ -265,7 +265,7 @@
                         <th style="background-color: #B2E0F6;text-align: left;width: 295px;">Received by</th>
                         <th></th>
                         <th style="background-color: #B2E0F6;text-align: left;width: 372px;">Paid ($) &nbsp;&nbsp;&nbsp;( <span style="font-family: Noto Sans Khmer,sans-serif;">បាន ថ្លៃបង់សេវ៉ា</span> )</th>
-                        <th style="text-align: right;">${{ $patient_payment['amount_paid'] }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                        <th style="text-align: right;">${{ $patient_payment['amount_paid'] }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -273,7 +273,7 @@
                         <td style="background-color: #B2E0F6;text-align: left;width: 295px;"><strong>Note</strong></td>
                         <td></td>
                         <td style="background-color: #B2E0F6;text-align: left;"><strong>Due ($) &nbsp;&nbsp;&nbsp;( <span style="font-family: Noto Sans Khmer,sans-serif;">នៅសល់ ថ្លៃសេវ៉ា</span> )</strong></td>
-                        <th style="text-align: right;">${{ $patient_payment['amount_unpaid'] }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                        <th style="text-align: right;">${{ $patient_payment['amount_unpaid'] }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
                     </tr>
                     
                 </tbody>
