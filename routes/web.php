@@ -11,6 +11,7 @@ use App\Http\Controllers\Patient\PatientController;
 use App\Http\Controllers\PatientHistory\PatientHistoryController;
 use App\Http\Controllers\PatientSummary\PatientSummaryController;
 use App\Http\Controllers\Payment\PaymentController;
+use App\Http\Controllers\Payment\PaymentOrthoController;
 // use App\Http\Controllers\Profile\ProfileController as ProfileProfileController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Report\ReportPatientsController;
@@ -120,6 +121,7 @@ use Illuminate\Support\Facades\Route;
         });
         Route::controller(NotificationController::class)->group(function(){
             Route::get('/notifications','index')->name('notifications.index');
+            Route::get('/send-notification-telegram','sendAppointmentNotifications');
         });
     });
 // [Notification-------------------------------]
@@ -179,3 +181,11 @@ use Illuminate\Support\Facades\Route;
         });
     });
 // [Calendar-----------------------------]
+
+// [patient_history_controller----------------------------]
+    Route::middleware('auth')->group(function () {
+        Route::controller(PaymentOrthoController::class)->group(function(){
+            Route::get('/payment-ortho','index')->name('payment.ortho.index');
+        });
+    });
+// [patient_history_controller----------------------------]
