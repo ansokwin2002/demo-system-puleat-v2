@@ -58,7 +58,7 @@
                                             <tr class="row_list_patients">
                                                 <td class="align-middle text-center">{{ $index + 1 }}</td>
                                                 <td class="align-middle text-center">{{ $patient->date }}</td>
-                                                <td class="align-middle text-center"><span class="badge badge-info">{{ $patient->name }}</span></td>
+                                                <td class="align-middle text-center patient-name"><span class="badge badge-info">{{ $patient->name }}</span></td>
                                                 <td class="align-middle text-center">{{ $patient->age }}</td>
                                                 <td class="align-middle text-center">{{ $patient->sex }}</td>
                                                 <td class="align-middle text-center">{{ $patient->address }}</td>
@@ -91,16 +91,30 @@
                     </div>
                 </div>
             <!--[Patient_table-------------------------]-->
-
         </section>
     </div>
     <!-- [main_content------------------------------] -->
 
+    <!-- [Context_Menu-------------------------]-->
+        <div id="contextMenu" class="context-menu">
+            <button class="btn btn-success btn_view_patient" id="viewPatientBtn">
+                View Patient's Info <i class="fa fa-eye"></i>
+            </button>
+            <button class="btn btn-danger" onclick="swal('Cannot Delete', 'Patient can only be updated after creation!', 'error');">
+                Delete Patient's Info <i class="fa fa-trash"></i>
+            </button>
+            <button class="btn btn-warning btn_edit_patient">
+                Edit Patient's Info <i class="fa fa-edit"></i>
+            </button>
+        </div>
+    <!-- [Context_Menu-------------------------]-->
+
     <!-- [footer------------------------------] -->
-    <footer class="main-footer">
-        @include('backend.body.footer')
-    </footer>
+        <footer class="main-footer">
+            @include('backend.body.footer')
+        </footer>
     <!-- [footer------------------------------] -->
+
     <!-- [Model Edit Patient-------------------------] -->
         <div class="modal fade" id="fire-modal-patient" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
             <div class="modal-dialog custom-modal-service-detail">
@@ -157,3 +171,106 @@
 </div>
 
 @endsection
+
+@push('scripts')
+<script>
+    $(document).ready(function() {
+        var selectedPatient = null;
+        var contextMenu = $("#contextMenu");
+
+        // Delegate right-click on the patient name to show the context menu
+        $(document).on("contextmenu", ".patient-name", function(e) {
+            e.preventDefault();
+            
+            // Position the context menu as per your original design
+            var rect = this.getBoundingClientRect();
+            contextMenu.css({
+                top: rect.bottom + window.scrollY - 30 + "px",
+                left: rect.left + window.scrollX + "px",
+                display: "block"
+            });
+            
+            // Get the parent row and then find the inline edit button that contains the data attributes
+            var row = $(this).closest("tr");
+            var inlineEditButton = row.find("button.btn_edit_patient").first();
+            
+            if (inlineEditButton.length) {
+                // Update selectedPatient with the latest data from this row
+                selectedPatient = {
+                    id: inlineEditButton.data("id"),
+                    name: inlineEditButton.data("name"),
+                    age: inlineEditButton.data("age"),
+                    sex: inlineEditButton.data("sex"),
+                    address: inlineEditButton.data("address"),
+                    telephone: inlineEditButton.data("telephone"),
+                    type_patient: inlineEditButton.data("type_patient")
+                };
+            }
+        });
+
+        // Hide the context menu when clicking anywhere else
+        $(document).on("click", function() {
+            contextMenu.hide();
+        });
+        
+        // Delegate the click event on the context menu "Edit Patient's Info" button
+        $(document).on("click", "#contextMenu .btn_edit_patient", function() {
+            if (selectedPatient) {
+                // Populate the edit form fields with the selected patient's data
+                $("#patient-id").val(selectedPatient.id);
+                $("#patient-name").val(selectedPatient.name);
+                $("#patient-age").val(selectedPatient.age);
+                $("#patient-address").val(selectedPatient.address);
+                $("#patient-telephone").val(selectedPatient.telephone);
+                $("#patient-type_patient").val(selectedPatient.type_patient);
+                
+                // Set the dropdown value for sex and trigger change if needed
+                $("#patient-sex").val(selectedPatient.sex).change();
+                
+                // Update the form action URL to include the patient ID
+                var formAction = "{{ route('patient.update', ':id') }}";
+                formAction = formAction.replace(':id', selectedPatient.id);
+                $("#editPatientForm").attr("action", formAction);
+                
+                // Open the modal for editing
+                $("#fire-modal-patient").modal("show");
+            }
+        });
+        console.log("Bootstrap Modal Function:", typeof $.fn.modal);
+        // When the "View Patient's Info" button is clicked
+        $(document).on("click", "#viewPatientBtn", function() {
+            if (selectedPatient) {
+                // Generate the URL with the patient ID
+                var viewPatientUrl = "{{ route('view_patient_detail', ['id' => ':id']) }}";
+                viewPatientUrl = viewPatientUrl.replace(':id', selectedPatient.id);
+                
+                // Redirect to the patient detail page
+                window.location.href = viewPatientUrl;
+            }
+        });
+    });
+
+</script>
+@endpush
+
+<style scoped lang="css">
+    .context-menu {
+        width: 200px;
+        position: absolute;
+        background: white;
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        padding: 10px;
+        border-radius: 5px;
+        display: none;
+        z-index: 1000;
+    }
+
+    .context-menu.show {
+        display: block;
+    }
+
+    .context-menu button {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+</style>

@@ -63,8 +63,8 @@
     }
 </style>
 
-<body>
-   
+<body class="">
+<!-- sidebar-mini -->
   <div id="app">
      <!-- [loading-----------------------] -->
      @include('backend.body.loader')
@@ -204,13 +204,15 @@
                 });
             // [summernote-------------------------------]
 
+
             // [Select_Service---------------------]
+                const selectedServices = [];
                 $('#serviceSelect').on('change', function() {
                     const selectedOption = $(this).find('option:selected');
                     const serviceName = selectedOption.data('name-service');
                     const serviceUnit = selectedOption.data('unit-service');
                     const servicePrice = selectedOption.data('price-service');  
-                    const serviceId = Date.now(); // Unique ID based on timestamp
+                    const serviceId = selectedOption.data('id-service'); // Unique ID based on timestamp
 
                     const tableRow = `
                         <tr>
@@ -235,6 +237,12 @@
                                 <input type="text" class="form-control discount-dollar" id="form_discount_dollar${serviceId}" inputmode="numeric" pattern="\d*" title="Please enter a number">
                             </td>
                             <td style="width:160px;"><p class="subtotal">$0.00</p></td>
+                            <td style="width:120px;">
+                               <input style="width:20px;height:20px;cursor:pointer;" 
+                                type="checkbox" 
+                                onclick="this.checked && (this.disabled = true)">
+
+                            </td>
                         </tr>
                     `;
 
@@ -313,6 +321,307 @@
                 });
 
             // [Select_Service---------------------]
+
+            // [get_patient_id_from_url---------------------------]
+               const patientId = window.location.pathname.split('/').pop();  // Get the last part of the URL (patient_id)
+                fetchAndDisplaySavedServices(patientId);
+                fetchAndDisplayTreatmentData(patientId);
+            // [get_patient_id_from_url---------------------------]
+
+
+            // [Save_plan------------------------------]
+                $('#save_treatment_planning').on('click', function () {
+                    
+                    const updatedServices = [];  // This will hold all updated service data
+                    const url = window.location.href;
+                    const patientId = url.split('/').pop();  // Get patient_id from URL
+                    
+                    // [customer_info--------------------------]
+                        const update_customer_info = [];
+                        const start_date = $('#date').val();
+                        const next_appointment = $('#next_appointment_date').val();
+                        const doctor = $('#doctor').val();
+                        const patient = $('#patient-select').val();
+                        const cashier = $('#cashier-select').val();
+                        const type_service = $('#type_service').val();
+                        const customer_info = {
+                            start_date: start_date,
+                            next_appointment: next_appointment,
+                            doctor: doctor,
+                            patient: patient,
+                            cashier: cashier,
+                            type_service: type_service,
+                        }
+                        update_customer_info.push(customer_info);
+                    // [customer_info--------------------------]
+
+                    // Extract grand total, amount paid, and amount unpaid only once
+                    const grandTotal = parseFloat($('#grand_total').text().replace('$', '').trim());  // Remove '$' and convert to number
+                    const amountPaid = parseFloat($('#amount_paid').text().replace('$', '').trim());  // Remove '$' and convert to number
+                    const amountUnpaid = parseFloat($('#amount_unpaid').text().replace('$', '').trim());  // Remove '$' and convert to number
+
+                    // Iterate over each row in the service table to collect data
+                    $('#serviceTableBody').find('tr').each(function() {
+                        const serviceId = $(this).find('input.service-id').val();  // Assuming you add a hidden input for service ID
+                        const serviceName = $(this).find('td').eq(1).text(); // Get service name (assuming it's in the 2nd column)
+                        const serviceUnit = $(this).find('.unit').val();  // Get updated unit value
+                        const servicePrice = $(this).find('.price input').val();  // Get updated price
+                        const discountPercent = $(this).find('.discount-percent').val();  // Get discount percent
+                        const discountDollar = $(this).find('.discount-dollar').val();  // Get discount dollar
+                        const subtotal = $(this).find('.subtotal').text().replace('$', '');  // Get updated subtotal (strip the dollar sign)
+
+                        // Check if the checkbox is checked for the current row
+                        const status = $(this).find('input[type="checkbox"]').prop('checked') ? true : false;
+                        
+                        // Create an object for this row with all the data
+                        const serviceData = {
+                            id: serviceId,
+                            name: serviceName,
+                            unit: serviceUnit,
+                            price: servicePrice,
+                            quantity: serviceUnit,  // If the quantity is the same as unit, use unit here
+                            discountType: (discountPercent !== "" ? "%" : "$"),  // Assuming default is percent
+                            discountValue: discountPercent || discountDollar,
+                            subtotal: subtotal,
+                            status: status,
+                        };
+
+                        updatedServices.push(serviceData);  // Add this service data to the array
+                    });
+
+                    // Now send the updatedServices array along with patient_id, grand_total, amount_paid, and amount_unpaid to the backend
+                    $.ajax({
+                        url: '/store-temp-services', // your route to controller
+                        method: 'POST',
+                        data: {
+                            patient_id: patientId,  // Send the patient_id only once
+                            grand_total: grandTotal,  // Send the grand_total only once
+                            amount_paid: amountPaid,  // Send the amount_paid only once
+                            amount_unpaid: amountUnpaid,  // Send the amount_unpaid only once
+                            services: updatedServices,  // Send the updated data for the services
+                            update_customer_info: update_customer_info,
+                            _token: $('meta[name="csrf-token"]').attr('content') // CSRF token
+                        },
+                        success: function(response) {
+                            if (response.status) {  // Check if the status is true
+                                localStorage.setItem('activeTreatmentTab', '#treatment-planning-tab2');
+                               Swal.fire({
+                                    title: 'Success!',
+                                    text: 'Treatment plan saved successfully!',
+                                    icon: 'success',
+                                    timer: 1000,
+                                    showConfirmButton: false
+                                }).then(() => {
+                                    location.reload(); // Reload **after** the success alert
+                                });
+                                // Update the page with the returned data
+                                $('#amount_paid').text(`$${response.data.amount_paid}`);
+                                $('#amount_unpaid').text(`$${response.data.amount_unpaid}`);
+
+                                // Clear and update the service table
+                                $('#serviceTableBody').empty();
+                                response.data.services.forEach((service) => {
+                                    const discountType = (service.discountType || '').toString().trim();
+                                    const isPercent = discountType === '%';
+                                    const isDollar = discountType === '$';
+                                    
+                                    const serviceRow = `
+                                        <tr>
+                                            <td></td>
+                                            <td style="width:700px;">${service.name}
+                                                <button class="btn btn-danger remove-row float-right">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </td>
+                                            <td style="width:120px;">
+                                                <input type="text" class="form-control unit" value="${service.unit}" inputmode="numeric" pattern="\\d*" title="Please enter a number">
+                                            </td>
+                                            <td class="price">
+                                                <input type="text" class="form-control price" value="${service.price}">
+                                            </td>
+                                            <td class="d-flex">
+                                                <div class="form-check form-check-lg">
+                                                    <input class="form-check-input discount-type" type="radio" name="discountType${service.id}" value="%" ${isPercent ? 'checked' : ''}>
+                                                    <label class="form-check-label mr-4">%</label>
+                                                </div>
+                                                <div class="form-check form-check-lg">
+                                                    <input class="form-check-input discount-type" type="radio" name="discountType${service.id}" value="$" ${isDollar ? 'checked' : ''}>
+                                                    <label class="form-check-label mr-4">$</label>
+                                                </div>
+                                            </td>
+                                            <td style="width:120px;">
+                                                <input type="text" class="form-control discount-percent" value="${isPercent ? (service.discountValue ?? '') : ''}">
+                                            </td>
+                                            <td style="width:120px;">
+                                                <input type="text" class="form-control discount-dollar" value="${isDollar ? (service.discountValue ?? '') : ''}">
+                                            </td>
+                                            <td style="width:160px;">
+                                                <p class="subtotal">$${service.subtotal}</p>
+                                            </td>
+                                            <td style="width:120px;">
+                                                <input type="checkbox" ${service.status === true ? 'checked' : ''}>
+                                            </td>
+                                        </tr>
+                                    `;
+                                    $('#serviceTableBody').append(serviceRow);
+                                });
+
+                                // Optionally, recalculate any totals
+                                calculateSubtotal();
+                                updateGrandTotal();
+                                updateInputState();  // Update the form elements after update
+                            } else {
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: 'There was an error saving the treatment plan.',
+                                    icon: 'error',
+                                    timer: 1000,  // Auto-close after 2 seconds
+                                    showConfirmButton: false // Hide confirm button
+                                });
+                            }
+                        },
+
+                        error: function(xhr) {
+                            console.error('Error:', xhr.responseText);
+                            alert('Failed to save services.');
+                        }
+                    });
+                });
+            // [Save_plan------------------------------]
+
+            // [fetchAndDisplaySavedServices-----------------------------------]
+                function fetchAndDisplaySavedServices(patientId) {
+                    $.ajax({
+                        url: `/get-services/${patientId}`,
+                        method: 'GET',
+                        success: function(response) {
+                            const services = response.data.services;
+
+                            // Clear current table rows (if any)
+                            $('#serviceTableBody').empty();
+
+                            // Loop through services and add them to the table
+                            services.forEach((service, index) => {
+                            // Explicitly ensure the value is string and trimmed
+                            const discountType = (service.discountType || '').toString().trim();
+                            const isPercent = discountType === '%';
+                            const isDollar = discountType === '$';
+                            const rowStyle = service.service_completed === true ? 'style="background-color: #d4edda;"' : '';
+                            const serviceRow = `
+                                <tr ${rowStyle}>
+                                    <td></td>
+                                    <td style="width:700px;">${service.name}
+                                        <button class="btn btn-danger remove-row float-right">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
+                                    <td style="width:120px;">
+                                        <input type="text" class="form-control unit" value="${service.unit}" inputmode="numeric" pattern="\\d*" title="Please enter a number">
+                                    </td>
+                                    <td class="price">
+                                        <input type="text" class="form-control price" value="${service.price}">
+                                    </td>
+                                    <td class="d-flex">
+                                        <div class="form-check form-check-lg">
+                                            <input class="form-check-input discount-type" type="radio" name="discountType${index}" id="discountPercent${index}" value="%" ${isPercent ? 'checked' : ''}>
+                                            <label class="form-check-label mr-4" for="discountPercent${index}">%</label>
+                                        </div>
+                                        <div class="form-check form-check-lg">
+                                            <input class="form-check-input discount-type" type="radio" name="discountType${index}" id="discountDollar${index}" value="$" ${isDollar ? 'checked' : ''}>
+                                            <label class="form-check-label mr-4" for="discountDollar${index}">$</label>
+                                        </div>
+                                    </td>
+                                    <td style="width:120px;">
+                                        <input type="text" class="form-control discount-percent" 
+                                            id="form_discount_percent${index}" 
+                                            value="${isPercent ? (service.discountValue ?? '') : ''}" 
+                                            inputmode="numeric" pattern="\\d*" title="Please enter a number">
+                                    </td>
+                                    <td style="width:120px;">
+                                        <input type="text" class="form-control discount-dollar" 
+                                            id="form_discount_dollar${index}" 
+                                            value="${isDollar ? (service.discountValue ?? '') : ''}" 
+                                            inputmode="numeric" pattern="\\d*" title="Please enter a number">
+                                    </td>
+                                    <td style="width:160px;">
+                                        <p class="subtotal">$${service.subtotal}</p>
+                                    </td>
+                                     <td style="width:120px;">
+                                        <input style="width:20px;height:20px;cursor:pointer;" type="checkbox" class="service-checkbox" data-service-id="${service.id}" ${service.status === 'true' ? 'checked disabled' : ''}>
+                                    </td>
+                                </tr>
+                            `;
+
+                            $('#serviceTableBody').append(serviceRow);
+                            $('#amount_paid').text(`$${response.data.amount_paid}`);
+                            $('#amount_unpaid').text(`$${response.data.amount_unpaid}`);
+
+                        });
+        
+                  
+                            // After populating, update row numbers and other necessary functions
+                            updateRowNumbers();
+                            updateInputState(); // Make sure to run this after the rows are appended
+                            calculateSubtotal();
+                            updateGrandTotal();
+
+                            // Attach event listeners to the radio buttons to handle the discount state dynamically
+                            $('input.discount-type').on('change', function() {
+                                updateInputState(); // Call to update input state when radio selection changes
+                            });
+
+                            // [Checkbox Change Event]
+                            $('.service-checkbox').on('change', function() {
+                                const isChecked = $(this).prop('checked');
+                                const serviceId = $(this).data('service-id');
+                                const row = $(this).closest('tr');
+                                const serviceData = {
+                                    id: serviceId,
+                                    name: row.find('td:eq(1)').text().trim(),
+                                    unit: row.find('.unit').val(),
+                                    price: row.find('.price').val(),
+                                    discountType: row.find('input[name="discountType' + serviceId + '"]:checked').val(),
+                                    discountValue: row.find('.discount-percent').val() || row.find('.discount-dollar').val(),
+                                    subtotal: row.find('.subtotal').text().trim().substring(1), // Remove '$' sign
+                                    status: isChecked
+                                };
+
+                                // Save or send the service data when checked
+                                if (isChecked) {
+                                    $(this).prop('disabled', true);
+                                    // Pass the data to a new page or display it
+                                    passServiceDataToTreatmentPage(serviceData);
+                                }
+                            });
+
+                        },
+                        error: function(xhr) {
+                            console.error('Error fetching services:', xhr.responseText);
+                        }
+                    });
+                }
+            // [fetchAndDisplaySavedServices-----------------------------------]
+
+            // [passServiceDataToTreatmentPage----------------------------------]
+                function passServiceDataToTreatmentPage(serviceData) {
+                    $.ajax({
+                        url: '/save-treatment',
+                        method: 'POST',
+                        data: {
+                            _token: $('meta[name="csrf-token"]').attr('content'),
+                            serviceData: serviceData
+                        },
+                        success: function(response) {
+                            console.log(response);
+                            // On success, navigate to the treatment page
+                            window.location.href = '/treatment';
+                        },
+                        error: function(xhr) {
+                            console.error('Error passing service data:', xhr.responseText);
+                        }
+                    });
+                }
+            // [passServiceDataToTreatmentPage----------------------------------]
 
             // [Update Grand Total------------------------]
                 function updateGrandTotal() {
@@ -677,7 +986,7 @@
                             method: 'GET',
                             data: { id: patientId },
                             success: function(response) {
-                                console.log(response);
+    
                                 // Populate the modal with the patient's noted information
                                 $('#patientsNotedContent').summernote('code', response.patient_noted);
                                 // Show the modal
@@ -951,6 +1260,454 @@
             
 
 
+            // [tap_treatment-----------------------------------------------------------------]
+                // [treatment_service---------------------------]
+                    $('.treatment_service').on('click', function (e) {
+                            e.preventDefault(); // Prevent default behavior to handle with AJA
+                            // Fetch and display treatment data
+                        fetchAndDisplayTreatmentData(patientId);
+                    });
+                // [treatment_service---------------------------]
+            
+                // [fetchAndDisplayTreatmentData---------------------------------]
+                    function fetchAndDisplayTreatmentData(patientId) {
+                        $.ajax({
+                            url: `/get-treatment/${patientId}`,  // Your route to the backend
+                            method: 'GET',
+                            success: function(response) {
+                                const acceptedServices = response.acceptedServices;
+
+                                // Clear current table rows (if any)
+                                $('#treatmentServiceTableBody').empty();
+
+                                // Loop through the accepted services and append them to the table
+                                acceptedServices.forEach((service, index) => {
+                                    const discountType = (service.discountType || '').toString().trim();
+                                    const isPercent = discountType === '%';
+                                    const isDollar = discountType === '$';
+
+                                    const serviceRow = `
+                                        <tr>
+                                            <td>${index + 1}</td>
+                                           <td style="width:700px;" class="service_name_treatment">
+                                                ${service.name}
+                                                <input type="hidden" class="service-id-treatment" value="${service.id}">
+                                            </td>
+                                               
+                                            </td>
+                                            <td style="width:120px;">
+                                                <input readonly type="text" class="form-control unit_treatment" value="${service.unit}" inputmode="numeric" pattern="\\d*" title="Please enter a number">
+                                            </td>
+                                            <td class="price">
+                                                <input readonly type="text" class="form-control price_treatment" value="${service.price}">
+                                            </td>
+                                            <td class="d-flex">
+                                                <div class="form-check form-check-lg">
+                                                    <input readonly class="form-check-input discount-type_treatment" type="radio" name="discountType${index}" id="discountPercent${index}" value="%" ${isPercent ? 'checked' : ''}>
+                                                    <label class="form-check-label mr-4" for="discountPercent${index}">%</label>
+                                                </div>
+                                                <div class="form-check form-check-lg">
+                                                    <input readonly class="form-check-input discount-type_treatment" type="radio" name="discountType${index}" id="discountDollar${index}" value="$" ${isDollar ? 'checked' : ''}>
+                                                    <label class="form-check-label mr-4" for="discountDollar${index}">$</label>
+                                                </div>
+                                            </td>
+                                            <td style="width:120px;">
+                                                <input readonly type="text" class="form-control discount-percent_treatment" 
+                                                    id="form_discount_percent${index}" 
+                                                    value="${isPercent ? (service.discountValue ?? '') : ''}" 
+                                                    inputmode="numeric" pattern="\\d*" title="Please enter a number">
+                                            </td>
+                                            <td style="width:120px;">
+                                                <input readonly type="text" class="form-control discount-dollar_treatment" 
+                                                    id="form_discount_dollar${index}" 
+                                                    value="${isDollar ? (service.discountValue ?? '') : ''}" 
+                                                    inputmode="numeric" pattern="\\d*" title="Please enter a number">
+                                            </td>
+                                            <td style="width:160px;">
+                                                <p class="subtotal_treatment">$${service.subtotal}</p>
+                                            </td>
+                                            <input type="hidden" class="status_treatment" value="${service.status}">
+                                        </tr>
+                                    `;
+
+                                    // Append the new row to the table
+                                    $('#treatmentServiceTableBody').append(serviceRow);
+                                });
+                                let grandTotal = 0;
+                                $('#treatmentServiceTableBody').find('tr').each(function() {
+                                    let subtotalText = $(this).find('.subtotal_treatment').text().replace(/[^0-9.]/g, '');
+                                    let subtotal = parseFloat(subtotalText);
+                                    if (!isNaN(subtotal)) {
+                                        grandTotal += subtotal;
+                                    }
+                                });
+                                $('#treatment_grand_total').text('$ ' + grandTotal);
+
+                               m 
+                                $('#treatment_amount_paid').text('$ 111');
+                                $('#treatment_amount_unpaid').text('$ 000');
+
+                                // // Attach event listeners to the radio buttons to handle the discount state dynamically
+                                // $('input.discount-type').on('change', function() {
+                                //     updateInputState(); // Call to update input state when radio selection changes
+                                // });
+
+                                // function calculateSubtotal() {
+                                //     $('#treatmentServiceTableBody').find('tr').each(function() {
+                                //         const servicePrice = parseFloat($(this).find('.price input').val()) || 0; 
+                                //         const unit = parseFloat($(this).find('.unit').val()) || 0;
+                                //         const discountPercent = parseFloat($(this).find('.discount-percent').val()) || 0;
+                                //         const discountDollar = parseFloat($(this).find('.discount-dollar').val()) || 0;
+
+                                //         let subtotal = servicePrice * unit;
+
+                                //         // Apply discount based on the selected type
+                                //         const isPercentChecked = $(this).find('input.discount-type:checked').attr('id').includes('Percent');
+                                        
+                                //         if (isPercentChecked) {
+                                //             subtotal = subtotal - (subtotal * (discountPercent / 100));
+                                //         } else {
+                                //             subtotal = subtotal - discountDollar;
+                                //         }
+
+                                //         // Ensure subtotal does not go below zero
+                                //         subtotal = Math.max(subtotal, 0);
+
+                                //         $(this).find('.subtotal').text('$ ' + subtotal.toFixed(2));
+                                //     });
+                                // }
+
+                                // $('#treatmentServiceTableBody').on('click', '.remove-row', function() {
+                                //     $(this).closest('tr').remove();
+                                //     updateRowNumbers(); 
+                                //     $('#treatment_amount_paid').text('$ 0.00');
+                                //     $('#treatment_amount_unpaid').text('$ 0.00');
+                                // });
+
+                                // function updateRowNumbers() {
+                                //     $('#treatmentServiceTableBody tr').each(function(index) {
+                                //         $(this).find('td:first').text(index + 1); 
+                                //     });
+                                // }
+
+                                // function updateInputState() {
+                                //     $('#treatmentServiceTableBody').find('tr').each(function() {
+                                //         var isPercentChecked = $(this).find('input.discount-type:checked').attr('id').includes('Percent');
+                                        
+                                //         if (isPercentChecked) {
+                                //             $(this).find('.discount-percent').removeClass('disabled-input').attr('readonly', false);
+                                //             $(this).find('.discount-dollar').addClass('disabled-input').attr('readonly', true);
+                                //         } else {
+                                //             $(this).find('.discount-percent').addClass('disabled-input').attr('readonly', true);
+                                //             $(this).find('.discount-dollar').removeClass('disabled-input').attr('readonly', false);
+                                //         }
+                                //     });
+                                // }
+
+                                // // Event handlers for discount changes
+                                // $('#treatmentServiceTableBody').on('change', 'input.discount-type', function() {
+                                //     updateInputState();
+                                //     calculateSubtotal();
+                                //     updateGrandTotalTreatment();
+                                // });
+
+                                // // Event handlers for input changes
+                                // $('#treatmentServiceTableBody').on('input', '.unit, .discount-percent, .discount-dollar', function() {
+                                //     calculateSubtotal();
+                                //     updateGrandTotalTreatment();
+                                // });
+
+
+                            },
+                            error: function(xhr) {
+                                console.error('Error fetching treatment data:', xhr.responseText);
+                            }
+                        });
+                    }
+                // [fetchAndDisplayTreatmentData---------------------------------]
+
+                 // [Update Grand Total------------------------]
+                    function updateGrandTotalTreatment() {
+                        let grandTotal = 0;
+
+                        $('#treatmentServiceTableBody').find('tr').each(function() {
+                            const subtotalText = $(this).find('.subtotal_treatment').text().replace('$ ', '');
+                            const subtotal = parseFloat(subtotalText) || 0;
+                            grandTotal += subtotal;
+                        });
+            
+                        // $('#grand_total').closest('tr').find('td:last').html('<strong>$ ' + grandTotal.toFixed(2) + '</strong>');
+                       $('#treatment_grand_total').text('$ ' + grandTotal.toFixed(2));
+
+                    }
+
+                        $('#treatmentServiceTableBody').on('click', '.remove-row', function() {
+                            $(this).closest('tr').remove(); 
+                            updateRowNumbers();
+                            updateGrandTotalTreatment();
+                        });
+                // [Update Grand Total------------------------]
+
+                // [Button Paid---------------------------]
+                    $('.btn_paid').on('click', function() {
+                        if ($('#treatment_grand_total').length > 0) {
+                            let grandTotalText = $('#grand_total').text().replace('$', '').trim();
+                            let grandTotal = parseFloat(grandTotalText) || 0;
+                            let amountPaid = parseFloat($('#form_paid').val()) || 0;
+                            $('#treatment_amount_paid').text('$ ' + amountPaid.toFixed(2));
+
+                            const amountUnpaid = grandTotal - amountPaid;
+                            $('#treatment_amount_unpaid').text('$ ' + amountUnpaid.toFixed(2)); 
+                        } else {
+                            alert('Element #grand_total not found or it is empty.');
+                        }
+                        $('#fire-modal-4').modal('hide');
+                    });
+                    $('.close, .btn-secondary').on('click', function() {
+                        $('#fire-modal-4').modal('hide');
+                    });
+                // [Button Paid---------------------------]
+         
+            // [tap_treatment-----------------------------------------------------------------]
+
+            // [completed_treatment_planning------------------------------------------------------------]
+                $('#completed_treatment_planning').on('click', function (e) {
+                    e.preventDefault();
+
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "Do you want to mark this treatment plan as completed?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, complete it!',
+                        cancelButtonText: 'No, keep it',
+                        reverseButtons: true
+                    }).then((result) => {
+                       if (result.isConfirmed) {
+                            const updatedServices = [];
+                            const url = window.location.href;
+                            const patientId = url.split('/').pop();
+
+                            const update_customer_info = [];
+                            const customer_info = {
+                                start_date: $('#date').val(),
+                                next_appointment: $('#next_appointment_date').val(),
+                                doctor: $('#doctor').val(),
+                                patient: $('#patient-select').val(),
+                                cashier: $('#cashier-select').val(),
+                                type_service: $('#type_service').val(),
+                            };
+                            update_customer_info.push(customer_info);
+
+                            const grandTotal = parseFloat($('#grand_total').text().replace('$', '').trim());
+
+                            if ($('#serviceTableBody tr').length === 0) {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'No Services',
+                                    text: 'There are no services added. Please add at least one service before completing.',
+                                });
+                                return; 
+                            }
+
+
+                            $('#serviceTableBody').find('tr').each(function () {
+                                const serviceId = $(this).find('input.service-id').val();
+                                const serviceName = $(this).find('td').eq(1).text();
+                                const serviceUnit = $(this).find('.unit').val();
+                                const servicePrice = $(this).find('.price input').val();
+                                const discountPercent = $(this).find('.discount-percent').val();
+                                const discountDollar = $(this).find('.discount-dollar').val();
+                                const subtotal = $(this).find('.subtotal').text().replace('$', '');
+                                const status = $(this).find('input[type="checkbox"]').prop('checked');
+
+                                const serviceData = {
+                                    id: serviceId,
+                                    name: serviceName,
+                                    unit: serviceUnit,
+                                    price: servicePrice,
+                                    quantity: serviceUnit,
+                                    discountType: (discountPercent !== "" ? "%" : "$"),
+                                    discountValue: discountPercent || discountDollar,
+                                    subtotal: subtotal,
+                                    status: status,
+                                };
+
+                                updatedServices.push(serviceData);
+                            });
+
+                            let allChecked = true;
+
+                            $('#serviceTableBody').find('tr').each(function () {
+                                const status = $(this).find('input[type="checkbox"]').prop('checked');
+                                if (!status) {
+                                    allChecked = false;
+                                    return false; // break loop
+                                }
+                            });
+
+                            if (!allChecked) {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Warning!',
+                                    text: 'Please accept all planned treatments before completing.',
+                                });
+                                return;
+                            }
+                                                        // Proceed with AJAX request
+                            $.ajax({
+                                url: '/completed-treatment-plan',
+                                method: 'POST',
+                                data: {
+                                    patient_id: patientId,
+                                    grand_total: grandTotal,
+                                    services: updatedServices,
+                                    update_customer_info: update_customer_info,
+                                    completed: true,
+                                    _token: $('meta[name="csrf-token"]').attr('content')
+                                },
+                                success: function (response) {
+                                    if (response.status) {
+                                        localStorage.setItem('activeTreatmentTab', '#treatment-planning-tab2');
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Success',
+                                            text: 'The treatment plan has been marked as completed.',
+                                            timer: 1500,
+                                            showConfirmButton: false
+                                        }).then(() => {
+                                            // window.location.hash = '#treatment-planning';
+                                            location.reload();
+                                        });
+
+                                        $('#serviceTableBody').empty();
+                                        $('#grand_total').text('$ 0.00');
+                                    } else {
+                                        Swal.fire('Error!', 'There was an error completing the treatment plan.', 'error');
+                                    }
+                                },
+                                error: function (xhr) {
+                                    console.error('Error:', xhr.responseText);
+                                    Swal.fire('Error!', 'Something went wrong while saving.', 'error');
+                                }
+                            });
+                        }
+
+                    });
+                });
+            // [completed_treatment_planning------------------------------------------------------------]
+
+            // [completed_save_print_treatment-----------------------------------------------------------]
+                $('#completed_save_print_treatment').on('click', function (e) {
+
+                    e.preventDefault();
+
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "Do you want to mark this treatment as completed?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, complete it!',
+                        cancelButtonText: 'No, keep it',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const updatedServices = [];
+                            const url = window.location.href;
+                            const patientId = url.split('/').pop();
+
+                            const update_customer_info = [{
+                                start_date: $('#date').val(),
+                                next_appointment: $('#next_appointment_date').val(),
+                                doctor: $('#doctor').val(),
+                                patient: $('#patient-select').val(),
+                                cashier: $('#cashier-select').val(),
+                                type_service: $('#type_service').val(),
+                            }];
+
+                            const grandTotal = parseFloat($('#grand_total').text().replace('$', '').trim());
+
+                            if ($('#treatmentServiceTableBody tr').length === 0) {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'No Services',
+                                    text: 'There are no services added. Please add at least one service before completing.',
+                                });
+                                return; 
+                            }
+
+                            $('#treatmentServiceTableBody').find('tr').each(function () {
+                                const serviceId = $(this).find('input.service-id-treatment').val();
+                                const serviceName = $(this).find('.service_name_treatment').text().trim();
+                                const serviceUnit = $(this).find('.unit_treatment').val();
+                                const servicePrice = $(this).find('.price_treatment').val();
+                                const discountPercent = $(this).find('.discount-percent_treatment').val();
+                                const discountDollar = $(this).find('.discount-dollar_treatment').val();
+                                const subtotal = $(this).find('.subtotal_treatment').text().replace('$', '');
+                                const status = $(this).find('.status_treatment').val();
+
+                                const serviceData = {
+                                    id: serviceId,
+                                    name: serviceName,
+                                    unit: serviceUnit,
+                                    price: servicePrice,
+                                    quantity: serviceUnit,
+                                    discountType: (discountPercent !== "" ? "%" : "$"),
+                                    discountValue: discountPercent || discountDollar,
+                                    subtotal: subtotal,
+                                    status: status,
+                                };
+
+                                updatedServices.push(serviceData);
+                            });
+
+                            // AJAX to save treatment data
+                            $.ajax({
+                                url: '/completed-treatment',
+                                method: 'POST',
+                                data: {
+                                    patient_id: patientId,
+                                    grand_total: grandTotal,
+                                    services: updatedServices,
+                                    update_customer_info: update_customer_info,
+                                    completed: true,
+                                    _token: $('meta[name="csrf-token"]').attr('content')
+                                },
+                                success: function (response) {
+                                    if (response.status) {
+                                        localStorage.setItem('activeTreatmentTab', '#treatment-tab2');
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Success',
+                                            text: 'Treatment saved as completed.',
+                                            timer: 1500,
+                                            showConfirmButton: false
+                                        }).then(() => {
+                                            location.reload(); // reload after alert
+                                        });
+                                    } else {
+                                        Swal.fire('Error', 'Failed to save treatment data.', 'error');
+                                    }
+                                },
+                                error: function (xhr) {
+                                    console.error('AJAX Error:', xhr.responseText);
+                                    Swal.fire('Error', 'Something went wrong.', 'error');
+                                }
+                            });
+                        }
+                    });
+                });
+            // [completed_save_print_treatment-----------------------------------------------------------]
+
+
+            // if (window.location.hash === '#treatment-planning') {
+            //     $('#treatment-planning-tab2').tab('show');
+            // }
+            const savedTab = localStorage.getItem('activeTreatmentTab');
+            if (savedTab) {
+                $(`${savedTab}`).tab('show');
+                localStorage.removeItem('activeTreatmentTab'); // Optional: clean up
+            }
       });
   </script>
   <script src="{{ asset('backend/assets/modules/sweetalert/sweetalert.min.js')  }}"></script>

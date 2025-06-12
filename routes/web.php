@@ -3,8 +3,11 @@
 use App\Http\Controllers\Appointment\AppointmentController;
 use App\Http\Controllers\Calendar\CalendarController;
 use App\Http\Controllers\Cashier\CashierController;
+use App\Http\Controllers\CompletedTreatmentDataController;
+use App\Http\Controllers\CompletedTreatmentPlanController;
 use App\Http\Controllers\Dashbaord\DashboardController;
 use App\Http\Controllers\Doctor\DoctorController;
+use App\Http\Controllers\DoctorNotedBookController;
 use App\Http\Controllers\Invoice\InvoiceController;
 use App\Http\Controllers\Notification\NotificationController;
 use App\Http\Controllers\Patient\PatientController;
@@ -19,7 +22,9 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Reports\ReportsController;
 use App\Http\Controllers\Reports\ReportServiceController;
 use App\Http\Controllers\Service\ServiceController;
+use App\Http\Controllers\TempServiceDataController;
 use App\Http\Controllers\uploadMultiImage\uploadMultiImageController;
+use App\Models\CompletedTreatmentPlan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -87,6 +92,7 @@ use Illuminate\Support\Facades\Route;
             Route::post('/create-patient','create_Patient')->name('create_Patient');
             Route::post('/update-patient/{id}','update')->name('patient.update');
             Route::get('/get-patient-history/{id}','getPatientHistory');
+            Route::get('/view-patient-detail/{id}','viewPatientDetail')->name('view_patient_detail');
         });
     });
 // [patient_controller----------------------------]
@@ -96,6 +102,7 @@ use Illuminate\Support\Facades\Route;
         Route::controller(PatientHistoryController::class)->group(function(){
             Route::post('/patient-save-history', 'savePatientHistory')->name('savePatientHistory'); 
             Route::get('/patient-service-history','patientServiceHistory')->name('patient_service_history');
+            Route::get('/patient-ortho-service-history','patientOrthoServiceHistory')->name('patient_ortho_service_history');
             Route::get('/patient-details/{id}','getPatientDetails')->name('get_patient_details');
             Route::get('/invoice/{invoiceId}','showInvoice')->name('show_invoice');
             Route::get('/get-patient-noted','getPatientNoted')->name('patient_noted');
@@ -121,8 +128,10 @@ use Illuminate\Support\Facades\Route;
         });
         Route::controller(NotificationController::class)->group(function(){
             Route::get('/notifications','index')->name('notifications.index');
-            Route::get('/send-notification-telegram','sendAppointmentNotifications');
         });
+    });
+    Route::controller(NotificationController::class)->group(function(){
+        Route::get('/send-notification-telegram','sendAppointmentNotifications');
     });
 // [Notification-------------------------------]
 
@@ -189,3 +198,46 @@ use Illuminate\Support\Facades\Route;
         });
     });
 // [patient_history_controller----------------------------]
+
+// [doctor_notebook_controller----------------------------]
+   Route::middleware('auth')->group(function () {
+        Route::controller(DoctorNotedBookController::class)->group(function(){
+            Route::get('/get-doctor-notebook/{id}','index')->name('doctor.notebook.index');
+            Route::post('/store-doctor-notebook','store')->name('doctor.notebook.store');
+            Route::delete('/delete-doctor-notebook/{id}', 'destroy')->name('doctor.notebook.destroy');
+            Route::get('/doctor-notebook/{id}', 'edit')->name('doctor.notebook.edit');
+            Route::put('/update-doctor-notebook/{id}', 'update')->name('doctor.notebook.update');
+        });
+   });
+// [doctor_notebook_controller----------------------------]
+
+// [temp_service_data---------------------------------------]
+    Route::middleware('auth')->group(function () {
+        Route::controller(TempServiceDataController::class)->group(function(){
+           Route::post('/store-temp-services','store');
+           Route::get('/get-services/{id}','getServices');
+           Route::post('/post-treatment/{id}','saveTreatment');
+           Route::get('/get-treatment/{id}','getTreatment');
+
+        });
+    });
+// [temp_service_data---------------------------------------]
+
+
+// [completed_treatment_plan---------------------------------------]
+    Route::middleware('auth')->group(function () {
+        Route::controller(CompletedTreatmentPlanController::class)->group(function(){
+           Route::post('/completed-treatment-plan','store');
+           Route::get('/view_invoice','view_invoice')->name('view_invoice');
+        });
+    });
+// [completed_treatment_plan---------------------------------------]
+
+// [completed_save_print_treatment---------------------------------------]
+    Route::middleware('auth')->group(function () {
+        Route::controller(CompletedTreatmentDataController::class)->group(function(){
+           Route::post('/completed-treatment','store');
+           Route::get('/view_invoice_treatment','view_invoice')->name('view_invoice_treatment');
+        });
+    });
+// [completed_save_print_treatment---------------------------------------]

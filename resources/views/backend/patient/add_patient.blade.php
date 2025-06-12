@@ -181,7 +181,20 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        <!-- [type-patient----------------------------------] -->                                        
+                                        <!-- [type-patient----------------------------------] -->       
+                                         
+                                        <!-- [type-patient----------------------------------] -->
+                                            <div class="form-group row">
+                                                <h6 class="col-sm-3 col-form-label">Type Payment :</h6>
+                                                <div class="col-sm-9">
+                                                    <input type="radio" value="general_implant" name="type_payment" checked>
+                                                    <strong>General / Implant</strong>
+                                                    &nbsp;&nbsp;&nbsp;
+                                                    <input type="radio" value="ortho" name="type_payment">
+                                                    <strong>Ortho</strong>   
+                                                </div>
+                                            </div>
+                                        <!-- [type-patient----------------------------------] -->     
 
                                         <!-- [button-save------------------------------------] -->
                                             <div class="form-group mb-0 row">

@@ -3341,3 +3341,8 @@ body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li.active ul.dropdown-men
   min-width: 40px; /* Ensures the calendar icon is aligned properly */
 }
 
+/* [custom-modal-doctor-notebook-----------------------] */
+.custom-modal-doctor-notebook {
+  max-width: 40%;
+}
+/* [custom-modal-doctor-notebook-----------------------] */

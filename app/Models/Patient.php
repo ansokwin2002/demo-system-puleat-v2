@@ -25,4 +25,15 @@ class Patient extends Model
     {
         return $this->belongsTo(Doctor::class);
     }
+
+    public function doctorNotedBooks()
+    {
+        return $this->hasMany(DoctorNotedBook::class);
+    }
+
+    public function doctorNotebooks()
+    {
+        return $this->hasMany(DoctorNotedBook::class, 'patient_id');
+    }
+
 }

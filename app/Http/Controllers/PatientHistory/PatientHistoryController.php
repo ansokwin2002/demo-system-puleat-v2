@@ -13,6 +13,17 @@ use Illuminate\Support\Facades\Log;
 class PatientHistoryController extends Controller
 {
     
+    // public function patientServiceHistory()
+    // {
+    //     // [Page_title----------------------------------]
+    //         $pageTitle = 'Patient-History | Laor-Prornit-Clinic-Dental';
+    //     // [Page_title----------------------------------]
+
+    //     $patientHistories = PatientHistory::with(['doctor', 'cashier', 'patient'])
+    //         ->orderBy('created_at', 'desc')
+    //         ->get();
+    //     return view('backend.patient.patient_service_history', compact('patientHistories','pageTitle'));
+    // }
     public function patientServiceHistory()
     {
         // [Page_title----------------------------------]
@@ -20,9 +31,25 @@ class PatientHistoryController extends Controller
         // [Page_title----------------------------------]
 
         $patientHistories = PatientHistory::with(['doctor', 'cashier', 'patient'])
+            ->whereRaw("NOT JSON_UNQUOTE(JSON_EXTRACT(patient_payment, '$.services[*].service_name')) LIKE '%Ortho%'")
             ->orderBy('created_at', 'desc')
-            ->get();
-        return view('backend.patient.patient_service_history', compact('patientHistories','pageTitle'));
+            ->get(['id', 'patient_id', 'doctor_id', 'cashier_id', 'patient_payment', 'invoice_id', 'created_at', 'updated_at']);
+
+        return view('backend.patient.patient_service_history', compact('patientHistories', 'pageTitle'));
+    }
+
+    public function patientOrthoServiceHistory()
+    {
+        // [Page_title----------------------------------]
+            $pageTitle = 'Ortho Patient History | Laor-Prornit-Clinic-Dental';
+        // [Page_title----------------------------------]
+    
+        $patientHistories = PatientHistory::with(['doctor', 'cashier', 'patient'])
+            ->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(patient_payment, '$.services[*].service_name')) LIKE '%Ortho%'")
+            ->orderBy('created_at', 'desc')
+            ->get(['id', 'patient_id', 'doctor_id', 'cashier_id', 'patient_payment', 'invoice_id', 'created_at', 'updated_at']);
+    
+        return view('backend.patient.patient_ortho_service_history', compact('patientHistories', 'pageTitle'));
     }
 
     /**

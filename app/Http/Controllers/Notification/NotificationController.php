@@ -80,12 +80,38 @@ class NotificationController extends Controller
     public function sendAppointmentNotifications()
     {
         $appointmentNotifications = $this->index()->getData()['appointmentNotifications'];
-
+    
+        // Start the combined message
+        $combinedMessage = "╔═════════════════════╗\n" .
+                           "      🦷 <b>Today Appointments</b> 🦷\n" .
+                           "╚═════════════════════╝\n\n" .
+                           "📅 <b>Date:</b> " . date('Y-m-d') . "  " .
+                           "🕘 <b>Time:</b> " . now()->format('h:i A') . "\n\n";
+        
+        $counter = 1; // Initialize counter for appointments
+        
         foreach ($appointmentNotifications as $notification) {
-            // Send notification to Telegram
-            $this->sendToTelegram($notification['message'], $notification['patient_name']);
+            // Combine individual patient messages into the combined message
+            $combinedMessage .= "No: {$counter}\n" . // Include the counter for numbering
+                                "🔻 <b>Patient:</b> <b>{$notification['patient_name']}</b>\n" .
+                                "🔻 <b>Doctor:</b> <b>{$notification['doctor_name']}</b>\n" .
+                                "🔻 <b>Appointment On:</b> <b>{$notification['next_appointment']}</b>\n" .
+                                "🔻 <b>Phone:</b> <b>{$notification['patient_phone']}</b>\n" .
+                                "🔻 <b>Services:</b> <b>" . implode(", ", $notification['services']->pluck('service_name')->toArray()) . "</b>\n" .
+                                "-----------------------------------------------\n"; // Separator for each patient
+            
+            $counter++; // Increment counter for next appointment
+        }
+    
+        // Check if there are any notifications to send
+        if ($counter > 1) { // Only send if there are appointments
+            // Send the combined message to Telegram
+            $this->sendToTelegram($combinedMessage, 'Today Appointments');
+        } else {
+            Log::info("No appointments for today.");
         }
     }
+    
 
     private function sendToTelegram($message, $patientName)
     {

@@ -8,13 +8,15 @@
     <ul class="sidebar-menu">
         <li class="menu-header">Dashboard</li>
         <li class="{{ Route::is('dashboard*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('dashboard') }}"><i class="fa-solid fa-house-medical"></i> <span>Dashboard</span></a></li>   
+        <li class="{{ Route::is('list_Patient*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('list_Patient') }}"><i class="fa-solid fa-user-plus"></i> <span>List Patient</span></a></li>   
         <li class="{{ Route::is('add_Patient*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('add_Patient') }}"><i class="fa-solid fa-user-plus"></i> <span>Add Patient</span></a></li>   
         <li class="{{ Route::is('view_Payment*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('view_Payment') }}"><i class="fa-solid fa-money-bill"></i> <span>Payment</span></a></li>   
+        <li class="{{ Route::is('payment.ortho.index*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('payment.ortho.index') }}"><i class="fa-solid fa-money-bill"></i> <span>Payment Ortho</span></a></li>   
         <li class="{{ Route::is('notifications.index*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('notifications.index') }}"><i class="fa-solid fa-bell"></i> <span>Notification</span></a></li>   
         <li class="{{ Route::is('appointments.form*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('appointments.form') }}"><i class="fa-solid fa-calendar-days"></i> <span>Appointment</span></a></li>   
         <li class="{{ Route::is('uploadMultiImage.index*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('uploadMultiImage.index') }}"><i class="fa-solid fa-upload"></i> <span>Upload Image</span></a></li>   
         
-        <li class="dropdown {{ Route::is('list_Patient*','patient_service_history*') ? 'active' : '' }}">
+        <!-- <li class="dropdown {{ Route::is('list_Patient*','patient_service_history*','patient_ortho_service_history*') ? 'active' : '' }}">
             <a href="#" class="nav-link has-dropdown" data-toggle="dropdown">
                 <i class="fa-solid fa-user"></i>
                 <span>Patient</span>
@@ -26,8 +28,11 @@
                 <li class="{{ Route::is('patient_service_history*') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('patient_service_history') }}">History Patient</a>
                 </li>
+                <li class="{{ Route::is('patient_ortho_service_history*') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('patient_ortho_service_history') }}">History Ortho Patient</a>
+                </li>
             </ul>
-        </li>
+        </li> -->
         <!-- [service-----------------------------------------] -->
             <li class="dropdown {{ Route::is('view_Service*', 'add_Service*') ? 'active' : '' }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown">

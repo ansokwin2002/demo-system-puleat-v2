@@ -158,8 +158,8 @@
                             <td style="text-align: center;"><strong>Invoice NO</strong></td>
                         </tr>
                         <tr>
-                            <td style="text-align: center;">{{ $patient_info['start_date'] ?? '' }}</td>
-                            <td style="text-align: center;">{{ $invoice_id ?? '' }}</td>
+                            <td style="text-align: center;">{{ $patient_payment['date'] }}</td>
+                            <td style="text-align: center;">{{ $data->invoice_id ?? '' }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -169,7 +169,7 @@
                 <p>#59, st261, Teuklaok3, ToulKork, Phnom Penh,Tel : 010692869,078813564</p>
                 <p>Telegram Phone: 078813564</p>
                 <p>Facebook: <span style="font-family: Noto Sans Khmer,sans-serif;">ល្អប្រណីត</span> Dental Clinic</p>
-                <p style="background-color: #90EE90;padding:2px;">Treatment By Dr. {{ $doctor['name'] ?? '' }}</p>
+                <p style="background-color: #90EE90;padding:2px;">Treatment By Dr. {{ $data->doctor->name ?? '' }}</p>
             </div>
             <div class="header-right">
                 <img class="invoice_logo" width="120px" src="{{ asset('backend/assets/img/invoice/logo.png') }}" alt="">
@@ -184,21 +184,21 @@
                         <td><strong>Bill To</strong></td>
                         <td></td>
                     </tr>
-                   <tr>
+                    <tr>
                         <td style="background-color: #B2E0F6;"><strong>Name</strong></td>
-                        <td style="text-align: center;"><strong>{{ $patient['name'] ?? '' }}</strong></td>
+                        <td style="text-align: center;"><strong>{{ $patient_info->name }}</strong></td>
                     </tr>
                     <tr>
                         <td style="background-color: #B2E0F6;"><strong>Sex</strong></td>
-                        <td style="text-align: center;"><strong>{{ $patient['sex'] ?? '' }}</strong></td>
+                        <td style="text-align: center;"><strong>{{ $patient_info->sex }}</strong></td>
                     </tr>
                     <tr>
                         <td style="background-color: #B2E0F6;"><strong>Address</strong></td>
-                        <td style="text-align: center;"><strong>{{ $patient['address'] ?? '' }}</strong></td>
+                        <td style="text-align: center;"><strong>{{ $patient_info->address }}</strong></td>
                     </tr>
                     <tr>
                         <td style="background-color: #B2E0F6;"><strong>Phone</strong></td>
-                        <td style="text-align: center;"><strong>{{ $patient['telephone'] ?? '' }}</strong></td>
+                        <td style="text-align: center;"><strong>{{ $patient_info->telephone }}</strong></td>
                     </tr>
                 </tbody>
             </table>
@@ -219,77 +219,41 @@
                         <th style="background-color: #90EE90;text-align: center;">After D.</th>
                     </tr>
                 </thead>
-               <tbody>
-                    @forelse ($services as $index => $service)
-                        @php
-                            $price = floatval($service['price'] ?? 0);
-                            $quantity = intval($service['quantity'] ?? 1);
-                            $rawSubtotal = $price * $quantity;
-
-                            $discountType = $service['discountType'] ?? '';
-                            $discountValue = floatval($service['discountValue'] ?? 0);
-
-                            $discount = $discountType === '$'
-                                ? $discountValue
-                                : ($rawSubtotal * $discountValue / 100);
-
-                            $finalTotal = $rawSubtotal - $discount;
+                <tbody>
+                    @php $totalPrice = 0; @endphp
+                    @forelse($patient_payment['services'] as $index => $service)
+                        @php 
+                            $totalPrice += ($service['service_price'] ?? 0) * ($service['service_unit'] ?? 1);
+                            $discountDollar = $service['discount_dollar'] ?? 0;
+                            if ($discountDollar == 0 && isset($service['discount_percent']) && isset($service['service_price'])) {
+                                $discountDollar = (($service['service_price'] * $service['service_unit']) * $service['discount_percent']) / 100;
+                            }
                         @endphp
+
                         <tr>
                             <td style="text-align: center;">{{ $index + 1 }}</td>
-                            <td style="font-family: Noto Sans Khmer, sans-serif;">{{ $service['name'] ?? '' }}</td>
-                            <td style="text-align: center;">${{ number_format($price, 2) }}</td>
-                            <td style="text-align: center;">{{ $quantity }}</td>
-                            <td style="text-align: center;">${{ number_format($rawSubtotal, 2) }}</td>
-                            <td style="text-align: center;">
-                                {{ $discountType }}{{ $discountType === '%' ? number_format($discountValue, 2) : number_format($discountValue, 2) }}
-                            </td>
-                            <td style="text-align: center;">
-                                ${{ number_format($discount, 2) }}
-                            </td>
-                            <td style="text-align: center;">
-                                ${{ number_format($finalTotal, 2) }}
-                            </td>
+                            <td style="font-family: Noto Sans Khmer,sans-serif;">{{ $service['service_name'] }}</td>
+                            <td style="text-align: center;">${{ number_format($service['service_price'] ?? 0, 2) }}</td>
+                            <td style="text-align: center;">{{ $service['service_unit'] }}</td>
+                            <td style="text-align: center;">${{ number_format(($service['service_price'] ?? 0) * ($service['service_unit'] ?? 1), 2) }}</td>
+                            <td style="text-align: center;">{{ number_format($service['discount_percent'] ?? 0, 2) }}%</td>
+                            <td style="text-align: center;">${{ number_format($discountDollar, 2) }}</td> 
+                            <td style="text-align: center;">${{ number_format($service['subtotal'] ?? 0, 2) }}</td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="text-center">No services available</td>
+                            <td colspan="7" class="text-center">No services available</td>
                         </tr>
                     @endforelse
                 </tbody>
-
-
-                @php
-                    $total = 0;
-                    $totalDiscount = 0;
-
-                    foreach ($services as $service) {
-                        $subtotal = floatval($service['subtotal'] ?? 0);
-                        $discountValue = floatval($service['discountValue'] ?? 0);
-                        $discount = 0;
-
-                        if (($service['discountType'] ?? '') === '$') {
-                            $discount = $discountValue;
-                        } elseif (($service['discountType'] ?? '') === '%') {
-                            $discount = $subtotal * $discountValue / 100;
-                        }
-
-                        $total += $subtotal;
-                        $totalDiscount += $discount;
-                    }
-
-                    $afterDiscount = $total - $totalDiscount;
-                @endphp
-
                 <tfoot>
                     <tr>
                         <td colspan="4" style="background-color: #B2E0F6;text-align: center;"><strong>Total</strong></td>
-                        <td style="color:#ff9f00; text-align: center;">${{ number_format($total, 2) }}</td>
-                        <td colspan="2" style="background-color: #B2E0F6;text-align: center;"><strong>After Discount</strong></td>
-                        <td style="color:#ff9f00; text-align: center;">${{ number_format($afterDiscount, 2) }}</td>
+                        <td style="color:#ff9f00; text-align: center;">${{ number_format($totalPrice, 2) }}</td>
+                        <td colspan="2" style="background-color: #B2E0F6;text-align: center;">After Discount</td>
+                        <td style="color:#ff9f00; text-align: center;">${{ $patient_payment['grand_total'] }}</td>
                     </tr>
                 </tfoot>
-
             </table>
         </section>
 
@@ -301,7 +265,7 @@
                         <th style="background-color: #B2E0F6;text-align: left;width: 295px;">Received by</th>
                         <th></th>
                         <th style="background-color: #B2E0F6;text-align: left;width: 372px;">Paid ($) &nbsp;&nbsp;&nbsp;( <span style="font-family: Noto Sans Khmer,sans-serif;">បាន ថ្លៃបង់សេវ៉ា</span> )</th>
-                        <th style="text-align: right;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                        <th style="text-align: right;">${{ $patient_payment['amount_paid'] }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -309,7 +273,7 @@
                         <td style="background-color: #B2E0F6;text-align: left;width: 295px;"><strong>Note</strong></td>
                         <td></td>
                         <td style="background-color: #B2E0F6;text-align: left;"><strong>Due ($) &nbsp;&nbsp;&nbsp;( <span style="font-family: Noto Sans Khmer,sans-serif;">នៅសល់ ថ្លៃសេវ៉ា</span> )</strong></td>
-                        <th style="text-align: right;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                        <th style="text-align: right;">${{ $patient_payment['amount_unpaid'] }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
                     </tr>
                     
                 </tbody>
@@ -323,10 +287,8 @@
 
     <div class="container pl-0 pr-0">
         <button class="btn btn-warning mt-2 mb-1" id="printButton" onclick="window.print();" style="width:100%;"><i class="fa fa-print"></i> Print Invoice</button>
-       <a id="backButton" href="#" data-route="{{ url('/view-patient-detail') }}" style="width: 100%;">
-            <button class="btn btn-success" id="printButton" style="width: 100%;">
-                <i class="fa fa-arrow-left"></i> Back
-            </button>
+        <a href="{{ route('patient_service_history') }}" style="width: 100%;">
+            <button class="btn btn-success" id="printButton" style="width: 100%;"><i class="fa fa-arrow-left"></i> Back</button>
         </a>
     </div>
 
@@ -334,13 +296,3 @@
     <script src="{{ asset('backend/assets/modules/bootstrap/js/bootstrap.min.js') }}"></script>
 </body>
 </html>
-<script>
-    $(document).ready(function () {
-        const urlParams = new URLSearchParams(window.location.search);
-        const patientId = urlParams.get('patient_id');
-        const baseRoute = $('#backButton').data('route');
-        if (patientId && baseRoute) {
-            $('#backButton').attr('href', `${baseRoute}/${patientId}`);
-        }
-    });
-</script>
