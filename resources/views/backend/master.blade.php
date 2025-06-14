@@ -1634,7 +1634,7 @@
                                 type_service: $('#type_service').val(),
                             }];
 
-                            const grandTotal = parseFloat($('#grand_total').text().replace('$', '').trim());
+                            const grandTotal = parseFloat($('#treatment_grand_total').text().replace('$', '').trim());
 
                             if ($('#treatmentServiceTableBody tr').length === 0) {
                                 Swal.fire({
@@ -1714,7 +1714,7 @@
                     let temp_amount_paid_str = $('#form_paid').val();
                     let temp_amount_paid = parseFloat(temp_amount_paid_str.replace(/[^0-9.]/g, ''));
 
-                    let temp_total_str = $('#grand_total').text();
+                    let temp_total_str = $('#treatment_grand_total').text();
                     let temp_total = parseFloat(temp_total_str.replace(/[^0-9.]/g, ''));
 
                     if (isNaN(temp_amount_paid)) {
