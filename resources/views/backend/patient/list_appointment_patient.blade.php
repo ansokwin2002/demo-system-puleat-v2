@@ -77,8 +77,10 @@
 
     <!-- [Context_Menu-------------------------]-->
         <div id="contextMenu" class="context-menu">
-            <button class="btn btn-success btn_view_patient" id="viewPatientBtn">
-                View Patient's Info <i class="fa fa-eye"></i>
+
+            <button 
+                class="btn btn-info view-patient" 
+                data-id="{{ $item['patient']->id }}">View Patient's Info <i class="fa fa-eye"></i>
             </button>
             <button class="btn btn-danger" onclick="swal('Cannot Delete', 'Patient can only be updated after creation!', 'error');">
                 Delete Patient's Info <i class="fa fa-trash"></i>
@@ -218,11 +220,12 @@
         });
         console.log("Bootstrap Modal Function:", typeof $.fn.modal);
         // When the "View Patient's Info" button is clicked
-        $(document).on("click", "#viewPatientBtn", function() {
-            if (selectedPatient) {
+        $(document).on("click", ".view-patient", function() {
+            var patientId = $(this).data("id");
+            if (patientId) {
                 // Generate the URL with the patient ID
                 var viewPatientUrl = "{{ route('view_patient_detail', ['id' => ':id']) }}";
-                viewPatientUrl = viewPatientUrl.replace(':id', selectedPatient.id);
+                viewPatientUrl = viewPatientUrl.replace(':id', patientId);
                 
                 // Redirect to the patient detail page
                 window.location.href = viewPatientUrl;

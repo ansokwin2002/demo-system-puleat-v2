@@ -30,6 +30,9 @@
             <!-- [header-------------------------] -->
 
             <!--[Patient_table-------------------------]-->
+            <button class="btn btn-primary"  
+                    data-toggle="modal" 
+                    data-target="#fire-modal-appointment-patient" ><i class="fa-solid fa-user-plus"></i> Add Patient</button>
                 <div class="row mt-4">
                     <div class="col-12">
                         <div class="card p-4">
@@ -97,7 +100,7 @@
 
     <!-- [Context_Menu-------------------------]-->
         <div id="contextMenu" class="context-menu">
-            <button class="btn btn-success btn_view_patient" id="viewPatientBtn">
+            <button class="btn btn-info btn_view_patient" id="viewPatientBtn">
                 View Patient's Info <i class="fa fa-eye"></i>
             </button>
             <button class="btn btn-danger" onclick="swal('Cannot Delete', 'Patient can only be updated after creation!', 'error');">
@@ -114,6 +117,195 @@
             @include('backend.body.footer')
         </footer>
     <!-- [footer------------------------------] -->
+
+    
+    <!-- [Model Add Patient-------------------------] -->
+        <div class="modal fade" id="fire-modal-appointment-patient" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog custom-modal-service-detail">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add Patient</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                     <div class="card-body">
+                        <form action="{{ route('create_Patient') }}" method="post" enctype="multipart/form-data">
+                            @csrf
+                        <!-- [name----------------------------------] -->
+                            <div class="form-group row">
+                                <h6 class="col-sm-3 col-form-label">Patient's Name :</h6>
+                                <div class="col-sm-9">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <i class="fa fa-heart"></i>
+                                        </div>
+                                    </div>
+                                    <input type="text" name="name" class="form-control" required="">
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please fill Patient name !
+                                </div>
+                                </div>
+                            </div>
+                        <!-- [name----------------------------------] -->
+
+                        <!-- [age-------------------------------------] -->
+                            <div class="form-group row">
+                                <h6 class="col-sm-3 col-form-label">Age :</h6>
+                                <div class="col-sm-9">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <i class="fa fa-hashtag"></i>
+                                        </div>
+                                    </div>
+                                    <input type="text" name="age" class="form-control age" required="">
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please fill Patient age !
+                                </div>
+                                </div>
+                            </div>
+                        <!-- [age-------------------------------------] -->
+
+                        <!-- [sex-------------------------------------] -->
+                            <div class="form-group row">
+                                <h6 class="col-sm-3 col-form-label">Sex :</h6>
+                                <div class="col-sm-9">
+                                <div class="flex-grow-1">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="fas fa-user-md"></i>
+                                            </div>
+                                        </div>
+                                        <select name="sex" class="form-control">
+                                            <option value="male">Male</option>
+                                            <option value="female">Female</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please fill Patient sex !
+                                </div>
+                                </div>
+                            </div>
+                        <!-- [sex-------------------------------------] -->
+
+                        <!-- [address----------------------------------] -->
+                            <div class="form-group row">
+                                <h6 class="col-sm-3 col-form-label">Address :</h6>
+                                <div class="col-sm-9">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <i class="fa fa-map-marker"></i>
+                                        </div>
+                                    </div>
+                                    <input type="text" name="address" class="form-control" required="">
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please fill Patient address !
+                                </div>
+                                </div>
+                            </div>
+                        <!-- [address----------------------------------] -->
+
+                        <!-- [telephone-------------------------------------] -->
+                            <div class="form-group row">
+                                <h6 class="col-sm-3 col-form-label">Telephone :</h6>
+                                <div class="col-sm-9">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <i class="fa fa-phone"></i>
+                                        </div>
+                                    </div>
+                                    <input type="text" name="telephone" class="form-control tel" required="">
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please fill Patient telephone !
+                                </div>
+                                </div>
+                            </div>
+                        <!-- [telephone-------------------------------------] -->
+
+                        <!-- [date-----------------------------] -->
+                            <div class="form-group row">
+                                <h6 class="col-sm-3 col-form-label">Date :</h6>
+                                <div class="col-sm-9">
+                                <div class="flex-grow-1">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="fas fa-calendar"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" name="date" class="form-control datepicker">
+                                    </div>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please fill Patient date !
+                                </div>
+                                </div>
+                            </div>
+                        <!-- [date-----------------------------] -->
+
+                        <!-- [type-patient----------------------------------] -->
+                            <div class="form-group row">
+                                <h6 class="col-sm-3 col-form-label">Type Patient :</h6>
+                                <div class="col-sm-9">
+                                    <div class="flex-grow-1">
+                                        <div class="input-group" id="type-patient-wrapper">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text" id="type-patient-icon">
+                                                    <i class="fas fa-user"></i>
+                                                </div>
+                                            </div>
+                                            <select name="type_patient" class="form-control" id="type-patient-select">
+                                                <option value="Walk-in">Walk-in</option>
+                                                <option value="Customize">Customize</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Please fill Type Patient!
+                                    </div>
+                                </div>
+                            </div>
+                        <!-- [type-patient----------------------------------] -->       
+                            
+                        <!-- [type-payment----------------------------------] -->
+                            <div class="form-group row d-none">
+                                <h6 class="col-sm-3 col-form-label">Type Payment :</h6>
+                                <div class="col-sm-9">
+                                    <input type="radio" value="general_implant" name="type_payment" checked>
+                                    <strong>General / Implant</strong>
+                                    &nbsp;&nbsp;&nbsp;
+                                    <input type="radio" value="ortho" name="type_payment">
+                                    <strong>Ortho</strong>   
+                                </div>
+                            </div>
+                        <!-- [type-payment----------------------------------] -->     
+
+                        <!-- [button-save------------------------------------] -->
+                            <div class="form-group mb-0 row">
+                                <label class="col-sm-3 col-form-label"></label>
+                                <div class="col-sm-9">
+                                    <button class="btn btn-primary"><i class="fa fa-save"></i> Save</button>
+                                </div>
+                            </div>
+                        <!-- [button-save------------------------------------] -->
+                        </form>
+                    </div>   
+                </div>
+            </div>
+        </div>
+    <!-- [Model Add Patient-------------------------] -->
+
 
     <!-- [Model Edit Patient-------------------------] -->
         <div class="modal fade" id="fire-modal-patient" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">

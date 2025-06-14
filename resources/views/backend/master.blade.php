@@ -1341,9 +1341,20 @@
                                         grandTotal += subtotal;
                                     }
                                 });
-                                $('#treatment_grand_total').text('$ ' + grandTotal);
-                                $('#treatment_amount_paid').text('$' + response.amount_paid);
-                                $('#treatment_amount_unpaid').text('$' + response.amount_unpaid);
+                                $('#treatment_grand_total').text('$ ' + grandTotal.toFixed(2));
+                               if ($('#treatment_amount_paid').length) {
+                                    let amountPaid = parseFloat(response.amount_paid);
+                                    if (isNaN(amountPaid)) amountPaid = 0;
+                                    $('#treatment_amount_paid').text('$ ' + amountPaid.toFixed(2)); // to show 2 decimal places
+                                }
+
+                                if ($('#treatment_amount_unpaid').length) {
+                                    let amountUnpaid = parseFloat(response.amount_unpaid);
+                                    if (isNaN(amountUnpaid)) amountUnpaid = 0;
+                                    $('#treatment_amount_unpaid').text('$ ' + amountUnpaid.toFixed(2)); 
+                                }
+
+
 
                                 // // Attach event listeners to the radio buttons to handle the discount state dynamically
                                 // $('input.discount-type').on('change', function() {

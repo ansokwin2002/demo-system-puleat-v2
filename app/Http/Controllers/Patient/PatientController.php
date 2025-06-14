@@ -54,8 +54,8 @@ class PatientController extends Controller
         ]);
 
         if ($validatedData['type_payment'] === 'general_implant') {
-            toastr()->success('Patient added successfully with General / Implant payment!');
-            return redirect()->route('view_Payment', ['selected_patient' => $patient->id]);
+            toastr()->success('Patient Added Successfully');
+            return redirect()->route('list_Patient');
         } elseif ($validatedData['type_payment'] === 'ortho') {
             toastr()->success('Patient added successfully with Ortho payment!');
             return redirect()->route('payment.ortho.index', ['selected_patient' => $patient->id]);
@@ -101,6 +101,35 @@ class PatientController extends Controller
 
         toastr()->success('Patient updated successfully!');
         return redirect()->back();
+    }
+
+    public function appointment_patient()
+    {
+        $pageTitle = 'List Appointment Patient | Laor-Prornit-Clinic-Dental';
+
+        // Retrieve all completed treatments with a next appointment
+        $completed = CompletedTreatmentData::whereRaw("JSON_EXTRACT(json_data, '$.update_customer_info[0].next_appointment') IS NOT NULL")->get();
+
+        $data = [];
+
+        foreach ($completed as $item) {
+            $patientId = $item->json_data['update_customer_info'][0]['patient']; 
+            $doctorId = $item->json_data['update_customer_info'][0]['doctor']; 
+            $nextAppointment = $item->json_data['update_customer_info'][0]['next_appointment']; 
+            
+            $patient = Patient::find($patientId);
+            $doctor = Doctor::find($doctorId);
+            
+            if ($patient && $doctor) {
+                $data[] = [
+                    'patient' => $patient, // whole patient model
+                    'doctor_name' => $doctor->name,
+                    'next_appointment' => $nextAppointment,
+                ];
+            }
+        }
+        return view('backend.patient.list_appointment_patient', compact('pageTitle', 'data'));
+
     }
 
     public function viewPatientDetail($id)
@@ -238,38 +267,6 @@ class PatientController extends Controller
             'completedTreatmentInfo' => $completedTreatmentInfo
         ]);
     }
-
-    public function appointment_patient()
-    {
-        $pageTitle = 'List Appointment Patient | Laor-Prornit-Clinic-Dental';
-
-        // Retrieve all completed treatments with a next appointment
-        $completed = CompletedTreatmentData::whereRaw("JSON_EXTRACT(json_data, '$.update_customer_info[0].next_appointment') IS NOT NULL")->get();
-
-        $data = [];
-
-        foreach ($completed as $item) {
-            $patientId = $item->json_data['update_customer_info'][0]['patient']; 
-            $doctorId = $item->json_data['update_customer_info'][0]['doctor']; 
-            $nextAppointment = $item->json_data['update_customer_info'][0]['next_appointment']; 
-            
-            $patient = Patient::find($patientId);
-            $doctor = Doctor::find($doctorId);
-            
-            if ($patient && $doctor) {
-                $data[] = [
-                    'patient' => $patient, // whole patient model
-                    'doctor_name' => $doctor->name,
-                    'next_appointment' => $nextAppointment,
-                ];
-            }
-        }
-    
-        Log::info($data);
-        return view('backend.patient.list_appointment_patient', compact('pageTitle', 'data'));
-
-    }
-
 
 
 }
