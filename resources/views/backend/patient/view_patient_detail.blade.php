@@ -194,7 +194,7 @@
 
 <!-- [Model Add Doctor_Notebook-------------------------] -->
     <div class="modal fade" id="fire-modal-doctor-notebook" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog" style="max-width: 70%;">
+        <div class="modal-dialog" style="max-width: 50%;">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Add New Doctor Notebook</h5>
@@ -439,7 +439,7 @@ function validateDescription(event) {
                     { title: "No.", className: "align-middle text-center" }, 
                     { title: "Date", className: "align-middle text-center" }, 
                     { title: "Doctor Name", className: "align-middle text-center" }, 
-                    { title: "Description", className: "align-middle" }, 
+                    { title: "Description", className: "align-middle w-100" }, 
                     { title: "Action", className: "align-middle text-center", orderable: false }
                 ]
             });
