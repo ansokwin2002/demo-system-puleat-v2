@@ -80,7 +80,7 @@
 
             <button 
                 class="btn btn-info view-patient" 
-                data-id="{{ $item['patient']->id }}">View Patient's Info <i class="fa fa-eye"></i>
+                data-id="{{ $item['patient']->id ?? ''}}">View Patient's Info <i class="fa fa-eye"></i>
             </button>
             <button class="btn btn-danger" onclick="swal('Cannot Delete', 'Patient can only be updated after creation!', 'error');">
                 Delete Patient's Info <i class="fa fa-trash"></i>
