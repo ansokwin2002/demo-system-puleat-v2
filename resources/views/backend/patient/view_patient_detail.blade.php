@@ -194,7 +194,7 @@
 
 <!-- [Model Add Doctor_Notebook-------------------------] -->
     <div class="modal fade" id="fire-modal-doctor-notebook" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog custom-modal-doctor-notebook">
+        <div class="modal-dialog" style="max-width: 70%;">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Add New Doctor Notebook</h5>
