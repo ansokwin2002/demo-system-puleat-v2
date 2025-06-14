@@ -66,6 +66,8 @@ class CompletedTreatmentDataController extends Controller
 
         $services = [];
         $patient_info = [];
+        $amount_paid = 0;
+        $amount_unpaid = 0;
 
         $tempServiceData = TempTreatmentData::all();
 
@@ -85,6 +87,8 @@ class CompletedTreatmentDataController extends Controller
                 });
 
                 $patient_info = $json['update_customer_info'][0] ?? [];
+                $amount_paid = $json['amount_paid'] ?? 0;
+                $amount_unpaid = $json['amount_unpaid'] ?? 0;
                 break;
             }
         }
@@ -93,7 +97,7 @@ class CompletedTreatmentDataController extends Controller
         $doctor_id = $patient_info['doctor'] ?? null;
         $doctor = Doctor::find($doctor_id);
 
-        return view('backend.invoice_2.index', compact('services', 'patient_info', 'patient', 'doctor', 'invoice_id'));
+        return view('backend.invoice_2.index', compact('services', 'patient_info', 'patient', 'doctor', 'invoice_id','amount_paid', 'amount_unpaid'));
     }
 
 

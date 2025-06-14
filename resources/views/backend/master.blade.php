@@ -1342,10 +1342,8 @@
                                     }
                                 });
                                 $('#treatment_grand_total').text('$ ' + grandTotal);
-
-                               m 
-                                $('#treatment_amount_paid').text('$ 111');
-                                $('#treatment_amount_unpaid').text('$ 000');
+                                $('#treatment_amount_paid').text('$' + response.amount_paid);
+                                $('#treatment_amount_unpaid').text('$' + response.amount_unpaid);
 
                                 // // Attach event listeners to the radio buttons to handle the discount state dynamically
                                 // $('input.discount-type').on('change', function() {
@@ -1699,6 +1697,71 @@
                 });
             // [completed_save_print_treatment-----------------------------------------------------------]
 
+
+            // [temp_btn_paid-------------------------------------------------------]
+                $('.temp_btn_paid').click(function(){
+                    let temp_amount_paid_str = $('#form_paid').val();
+                    let temp_amount_paid = parseFloat(temp_amount_paid_str.replace(/[^0-9.]/g, ''));
+
+                    let temp_total_str = $('#grand_total').text();
+                    let temp_total = parseFloat(temp_total_str.replace(/[^0-9.]/g, ''));
+
+                    if (isNaN(temp_amount_paid)) {
+                        Swal.fire({ 
+                            icon: 'error', 
+                            title: 'Invalid!', 
+                            text: 'Please enter a valid payment amount.', 
+                            timer: 1500, 
+                            showConfirmButton: false 
+                        });
+                        return;
+                    }
+                    if (isNaN(temp_total)) {
+                        Swal.fire({ 
+                            icon: 'error', 
+                            title: 'Invalid!', 
+                            text: 'Total amount is invalid.', 
+                            timer: 1500, 
+                            showConfirmButton: false 
+                        });
+                        return;
+                    }
+                    let temp_amount_unpaid = temp_total - temp_amount_paid;
+
+                    $.ajax({  
+                        url: "/update-amount", 
+                        method: "POST",
+                        data: {
+                            amount_paid: temp_amount_paid,
+                            amount_unpaid: temp_amount_unpaid
+                        },
+                        headers: {  
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')  
+                        },
+                        success: function(response) {
+                            localStorage.setItem('activeTreatmentTab', '#treatment-tab2');
+                            Swal.fire({
+                                title: 'Success!',
+                                text: 'Amount Updated successfully!',
+                                icon: 'success',
+                                timer: 1000,
+                                showConfirmButton: false
+                            }).then(() => {
+                                location.reload();
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            Swal.fire({ 
+                                icon: 'error', 
+                                title: 'Failed!', 
+                                text: 'Save failed!', 
+                                timer: 1500, 
+                                showConfirmButton: false 
+                            });
+                        }
+                    });
+                });
+            // [temp_btn_paid-------------------------------------------------------]
 
             // if (window.location.hash === '#treatment-planning') {
             //     $('#treatment-planning-tab2').tab('show');

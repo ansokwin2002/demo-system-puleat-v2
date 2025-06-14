@@ -6,6 +6,7 @@ use App\Models\CompletedTreatmentPlan;
 use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\TempServiceData;
+use App\Models\TempTreatmentData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -76,5 +77,26 @@ class CompletedTreatmentPlanController extends Controller
 
         return view('backend.invoice.index', compact('services', 'patient_info', 'patient','doctor', 'invoice_id'));
     }
+
+    public function updateAmount(Request $request)
+    {
+        $amountPaid = $request->input('amount_paid'); 
+        $amountUnpaid = $request->input('amount_unpaid');  
+
+        $temp = TempTreatmentData::first();
+
+        if ($temp) {
+            $json = $temp->json_data; // It's already an array
+            $json['amount_paid'] = (string) $amountPaid;
+            $json['amount_unpaid'] = (string) $amountUnpaid;
+
+            $temp->json_data = $json;
+            $temp->save();
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false, 'message' => 'Not found'], 404);
+        }
+    }
+
 
 }

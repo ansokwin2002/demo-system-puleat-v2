@@ -347,7 +347,7 @@
                     <input type="text" class="form-control form_paid" id="form_paid" inputmode="numeric" pattern="\d*" title="Please enter a number">
                 </div>
                 <div class="modal-footer bg-whitesmoke br">
-                    <button type="button" class="btn btn-primary btn_paid" data-dismiss="modal"><i class="fa fa-save"></i> Save</button>
+                    <button type="button" class="btn btn-primary temp_btn_paid" data-dismiss="modal"><i class="fa fa-save"></i> Save</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa-solid fa-times"></i> Close</button>
                 </div>
             </div>

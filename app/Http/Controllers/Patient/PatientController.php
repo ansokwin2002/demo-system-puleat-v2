@@ -61,7 +61,6 @@ class PatientController extends Controller
         }
     }
 
-
     /**
      * Show the form for creating a new resource.
      */
@@ -103,111 +102,6 @@ class PatientController extends Controller
         return redirect()->back();
     }
 
-  
-    // public function viewPatientDetail($id) 
-    // {
-    //     $pageTitle = 'Detail Patient | Laor-Prornit-Clinic-Dental';
-
-    //     $patient = Patient::findOrFail($id);
-    //     $doctorNotebook = DoctorNotedBook::with('doctor')
-    //         ->where('patient_id', $id)
-    //         ->orderBy('id', 'desc')
-    //         ->get();
-
-    //     $updateCustomerInfo = null;
-    //     $invoice_id = null;
-
-    //     $tempServiceData = TempServiceData::all();
-
-    //     $latestInvoiceRecord = null;
-
-    //     foreach ($tempServiceData as $data) {
-    //         $json = $data->temp_service_json_data;
-
-    //         if (!$json) continue;
-
-    //         // Always set updateCustomerInfo from first match
-    //         if (
-    //             !$updateCustomerInfo &&
-    //             isset($json['update_customer_info'][0]['patient']) &&
-    //             (string)$json['update_customer_info'][0]['patient'] === (string)$id
-    //         ) {
-    //             $updateCustomerInfo = $json['update_customer_info'];
-    //         }
-
-    //         // Find latest invoice record matching patient
-    //         if (
-    //             isset($json['update_customer_info'][0]['patient']) &&
-    //             (string)$json['update_customer_info'][0]['patient'] === (string)$id
-    //         ) {
-    //             if (!$latestInvoiceRecord || $data->id > $latestInvoiceRecord->id) {
-    //                 $latestInvoiceRecord = $data;
-    //             }
-    //         }
-    //     }
-
-    //     // Set invoice_id only from the latest matching record
-    //     if ($latestInvoiceRecord) {
-    //         $invoice_id = $latestInvoiceRecord->temp_service_json_data['invoice_id'] ?? null;
-    //     }
-
-    //     // Process completed treatment plans
-    //     $completedCustomerInfo = []; 
-    //     $completedTreatmentPlaning = CompletedTreatmentPlan::all();
-
-    //     foreach ($completedTreatmentPlaning as $data) {
-    //         $json = $data->json_data;
-    //         if (!$json || !isset($json['customer_info'][0]['patient'])) continue;
-
-    //         if ((string)$json['customer_info'][0]['patient'] === (string)$id) {
-    //             $completedCustomerInfo[] = [
-    //                 'id' => $data->id,
-    //                 'json' => $json,
-    //             ];
-    //         }
-    //     }
-
-    //     // Sort and extract JSON only
-    //     usort($completedCustomerInfo, fn($a, $b) => $b['id'] <=> $a['id']);
-    //     $completedCustomerInfo = array_map(fn($item) => $item['json'], $completedCustomerInfo);
-
-
-    //     $completedTreatmentInfo = [];
-    //     $completedTreatmentData = CompletedTreatmentData::all();
-
-    //     foreach ($completedTreatmentData as $data) {
-    //         $json = $data->json_data;
-
-    //         // Skip if patient_id is missing or doesn't match
-    //         if (!isset($json['patient_id']) || (string)$json['patient_id'] !== (string)$id) {
-    //             continue;
-    //         }
-
-    //         $completedTreatmentInfo[] = [
-    //             'id' => $data->id,
-    //             'json' => $json,
-    //         ];
-    //     }
-
-    //     // Sort by latest first
-    //     usort($completedTreatmentInfo, fn($a, $b) => $b['id'] <=> $a['id']);
-
-    //     // Extract only JSON from each record
-    //     $completedTreatmentInfo = array_map(fn($item) => $item['json'], $completedTreatmentInfo);
-
-    //     // Log::info($completedTreatmentInfo);
-
-
-    //     return view('backend.patient.view_patient_detail', [
-    //         'pageTitle' => $pageTitle,
-    //         'patient' => $patient,
-    //         'doctorNotebook' => $doctorNotebook,
-    //         'updateCustomerInfo' => $updateCustomerInfo,
-    //         'completedCustomerInfo' => $completedCustomerInfo,
-    //         'invoice_id' => $invoice_id,
-    //         'completedTreatmentInfo' => $completedTreatmentInfo
-    //     ]);
-    // }
     public function viewPatientDetail($id)
     {
         $pageTitle = 'Detail Patient | Laor-Prornit-Clinic-Dental';
@@ -344,7 +238,14 @@ class PatientController extends Controller
         ]);
     }
 
+    public function appointment_patient()
+    {
+        // [Page_title----------------------------------]
+            $pageTitle = 'List Appointment Patient | Laor-Prornit-Clinic-Dental';
+        // [Page_title----------------------------------]
 
-
+        
+        return view('backend.patient.list_appointment_patient',compact('pageTitle'));
+    }
 
 }

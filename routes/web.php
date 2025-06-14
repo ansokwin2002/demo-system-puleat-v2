@@ -93,6 +93,7 @@ use Illuminate\Support\Facades\Route;
             Route::post('/update-patient/{id}','update')->name('patient.update');
             Route::get('/get-patient-history/{id}','getPatientHistory');
             Route::get('/view-patient-detail/{id}','viewPatientDetail')->name('view_patient_detail');
+            Route::get('/list-appointment-patient','appointment_patient')->name('appointment_patient');
         });
     });
 // [patient_controller----------------------------]
@@ -218,7 +219,6 @@ use Illuminate\Support\Facades\Route;
            Route::get('/get-services/{id}','getServices');
            Route::post('/post-treatment/{id}','saveTreatment');
            Route::get('/get-treatment/{id}','getTreatment');
-
         });
     });
 // [temp_service_data---------------------------------------]
@@ -241,3 +241,11 @@ use Illuminate\Support\Facades\Route;
         });
     });
 // [completed_save_print_treatment---------------------------------------]
+
+// [update_amount_unpaid---------------------------------------]
+    Route::middleware('auth')->group(function () {
+        Route::controller(CompletedTreatmentPlanController::class)->group(function(){
+           Route::post('/update-amount','updateAmount');
+        });
+    });
+// [update_amount_unpaid---------------------------------------]
