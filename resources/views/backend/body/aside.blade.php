@@ -14,7 +14,7 @@
         <li class="{{ Route::is('view_Payment*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('view_Payment') }}"><i class="fa-solid fa-money-bill"></i> <span>Payment</span></a></li>   
         <li class="{{ Route::is('payment.ortho.index*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('payment.ortho.index') }}"><i class="fa-solid fa-money-bill"></i> <span>Payment Ortho</span></a></li>   
         <li class="{{ Route::is('notifications.index*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('notifications.index') }}"><i class="fa-solid fa-bell"></i> <span>Notification</span></a></li>   
-        <li class="{{ Route::is('appointments.form*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('appointments.form') }}"><i class="fa-solid fa-calendar-days"></i> <span>Appointment</span></a></li>   
+        <li class="d-none {{ Route::is('appointments.form*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('appointments.form') }}"><i class="fa-solid fa-calendar-days"></i> <span>Appointment</span></a></li>   
         <li class="{{ Route::is('uploadMultiImage.index*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('uploadMultiImage.index') }}"><i class="fa-solid fa-upload"></i> <span>Upload Image</span></a></li>   
         
         <!-- <li class="dropdown {{ Route::is('list_Patient*','patient_service_history*','patient_ortho_service_history*') ? 'active' : '' }}">

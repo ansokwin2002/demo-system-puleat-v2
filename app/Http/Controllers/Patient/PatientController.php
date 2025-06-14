@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Patient;
 use App\Http\Controllers\Controller;
 use App\Models\CompletedTreatmentData;
 use App\Models\CompletedTreatmentPlan;
+use App\Models\Doctor;
 use App\Models\DoctorNotedBook;
 use App\Models\Patient;
 use App\Models\PatientHistory;
@@ -240,12 +241,35 @@ class PatientController extends Controller
 
     public function appointment_patient()
     {
-        // [Page_title----------------------------------]
-            $pageTitle = 'List Appointment Patient | Laor-Prornit-Clinic-Dental';
-        // [Page_title----------------------------------]
+        $pageTitle = 'List Appointment Patient | Laor-Prornit-Clinic-Dental';
 
-        
-        return view('backend.patient.list_appointment_patient',compact('pageTitle'));
+        // Retrieve all completed treatments with a next appointment
+        $completed = CompletedTreatmentData::whereRaw("JSON_EXTRACT(json_data, '$.update_customer_info[0].next_appointment') IS NOT NULL")->get();
+
+        $data = [];
+
+        foreach ($completed as $item) {
+            $patientId = $item->json_data['update_customer_info'][0]['patient']; 
+            $doctorId = $item->json_data['update_customer_info'][0]['doctor']; 
+            $nextAppointment = $item->json_data['update_customer_info'][0]['next_appointment']; 
+            
+            $patient = Patient::find($patientId);
+            $doctor = Doctor::find($doctorId);
+            
+            if ($patient && $doctor) {
+                $data[] = [
+                    'patient' => $patient, // whole patient model
+                    'doctor_name' => $doctor->name,
+                    'next_appointment' => $nextAppointment,
+                ];
+            }
+        }
+    
+        Log::info($data);
+        return view('backend.patient.list_appointment_patient', compact('pageTitle', 'data'));
+
     }
+
+
 
 }

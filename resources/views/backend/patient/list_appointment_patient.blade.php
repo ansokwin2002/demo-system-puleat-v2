@@ -35,43 +35,33 @@
                         <div class="card p-4">
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-striped dataTable" id="table_patient">
+                                    <table class="table table-striped dataTable" id="table_appointment_patient">
                                         <thead class="bg-primary">
                                             <tr>
-                                                <th class="text-white align-middle text-center ">Patient's ID</th>
-                                                <th class="text-white align-middle text-center ">Date</th>
+                                                <th class="text-white align-middle text-center ">No</th>
+                                                <th class="text-white align-middle text-center ">Patient Code</th>
                                                 <th class="text-white align-middle text-center ">Patient's Name</th>
                                                 <th class="text-white align-middle text-center ">Sex</th>
                                                 <th class="text-white align-middle text-center ">Telephone</th>
                                                 <th class="text-white align-middle text-center ">Appointment Date</th>
                                                 <th class="text-white align-middle text-center ">Doctor</th>
-                                                <th class="text-white align-middle text-center ">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                           
-                                            <!-- <tr class="row_list_patients">
-                                                <td class="align-middle text-center">1</td>
-                                                <td class="align-middle text-center">2</td>
-                                                <td class="align-middle text-center patient-name"><span class="badge badge-info">3</span></td>
-                                                <td class="align-middle text-center">4</td>
-                                                <td class="align-middle text-center">5</td>
-                                                <td class="align-middle text-center">6</td>
-                                                <td class="align-middle text-center">7</td>
-                                                <td class="align-middle text-center"><span class="badge badge-secondary">8</span></td>
-                                                <td class="align-middle text-center" class="td-action">
-                                                    <button class="btn btn-danger" onclick="swal('Cannot Delete', 'Patient can only be updated after creation!', 'error');">
-                                                        <i class="fa fa-trash"></i>
-                                                    </button>
-                                                    <button class="btn btn-warning btn_edit_patient" 
-                                                        data-toggle="modal" 
-                                                        data-target="#fire-modal-patient" 
-                                                
-                                                        <i class="fa fa-edit"></i>
-                                                    </button>
-                                                </td>
-                                            </tr> -->
-                                       
+                                            @foreach ($data as $index => $item)
+                                                <tr class="row_list_patients">
+                                                    <td class="align-middle text-center">{{ $index + 1 }}</td><!-- Serial number -->
+                                                    <td class="align-middle text-center">{{ $item['patient']->id }}</td><!-- Patient ID -->
+                                                    <td class="align-middle text-center patient-name">
+                                                        <span class="badge badge-info">{{ $item['patient']->name }}</span><!-- Patient Name -->
+                                                    </td>
+                                                    <td class="align-middle text-center">{{ $item['patient']->sex }}</td>
+                                                    <td class="align-middle text-center">{{ $item['patient']->telephone }}</td><!-- Phone -->
+                                                    <td class="align-middle text-center">{{ $item['next_appointment'] }}</td><!-- Next Appointment -->
+                                                    <td class="align-middle text-center">{{ $item['doctor_name'] }}</td><!-- Doctor -->
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                          
                                         </tbody>
                                     </table>
