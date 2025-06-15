@@ -78,25 +78,32 @@ class CompletedTreatmentPlanController extends Controller
         return view('backend.invoice.index', compact('services', 'patient_info', 'patient','doctor', 'invoice_id'));
     }
 
-    public function updateAmount(Request $request)
+   public function updateAmount(Request $request)
     {
         $amountPaid = $request->input('amount_paid'); 
         $amountUnpaid = $request->input('amount_unpaid');  
+        $patientId = $request->input('patient_id');  
 
-        $temp = TempTreatmentData::first();
+        $temp = TempTreatmentData::all()
+            ->first(function ($item) use ($patientId) {
+                $json = $item->json_data;
+                return $json && $json['patient_id'] == $patientId;
+            });
 
         if ($temp) {
-            $json = $temp->json_data; // It's already an array
+            $json = $temp->json_data;
             $json['amount_paid'] = (string) $amountPaid;
             $json['amount_unpaid'] = (string) $amountUnpaid;
 
             $temp->json_data = $json;
             $temp->save();
+
             return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false, 'message' => 'Not found'], 404);
         }
     }
+
 
 
 }

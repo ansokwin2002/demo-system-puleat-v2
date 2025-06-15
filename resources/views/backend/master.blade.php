@@ -1717,6 +1717,9 @@
                     let temp_total_str = $('#treatment_grand_total').text();
                     let temp_total = parseFloat(temp_total_str.replace(/[^0-9.]/g, ''));
 
+                    let urlParts = window.location.pathname.split('/');
+                    let patientId = urlParts[urlParts.length - 1]; 
+
                     if (isNaN(temp_amount_paid)) {
                         Swal.fire({ 
                             icon: 'error', 
@@ -1744,7 +1747,8 @@
                         method: "POST",
                         data: {
                             amount_paid: temp_amount_paid,
-                            amount_unpaid: temp_amount_unpaid
+                            amount_unpaid: temp_amount_unpaid,
+                            patient_id: patientId
                         },
                         headers: {  
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')  
