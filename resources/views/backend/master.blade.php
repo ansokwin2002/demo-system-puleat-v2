@@ -204,6 +204,11 @@
                 });
             // [summernote-------------------------------]
 
+            // [dataTable_table_appointment_patient---------------------]
+                $('#table_appointment_patient').DataTable({
+                    "pageLength": 50,
+                });
+            // [dataTable_table_appointment_patient---------------------]
 
             // [Select_Service---------------------]
                 const selectedServices = [];
