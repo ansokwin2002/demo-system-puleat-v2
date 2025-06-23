@@ -285,12 +285,12 @@
                     <form action="{{ route('doctor.notebook.update', ':id') }}" id="editDoctorNotebookForm" method="POST">
                         @csrf
                         @method('PUT') <!-- This is important for updating data -->
-                        <input type="hidden" name="id" id="editDoctorNotebookId">
+                        <input type="hidden" name="id" id="notebookId">
                         <input type="hidden" name="patient_id" value="{{ $patient->id }}">
                         
                         <div class="form-group">
                             <label for="date">Date :</label>
-                            <input type="text" name="date" id="editDate" class="form-control datepicker">
+                            <input type="text" name="date" id="date" class="form-control datepicker">
                         </div>
 
                         <div class="form-group">
@@ -298,7 +298,7 @@
                             @php 
                                 $doctors = App\Models\Doctor::all();
                             @endphp
-                            <select class="form-control" name="doctor_id" id="editDoctor">
+                            <select class="form-control" name="doctor_id" id="doctorName">
                                 @foreach ($doctors as $doctor)
                                     <option value="{{ $doctor->id }}" 
                                         {{ old('doctor_id', $doctor->id) == $doctor->id ? 'selected' : '' }}>
@@ -311,7 +311,7 @@
                         <div class="form-group">
                             <label for="description">Description :</label>
                             <div class="flex-grow-1">
-                                <textarea name="description" id="editDescription" class="summernote pt-4"></textarea>
+                                <textarea name="description" id="description" class="summernote pt-4"></textarea>
                             </div>
                             <div class="invalid-feedback">
                                 Please fill Type doctor notebook!
@@ -412,12 +412,10 @@ function validateDescription(event) {
             let description = $(this).data('description');
 
             // Set values in modal
-            $('#editDoctorNotebookId').val(id);
-            $('#editDate').val(date);
-            $('#editDoctor').val(doctor).trigger('change'); // Set doctor select
-
-            // If using summernote, use its method to set the content
-            $('#editDescription').summernote('code', description);
+          $('#notebookId').val(id);
+        $('#date').val(date);
+        $('#doctorName').val(doctorId).trigger('change');
+        $('#description').summernote('code', description);
 
             // Update form action with the correct URL and ID
             $('#editDoctorNotebookForm').attr('action', '{{ route("doctor.notebook.update", ":id") }}'.replace(':id', id));
@@ -466,7 +464,7 @@ function validateDescription(event) {
                             <i data-id="${doctor.id}" class="fa fa-trash text-danger delete-notebook" 
                             data-toggle="tooltip" title="Delete Doctor Notebook" style="cursor: pointer;"></i>
                             &nbsp;
-                            <i data-id="${doctor.id}" data-date="${doctor.date}" data-doctor="${doctor.doctor_name}" 
+                            <i data-id="${doctor.id}" data-date="${doctor.date}" data-doctor="${doctor.id}" 
                             data-description="${doctor.description}" class="fa fa-edit edit-doctor-notebook" 
                             data-toggle="tooltip" title="Edit Doctor Notebook" style="color: gold;cursor: pointer;"></i>
                             `
@@ -554,8 +552,12 @@ function validateDescription(event) {
 
                         const notebookId = $('#notebookId').val();
                         const date = $('#date').val();
-                        const doctorName = $('#doctorName').val();
-                        const description = $('#description').val();
+                        const doctorId = $(this).data('doctor');  // now holds the doctor_id number
+                        $('#doctorName').val(doctorId).trigger('change');
+
+                        const description = $('#description').summernote('code', description);
+
+
 
                         $.ajax({
                             url: `{{ route('doctor.notebook.update', '') }}/${notebookId}`, // Update route
@@ -563,7 +565,7 @@ function validateDescription(event) {
                             data: {
                                 _token: '{{ csrf_token() }}', // Include CSRF token for security
                                 date: date,
-                                doctor_name: doctorName,
+                                doctor_name: doctorId,
                                 description: description
                             },
                             dataType: "json",

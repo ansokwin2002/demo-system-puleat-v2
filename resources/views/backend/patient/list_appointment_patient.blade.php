@@ -30,6 +30,9 @@
             <!-- [header-------------------------] -->
 
             <!--[Patient_table-------------------------]-->
+                <div class="container-fluid pl-0">
+                    <h4 class="text-danger">🔴 Red Highlight = Appointment Today</h4>
+                </div>
                 <div class="row mt-4">
                     <div class="col-12">
                         <div class="card p-4">
@@ -47,22 +50,38 @@
                                                 <th class="text-white align-middle text-center ">Doctor</th>
                                             </tr>
                                         </thead>
+                                        @php
+                                            use Carbon\Carbon;
+                                        @endphp
                                         <tbody>
                                             @foreach ($data as $index => $item)
-                                                <tr class="row_list_patients">
-                                                    <td class="align-middle text-center">{{ $index + 1 }}</td><!-- Serial number -->
-                                                    <td class="align-middle text-center">{{ $item['patient']->id }}</td><!-- Patient ID -->
+                                                @php
+                                                    $isToday = Carbon::parse($item['next_appointment'])->isToday();
+                                                @endphp
+                                                <tr class="row_list_patients {{ $isToday ? 'bg-danger text-white' : '' }}">
+                                                    <td class="align-middle text-center">{{ $index + 1 }}</td>
+                                                    <td class="align-middle text-center">{{ $item['patient']->id }}</td>
                                                     <td class="align-middle text-center patient-name">
-                                                        <span class="badge badge-info">{{ $item['patient']->name }}</span><!-- Patient Name -->
+                                                        <span class="badge badge-info">{{ $item['patient']->name }}</span>
+                                                        <!-- Include hidden edit button with data attributes -->
+                                                        <button 
+                                                            type="button" 
+                                                            class="d-none btn_edit_patient"
+                                                            data-id="{{ $item['patient']->id }}"
+                                                            data-name="{{ $item['patient']->name }}"
+                                                            data-age="{{ $item['patient']->age }}"
+                                                            data-sex="{{ $item['patient']->sex }}"
+                                                            data-address="{{ $item['patient']->address }}"
+                                                            data-telephone="{{ $item['patient']->telephone }}"
+                                                            data-type_patient="{{ $item['patient']->type_patient }}">
+                                                        </button>
                                                     </td>
                                                     <td class="align-middle text-center">{{ $item['patient']->sex }}</td>
-                                                    <td class="align-middle text-center">{{ $item['patient']->telephone }}</td><!-- Phone -->
-                                                    <td class="align-middle text-center">{{ $item['next_appointment'] }}</td><!-- Next Appointment -->
-                                                    <td class="align-middle text-center">{{ $item['doctor_name'] }}</td><!-- Doctor -->
-                                                    </td>
+                                                    <td class="align-middle text-center">{{ $item['patient']->telephone }}</td>
+                                                    <td class="align-middle text-center">{{ $item['next_appointment'] }}</td>
+                                                    <td class="align-middle text-center">{{ $item['doctor_name'] }}</td>
                                                 </tr>
                                             @endforeach
-                                         
                                         </tbody>
                                     </table>
                                 </div>
@@ -187,6 +206,7 @@
                     telephone: inlineEditButton.data("telephone"),
                     type_patient: inlineEditButton.data("type_patient")
                 };
+            contextMenu.find(".view-patient").attr("data-id", selectedPatient.id);
             }
         });
 

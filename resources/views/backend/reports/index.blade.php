@@ -100,7 +100,7 @@
                                 </div>
                             </div>
                             <div class="form-group mt-3">
-                                <button type="button" class="btn btn-warning" id="search_patient_all_history">
+                                <button type="button" class="btn btn-warning d-none" id="search_patient_all_history">
                                     <i class="fa fa-search"></i> Search
                                 </button>
                                 <button type="button" class="btn btn-primary" id="export_patient_all_history">
@@ -112,7 +112,7 @@
                 </div>
             <!-- [Service_table-------------------------] -->
             <!-- [Table All Patients After Search-----------------------------------] -->
-                <div class="row">
+                <div class="row d-none">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">

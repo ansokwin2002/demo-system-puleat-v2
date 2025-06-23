@@ -1083,7 +1083,7 @@
                     calculateNextAppointment();
                 });
                 //-change-by-default
-                calculateNextAppointment();
+        
             // [next-appointment-date------------------------------------]
 
             // [page-list-doctor-----------------------------------]

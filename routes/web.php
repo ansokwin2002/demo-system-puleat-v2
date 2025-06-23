@@ -8,6 +8,7 @@ use App\Http\Controllers\CompletedTreatmentPlanController;
 use App\Http\Controllers\Dashbaord\DashboardController;
 use App\Http\Controllers\Doctor\DoctorController;
 use App\Http\Controllers\DoctorNotedBookController;
+use App\Http\Controllers\DoctorReportController;
 use App\Http\Controllers\Invoice\InvoiceController;
 use App\Http\Controllers\Notification\NotificationController;
 use App\Http\Controllers\Patient\PatientController;
@@ -170,7 +171,7 @@ use Illuminate\Support\Facades\Route;
     });
 // [uploadMultiImage-----------------------------]
 
-// [report-----------------------------]
+// [patient-report-----------------------------]
     Route::middleware('auth')->group(function () {
         Route::controller(ReportPatientsController::class)->group(function(){
             Route::get('/report-patients','index')->name('reports.index');
@@ -178,7 +179,16 @@ use Illuminate\Support\Facades\Route;
             Route::get('/search-patient-history','searchPatientHistory')->name('search.patient.all_history');
         });
     });
-// [report-----------------------------]
+// [patient-report-----------------------------]
+
+// [doctor-report-----------------------------]
+    Route::middleware('auth')->group(function () {
+        Route::controller(DoctorReportController::class)->group(function(){
+            Route::get('/doctor-report','index')->name('report.doctor.index');
+            Route::get('/export-doctor-monthly','exportDoctorMonthly')->name('export.doctor.monthly');
+        });
+    });
+// [doctor-report-----------------------------]
 
 // [Calendar-----------------------------]
     Route::middleware('auth')->group(function () {
