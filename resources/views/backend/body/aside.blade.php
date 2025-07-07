@@ -7,7 +7,7 @@
     </div>
     <ul class="sidebar-menu">
         <li class="menu-header">Dashboard</li>
-        <li class="d-none {{ Route::is('dashboard*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('dashboard') }}"><i class="fa-solid fa-house-medical"></i> <span>Dashboard</span></a></li>   
+        <li class="{{ Route::is('dashboard*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('dashboard') }}"><i class="fa-solid fa-house-medical"></i> <span>Dashboard</span></a></li>   
         <li class="{{ Route::is('list_Patient*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('list_Patient') }}"><i class="fa-solid fa-user-plus"></i> <span>List Patient</span></a></li>   
         <li class="{{ Route::is('appointment_patient*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('appointment_patient') }}"><i class="fa-solid fa-user-plus"></i> <span>List Appointment Patient</span></a></li>   
         <li class="d-none {{ Route::is('add_Patient*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('add_Patient') }}"><i class="fa-solid fa-user-plus"></i> <span>Add Patient</span></a></li>   
