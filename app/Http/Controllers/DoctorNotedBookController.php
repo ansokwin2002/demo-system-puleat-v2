@@ -35,8 +35,6 @@ class DoctorNotedBookController extends Controller
         return response()->json($formattedNotebooks);
     }
     
-    
-
     /**
      * Store a newly created resource in storage.
      */
@@ -69,36 +67,27 @@ class DoctorNotedBookController extends Controller
     /**
      * Update the specified resource in storage.
      */
-public function update(Request $request, $notebookId)
-{
-    $request->validate([
-        'date' => 'required|date',
-        'doctor_id' => 'required|exists:doctors,id',
-        'description' => 'required|string',
-    ]);
+    public function update(Request $request, $notebookId)
+    {
+        $request->validate([
+            'date' => 'required|date',
+            'doctor_id' => 'required|exists:doctors,id',
+            'description' => 'required|string',
+        ]);
 
-    $doctorNotebook = DoctorNotedBook::findOrFail($notebookId);
+        $doctorNotebook = DoctorNotedBook::findOrFail($notebookId);
 
-    Log::info('Updating doctor notebook:', [
-        'id' => $notebookId,
-        'date' => $request->input('date'),
-        'doctor_id' => $request->input('doctor_id'),
-        'description' => $request->input('description'),
-    ]);
+        $doctorNotebook->date = $request->input('date');
+        $doctorNotebook->doctor_id = $request->input('doctor_id');
+        $doctorNotebook->description = $request->input('description');
+        $doctorNotebook->save();
 
-    $doctorNotebook->date = $request->input('date');
-    $doctorNotebook->doctor_id = $request->input('doctor_id');
-    $doctorNotebook->description = $request->input('description');
-    $doctorNotebook->save();
-
-    return response()->json([
-        'success' => true,
-        'message' => 'Doctor Notebook updated successfully!',
-        'data' => $doctorNotebook
-    ]);
-}
-
-
+        return response()->json([
+            'success' => true,
+            'message' => 'Doctor Notebook updated successfully!',
+            'data' => $doctorNotebook
+        ]);
+    }
 
     /**
      * Remove the specified resource from storage.
