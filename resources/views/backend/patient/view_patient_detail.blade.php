@@ -288,7 +288,7 @@
                         
                         <div class="form-group">
                             <label for="date">Date :</label>
-                            <input type="text" name="date" id="date" class="form-control datepicker">
+                            <input type="text" name="date" id="edit_date" class="form-control datepicker">
                         </div>
 
                         <div class="form-group">
@@ -309,7 +309,7 @@
                         <div class="form-group">
                             <label for="description">Description :</label>
                             <div class="flex-grow-1">
-                                <textarea name="description" id="description" class="summernote pt-4"></textarea>
+                                <textarea name="description" id="edit_description" class="summernote pt-4"></textarea>
                             </div>
                             <div class="invalid-feedback">
                                 Please fill Type doctor notebook!
@@ -507,42 +507,43 @@
                             });
                         });
 
-                    // Edit functionality
+                   // Edit functionality
                     $('.edit-doctor-notebook').on('click', function () {
-                            const notebookId = $(this).data('id');
-                            const date = $(this).data('date');
-                            const doctorId = $(this).data('doctor');
-                            const description = $(this).data('description');
+                        const notebookId = $(this).data('id');
+                        const date = $(this).data('date');
+                        const doctorId = $(this).data('doctor');
+                        const description = $(this).data('description');
 
-                            // Populate hidden ID
-                            $('#fire-modal-edit-doctor-notebook #notebookId').val(notebookId);
+                        // Populate hidden ID
+                        $('#notebookId').val(notebookId);
 
-                            // Populate date
-                            $('#fire-modal-edit-doctor-notebook #date').val(date);
+                        // Populate date
+                        $('#edit_date').val(date);
 
-                            // Populate doctor select
-                            $('#fire-modal-edit-doctor-notebook #doctorName').val(doctorId);
+                        // Populate doctor select
+                        $('#doctorName').val(doctorId);
 
-                            // Refresh the select picker if you are using Bootstrap-select or similar
-                            $('#fire-modal-edit-doctor-notebook #doctorName').trigger('change');
+                        // Refresh the select picker if you are using Bootstrap-select or similar
+                        $('#doctorName').trigger('change');
 
-                            // Populate Summernote description
-                            $('#fire-modal-edit-doctor-notebook #description').summernote('code', description);
+                        // Populate Summernote description
+                        $('#edit_description').summernote('code', description);
 
-                            // Open modal
-                            $('#fire-modal-edit-doctor-notebook').modal('show');
-                        });
+                        // Open modal
+                        $('#fire-modal-edit-doctor-notebook').modal('show');
+                    });
 
                     // Detach any previous submit handler to prevent duplicates
                     $('#editDoctorNotebookForm').off('submit').on('submit', function (e) {
                         e.preventDefault();
 
                         const notebookId = $('#notebookId').val();
-                        const date = $('#date').val();
+                        const date = $('#edit_date').val();
                         const doctorId = $('#doctorName').val();
-                        const description = $('#description').summernote('code');
+                        const description = $('#edit_description').summernote('code');
 
-                        alert(description);
+                        console.log("Submitting:", { notebookId, date, doctorId, description });
+
                         $.ajax({
                             url: '{{ route("doctor.notebook.update", ":notebookId") }}'.replace(':notebookId', notebookId),
                             type: "PUT",

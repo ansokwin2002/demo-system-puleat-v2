@@ -276,6 +276,8 @@
             $('.summernote').summernote({
                 height: 100 
             });
+            $('#description').summernote({ height: 200 });        // For Add Modal
+            $('#edit_description').summernote({ height: 200 });   // For Edit Modal
         // [summernote-------------------------------]
 
         // [dataTable_table_appointment_patient---------------------]
