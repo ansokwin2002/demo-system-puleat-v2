@@ -140,7 +140,7 @@
                             <div class="form-group mb-0 row">
                                 <label class="col-sm-3 col-form-label"></label>
                                 <div class="col-sm-9">
-                                    <button class="btn btn-primary" id="add_service"><i class="fa fa-save"></i> Save</button>
+                                    <button class="btn btn-primary" id="add_service"> <i class="fa fa-plus-circle"></i> Add</button>
                                 </div>
                             </div>
                         </form>
