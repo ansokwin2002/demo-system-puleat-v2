@@ -3,99 +3,100 @@
 
 <div class="main-wrapper main-wrapper-1">
     <!-- [navbar----------------------------] -->
-    <div class="navbar-bg"></div>
-    <nav class="navbar navbar-expand-lg main-navbar">
-        @include('backend.body.navbar')
-    </nav>
+        <div class="navbar-bg"></div>
+        <nav class="navbar navbar-expand-lg main-navbar">
+            @include('backend.body.navbar')
+        </nav>
     <!-- [navbar----------------------------] -->
 
     <!-- [aside------------------------------] -->
-    <div class="main-sidebar sidebar-style-2">
-        @include('backend.body.aside')
-    </div>
+        <div class="main-sidebar sidebar-style-2">
+            @include('backend.body.aside')
+        </div>
     <!-- [aside------------------------------] -->
 
     <!-- [main_content------------------------------] -->
-    <div class="main-content">
-        <section class="section">
-            <!-- [header-------------------------] -->
-                <div class="section-header">
-                    <h1>List Patient</h1>
-                    <div class="section-header-breadcrumb">
-                        <div class="breadcrumb-item active"><a href="{{ route('dashboard') }}">Dashboard</a></div>
-                        <div class="breadcrumb-item"><a href="{{ route('list_Patient') }}">Patient</a></div>
-                        <div class="breadcrumb-item">List Patient</div>
+        <div class="main-content">
+            <section class="section">
+                <!-- [header-------------------------] -->
+                    <div class="section-header">
+                        <h1>List Patient</h1>
+                        <div class="section-header-breadcrumb">
+                            <div class="breadcrumb-item active"><a href="{{ route('dashboard') }}">Dashboard</a></div>
+                            <div class="breadcrumb-item"><a href="{{ route('list_Patient') }}">Patient</a></div>
+                            <div class="breadcrumb-item">List Patient</div>
+                        </div>
                     </div>
-                </div>
-            <!-- [header-------------------------] -->
+                <!-- [header-------------------------] -->
 
-            <!--[Patient_table-------------------------]-->
-            <button class="btn btn-primary"  
-                    data-toggle="modal" 
-                    data-target="#fire-modal-appointment-patient" ><i class="fa-solid fa-user-plus"></i> Add Patient</button>
-                <div class="row mt-4">
-                    <div class="col-12">
-                        <div class="card p-4">
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-striped dataTable" id="table_patient">
-                                        <thead class="bg-primary">
-                                            <tr>
-                                                <th class="text-white align-middle text-center ">Patient's ID</th>
-                                                <th class="text-white align-middle text-center ">Date</th>
-                                                <th class="text-white align-middle text-center ">Patient's Name</th>
-                                                <th class="text-white align-middle text-center ">Age</th>
-                                                <th class="text-white align-middle text-center ">Sex</th>
-                                                <th class="text-white align-middle text-center ">Address</th>
-                                                <th class="text-white align-middle text-center ">Telephone</th>
-                                                <th class="text-white align-middle text-center ">Type Patient</th>
-                                                <th class="text-white align-middle text-center ">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @php
-                                                use App\Models\Patient;
-                                                $patients = Patient::latest('created_at')->get();
-                                            @endphp
-                                            @foreach ($patients as $index => $patient)
-                                            <tr class="row_list_patients">
-                                                <td class="align-middle text-center">{{ $index + 1 }}</td>
-                                                <td class="align-middle text-center">{{ $patient->date }}</td>
-                                                <td class="align-middle text-center patient-name"><span class="badge badge-info">{{ $patient->name }}</span></td>
-                                                <td class="align-middle text-center">{{ $patient->age }}</td>
-                                                <td class="align-middle text-center">{{ $patient->sex }}</td>
-                                                <td class="align-middle text-center">{{ $patient->address }}</td>
-                                                <td class="align-middle text-center">{{ $patient->telephone }}</td>
-                                                <td class="align-middle text-center"><span class="badge badge-secondary">{{ $patient->type_patient }}</span></td>
-                                                <td class="align-middle text-center" class="td-action">
-                                                    <button class="btn btn-danger" onclick="swal('Cannot Delete', 'Patient can only be updated after creation!', 'error');">
-                                                        <i class="fa fa-trash"></i>
-                                                    </button>
-                                                    <button class="btn btn-warning btn_edit_patient" 
-                                                        data-toggle="modal" 
-                                                        data-target="#fire-modal-patient" 
-                                                        data-id="{{ $patient->id }}" 
-                                                        data-name="{{ $patient->name }}" 
-                                                        data-age="{{ $patient->age }}" 
-                                                        data-sex="{{ $patient->sex }}" 
-                                                        data-address="{{ $patient->address }}" 
-                                                        data-telephone="{{ $patient->telephone }}" 
-                                                        data-type_patient="{{ $patient->type_patient }}">
-                                                        <i class="fa fa-edit"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                <!--[Patient_table-------------------------]-->
+                    <button class="btn btn-primary"  
+                        data-toggle="modal" 
+                        data-target="#fire-modal-appointment-patient" ><i class="fa-solid fa-user-plus"></i> Add Patient
+                    </button>
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="card p-4">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped dataTable" id="table_patient">
+                                            <thead class="bg-primary">
+                                                <tr>
+                                                    <th class="text-white align-middle text-center ">Patient's ID</th>
+                                                    <th class="text-white align-middle text-center ">Date</th>
+                                                    <th class="text-white align-middle text-center ">Patient's Name</th>
+                                                    <th class="text-white align-middle text-center ">Age</th>
+                                                    <th class="text-white align-middle text-center ">Sex</th>
+                                                    <th class="text-white align-middle text-center ">Address</th>
+                                                    <th class="text-white align-middle text-center ">Telephone</th>
+                                                    <th class="text-white align-middle text-center ">Type Patient</th>
+                                                    <th class="text-white align-middle text-center ">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @php
+                                                    use App\Models\Patient;
+                                                    $patients = Patient::latest('created_at')->get();
+                                                @endphp
+                                                @foreach ($patients as $index => $patient)
+                                                <tr class="row_list_patients">
+                                                    <td class="align-middle text-center">{{ $index + 1 }}</td>
+                                                    <td class="align-middle text-center">{{ $patient->date }}</td>
+                                                    <td class="align-middle text-center patient-name"><span class="badge badge-info">{{ $patient->name }}</span></td>
+                                                    <td class="align-middle text-center">{{ $patient->age }}</td>
+                                                    <td class="align-middle text-center">{{ $patient->sex }}</td>
+                                                    <td class="align-middle text-center">{{ $patient->address }}</td>
+                                                    <td class="align-middle text-center">{{ $patient->telephone }}</td>
+                                                    <td class="align-middle text-center"><span class="badge badge-secondary">{{ $patient->type_patient }}</span></td>
+                                                    <td class="align-middle text-center" class="td-action">
+                                                        <button class="btn btn-danger" onclick="swal('Cannot Delete', 'Patient can only be updated after creation!', 'error');">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                        <button class="btn btn-warning btn_edit_patient" 
+                                                            data-toggle="modal" 
+                                                            data-target="#fire-modal-patient" 
+                                                            data-id="{{ $patient->id }}" 
+                                                            data-name="{{ $patient->name }}" 
+                                                            data-age="{{ $patient->age }}" 
+                                                            data-sex="{{ $patient->sex }}" 
+                                                            data-address="{{ $patient->address }}" 
+                                                            data-telephone="{{ $patient->telephone }}" 
+                                                            data-type_patient="{{ $patient->type_patient }}">
+                                                            <i class="fa fa-edit"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            <!--[Patient_table-------------------------]-->
-        </section>
-    </div>
+                <!--[Patient_table-------------------------]-->
+            </section>
+        </div>
     <!-- [main_content------------------------------] -->
 
     <!-- [Context_Menu-------------------------]-->
@@ -359,7 +360,6 @@
             </div>
         </div>
     <!-- [Model Edit Patient-------------------------] -->
-
 </div>
 
 @endsection

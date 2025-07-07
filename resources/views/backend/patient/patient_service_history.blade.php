@@ -4,101 +4,101 @@
 
 <div class="main-wrapper main-wrapper-1">
     <!-- [navbar----------------------------] -->
-    <div class="navbar-bg"></div>
-    <nav class="navbar navbar-expand-lg main-navbar">
-        @include('backend.body.navbar')
-    </nav>
+        <div class="navbar-bg"></div>
+        <nav class="navbar navbar-expand-lg main-navbar">
+            @include('backend.body.navbar')
+        </nav>
     <!-- [navbar----------------------------] -->
 
     <!-- [aside------------------------------] -->
-    <div class="main-sidebar sidebar-style-2">
-        @include('backend.body.aside')
-    </div>
+        <div class="main-sidebar sidebar-style-2">
+            @include('backend.body.aside')
+        </div>
     <!-- [aside------------------------------] -->
 
     <!-- [main_content------------------------------] -->
-    <div class="main-content">
-        <section class="section">
-            <!-- [header-------------------------] -->
-            <div class="section-header">
-                <h1>Patient Service History</h1>
-                <div class="section-header-breadcrumb">
-                    <div class="breadcrumb-item active"><a href="{{ route('dashboard') }}">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="{{ route('patient_service_history') }}">Patient</a></div>
-                    <div class="breadcrumb-item">Patient Service History</div>
-                </div>
-            </div>
-            <!-- [header-------------------------] -->
+        <div class="main-content">
+            <section class="section">
+                <!-- [header-------------------------] -->
+                    <div class="section-header">
+                        <h1>Patient Service History</h1>
+                        <div class="section-header-breadcrumb">
+                            <div class="breadcrumb-item active"><a href="{{ route('dashboard') }}">Dashboard</a></div>
+                            <div class="breadcrumb-item"><a href="{{ route('patient_service_history') }}">Patient</a></div>
+                            <div class="breadcrumb-item">Patient Service History</div>
+                        </div>
+                    </div>
+                <!-- [header-------------------------] -->
 
-            <!--[Patient_table-------------------------]-->
-                <div class="row mt-4">
-                    <div class="col-12">
-                        <div class="card p-4">
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-striped dataTable" id="table_history">
-                                        <thead class="bg-primary">
-                                            <tr>
-                                                <th class="text-white text-center">Invoice ID</th>
-                                                <th class="text-white text-center">Date</th>
-                                                <th class="text-white text-center">Doctor</th>
-                                                <th class="text-white text-center">Cashier</th>
-                                                <th class="text-white text-center">Patient</th>
-                                                <th class="text-white text-center">Grand Total</th>
-                                                <th class="text-white text-center">Amount Paid</th>
-                                                <th class="text-white text-center">Amount Unpaid</th>
-                                                <th class="text-white text-center">Created_at</th>
-                                                <th class="text-white text-center">Updated_at</th>
-                                                <th class="text-white text-center">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($patientHistories as $patientHistory)
-                                                @php
-                                                    $paymentData = $patientHistory->patient_payment;
-                                                    $doctorName = $patientHistory->doctor->name ?? '';
-                                                    $cashierName = $patientHistory->cashier->name ?? '';
-                                                    $patientName = $patientHistory->patient->name ?? '';
-                                                @endphp
-                                                <tr class="row_service_detail" data-toggle="modal" 
-                                                    data-target="#fire-modal-4" data-id="{{ $patientHistory->id }}">
-                                                    <td class="align-middle text-center">{{ $patientHistory->invoice_id }}</td>
-                                                    <td class="align-middle text-center">{{ $paymentData['date'] ?? '' }}</td>
-                                                    <td class="align-middle text-center"><span class="badge badge-dark">{{ $doctorName }}</span></td>
-                                                    <td class="align-middle text-center"><span class="badge badge-success">{{ $cashierName }}</span></td>
-                                                    <td class="align-middle text-center"><span class="badge badge-info">{{ $patientName }}</span></td>
-                                                    <td class="align-middle text-center">${{ $paymentData['grand_total'] ?? '' }}</td>
-                                                    <td class="align-middle text-center">${{ $paymentData['amount_paid'] ?? '' }}</td>
-                                                    <td class="align-middle text-center">${{ $paymentData['amount_unpaid'] ?? '' }}</td>
-                                                    <td class="align-middle text-center">{{ $patientHistory['created_at'] }}</td>
-                                                    <td class="align-middle text-center">{{ $patientHistory['updated_at'] }}</td>
-                                                    <td class="align-middle text-center td-action">
-                                                        <button class="btn btn-danger" onclick="swal('Cannot Delete', 'Patient\'s history cannot be deleted after creation!', 'error');">
-                                                            <i class="fa fa-trash"></i>
-                                                        </button>
-                                                        <button class="btn btn-warning btn_edit_history_patient" 
-                                                                data-invoice-id="{{ $patientHistory->invoice_id }}">
-                                                            <i class="fa fa-edit"></i>
-                                                        </button>
-                                                    </td>
+                <!--[Patient_table-------------------------]-->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="card p-4">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped dataTable" id="table_history">
+                                            <thead class="bg-primary">
+                                                <tr>
+                                                    <th class="text-white text-center">Invoice ID</th>
+                                                    <th class="text-white text-center">Date</th>
+                                                    <th class="text-white text-center">Doctor</th>
+                                                    <th class="text-white text-center">Cashier</th>
+                                                    <th class="text-white text-center">Patient</th>
+                                                    <th class="text-white text-center">Grand Total</th>
+                                                    <th class="text-white text-center">Amount Paid</th>
+                                                    <th class="text-white text-center">Amount Unpaid</th>
+                                                    <th class="text-white text-center">Created_at</th>
+                                                    <th class="text-white text-center">Updated_at</th>
+                                                    <th class="text-white text-center">Action</th>
                                                 </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($patientHistories as $patientHistory)
+                                                    @php
+                                                        $paymentData = $patientHistory->patient_payment;
+                                                        $doctorName = $patientHistory->doctor->name ?? '';
+                                                        $cashierName = $patientHistory->cashier->name ?? '';
+                                                        $patientName = $patientHistory->patient->name ?? '';
+                                                    @endphp
+                                                    <tr class="row_service_detail" data-toggle="modal" 
+                                                        data-target="#fire-modal-4" data-id="{{ $patientHistory->id }}">
+                                                        <td class="align-middle text-center">{{ $patientHistory->invoice_id }}</td>
+                                                        <td class="align-middle text-center">{{ $paymentData['date'] ?? '' }}</td>
+                                                        <td class="align-middle text-center"><span class="badge badge-dark">{{ $doctorName }}</span></td>
+                                                        <td class="align-middle text-center"><span class="badge badge-success">{{ $cashierName }}</span></td>
+                                                        <td class="align-middle text-center"><span class="badge badge-info">{{ $patientName }}</span></td>
+                                                        <td class="align-middle text-center">${{ $paymentData['grand_total'] ?? '' }}</td>
+                                                        <td class="align-middle text-center">${{ $paymentData['amount_paid'] ?? '' }}</td>
+                                                        <td class="align-middle text-center">${{ $paymentData['amount_unpaid'] ?? '' }}</td>
+                                                        <td class="align-middle text-center">{{ $patientHistory['created_at'] }}</td>
+                                                        <td class="align-middle text-center">{{ $patientHistory['updated_at'] }}</td>
+                                                        <td class="align-middle text-center td-action">
+                                                            <button class="btn btn-danger" onclick="swal('Cannot Delete', 'Patient\'s history cannot be deleted after creation!', 'error');">
+                                                                <i class="fa fa-trash"></i>
+                                                            </button>
+                                                            <button class="btn btn-warning btn_edit_history_patient" 
+                                                                    data-invoice-id="{{ $patientHistory->invoice_id }}">
+                                                                <i class="fa fa-edit"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            <!--[Patient_table-------------------------]-->
-        </section>
-    </div>
+                <!--[Patient_table-------------------------]-->
+            </section>
+        </div>
     <!-- [main_content------------------------------] -->
 
     <!-- [footer------------------------------] -->
-    <footer class="main-footer">
-        @include('backend.body.footer')
-    </footer>
+        <footer class="main-footer">
+            @include('backend.body.footer')
+        </footer>
     <!-- [footer------------------------------] -->
 
     <!-- [Model Detail Patient Service-------------------------] -->

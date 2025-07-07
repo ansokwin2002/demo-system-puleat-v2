@@ -25,6 +25,7 @@ class DoctorNotedBookController extends Controller
             return [
                 'id' => $notebook->id,
                 'date' => $notebook->date,
+                'doctor_id' => $notebook->doctor->id,
                 'doctor_name' => $notebook->doctor ? $notebook->doctor->name : 'N/A',
                 'description' => $notebook->description,
             ];
@@ -68,30 +69,37 @@ class DoctorNotedBookController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
-    {
-        // Validate incoming data (you can adjust the rules as needed)
-        $request->validate([
-            'date' => 'required|date',
-            'doctor_id' => 'required|exists:doctors,id', // Ensure the doctor exists
-            'description' => 'required|string', // Make sure description is present
-        ]);
+public function update(Request $request, $notebookId)
+{
+    $request->validate([
+        'date' => 'required|date',
+        'doctor_id' => 'required|exists:doctors,id',
+        'description' => 'required|string',
+    ]);
 
-        // Find the doctor notebook by its ID
-        $doctorNotebook = DoctorNotedBook::findOrFail($id);
+    $doctorNotebook = DoctorNotedBook::findOrFail($notebookId);
 
-        // Update the doctor notebook with new data
-        $doctorNotebook->date = $request->input('date');
-        $doctorNotebook->doctor_id = $request->input('doctor_id');
-        $doctorNotebook->description = $request->input('description');
+    Log::info('Updating doctor notebook:', [
+        'id' => $notebookId,
+        'date' => $request->input('date'),
+        'doctor_id' => $request->input('doctor_id'),
+        'description' => $request->input('description'),
+    ]);
 
-        // Save the changes
-        $doctorNotebook->save();
-        // Redirect or return a response (you can customize the redirect as needed)
-        return redirect()->back()
-        ->with('active_tab', 'doctor-notebook') 
-        ->with('success', 'Doctor Notebook updated successfully!');
-    }
+    $doctorNotebook->date = $request->input('date');
+    $doctorNotebook->doctor_id = $request->input('doctor_id');
+    $doctorNotebook->description = $request->input('description');
+    $doctorNotebook->save();
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Doctor Notebook updated successfully!',
+        'data' => $doctorNotebook
+    ]);
+}
+
+
+
     /**
      * Remove the specified resource from storage.
      */

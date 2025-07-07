@@ -1,6 +1,7 @@
 @php
     $info = $updateCustomerInfo[0] ?? [];
 @endphp
+
 <!--[Service_table-------------------------]-->
     <div class="row">
         <div class="col-12">
@@ -195,7 +196,11 @@
                             <div class="col-12 col-sm-5 col-md-8 col-lg-12">
                                 <div class="card_service">
                                     <div class="icon_service">
-                                        <button class="btn btn-primary" style="width: 100%;height:100%;">Services</button>
+                                        <button class="btn btn-primary" style="width: 100%;height:100%;"  
+                                            data-toggle="modal" 
+                                            data-target="#fire-modal-add-service">
+                                           <i class="fa fa-plus" style="font-size: 14px;"></i> Add Service
+                                        </button>
                                     </div>
                                     <div class="select_service">
                                         @php 
@@ -285,6 +290,7 @@
         </div>
     </div>
 <!--[Service_table-------------------------]-->
+
 
 @php
     $doctors = App\Models\Doctor::all();

@@ -4,84 +4,84 @@
 
 <div class="main-wrapper main-wrapper-1">
     <!-- [navbar----------------------------] -->
-    <div class="navbar-bg"></div>
-    <nav class="navbar navbar-expand-lg main-navbar">
-        @include('backend.body.navbar')
-    </nav>
+        <div class="navbar-bg"></div>
+        <nav class="navbar navbar-expand-lg main-navbar">
+            @include('backend.body.navbar')
+        </nav>
     <!-- [navbar----------------------------] -->
 
     <!-- [aside------------------------------] -->
-    <div class="main-sidebar sidebar-style-2">
-        @include('backend.body.aside')
-    </div>
+        <div class="main-sidebar sidebar-style-2">
+            @include('backend.body.aside')
+        </div>
     <!-- [aside------------------------------] -->
 
     <!-- [main_content------------------------------] -->
-    <div class="main-content">
-        <section class="section">
-            <div class="section-header">
-                <h1>Dashboard</h1>
-            </div>
-            <!-- [Bar Chart Patient-------------------------] -->
-                <div class="row mt-4">
-                    <div class="col-12">
-                        <div class="card p-4">
-                            <div class="card_title">
-                                <div class="row">
-                                    <h3>&nbsp;&nbsp;Patient's Bar Chart ({{ $year }})</h3>
-                                    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                                        <canvas id="patient_bar_chart" width="400" height="100"></canvas>
+        <div class="main-content">
+            <section class="section">
+                <div class="section-header">
+                    <h1>Dashboard</h1>
+                </div>
+                <!-- [Bar Chart Patient-------------------------] -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="card p-4">
+                                <div class="card_title">
+                                    <div class="row">
+                                        <h3>&nbsp;&nbsp;Patient's Bar Chart ({{ $year }})</h3>
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                                            <canvas id="patient_bar_chart" width="400" height="100"></canvas>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            <!-- [Bar Chart Patient-------------------------] -->
+                <!-- [Bar Chart Patient-------------------------] -->
 
-            <!-- [Type Service-------------------------] -->
-                <div class="row mt-2">
-                    <div class="col-12">
-                        <div class="card p-4">
-                            <div class="card_title">
-                                <div class="row">
-                                    <h3>&nbsp;&nbsp;Service's Bar Chart ({{ $year }})</h3>
-                                    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                                        <canvas id="service_bar_chart" width="400" height="400"></canvas>
+                <!-- [Type Service-------------------------] -->
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <div class="card p-4">
+                                <div class="card_title">
+                                    <div class="row">
+                                        <h3>&nbsp;&nbsp;Service's Bar Chart ({{ $year }})</h3>
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                                            <canvas id="service_bar_chart" width="400" height="400"></canvas>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            <!-- [Type Service-------------------------] -->
+                <!-- [Type Service-------------------------] -->
 
-            <!-- [Doctor-------------------------] -->
-                <div class="row mt-2">
-                    <div class="col-12">
-                        <div class="card p-4">
-                            <div class="card_title">
-                                <div class="row">
-                                    <h3>&nbsp;&nbsp;Doctor's Bar Chart ({{ $year }})</h3>
-                                    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                                        <canvas id="doctor_earnings_bar_chart" width="400" height="400"></canvas>
+                <!-- [Doctor-------------------------] -->
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <div class="card p-4">
+                                <div class="card_title">
+                                    <div class="row">
+                                        <h3>&nbsp;&nbsp;Doctor's Bar Chart ({{ $year }})</h3>
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                                            <canvas id="doctor_earnings_bar_chart" width="400" height="400"></canvas>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            <!-- [Doctor-------------------------] -->
+                <!-- [Doctor-------------------------] -->
 
 
-        </section>
-    </div>
+            </section>
+        </div>
     <!-- [main_content------------------------------] -->
 
     <!-- [footer------------------------------] -->
-    <footer class="main-footer">
-        @include('backend.body.footer')
-    </footer>
+        <footer class="main-footer">
+            @include('backend.body.footer')
+        </footer>
     <!-- [footer------------------------------] -->
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -308,12 +308,6 @@
         });
 
     </script>
-
-
-
-
-
-
 </div>
 
 @endsection

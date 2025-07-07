@@ -217,7 +217,7 @@ use Illuminate\Support\Facades\Route;
             Route::post('/store-doctor-notebook','store')->name('doctor.notebook.store');
             Route::delete('/delete-doctor-notebook/{id}', 'destroy')->name('doctor.notebook.destroy');
             Route::get('/doctor-notebook/{id}', 'edit')->name('doctor.notebook.edit');
-            Route::put('/update-doctor-notebook/{id}', 'update')->name('doctor.notebook.update');
+            Route::put('/update-doctor-notebook/{notebookId}', 'update')->name('doctor.notebook.update');
         });
    });
 // [doctor_notebook_controller----------------------------]
