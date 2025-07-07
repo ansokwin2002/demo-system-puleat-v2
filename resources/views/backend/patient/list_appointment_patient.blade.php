@@ -58,7 +58,7 @@
                                                     @php
                                                         $isToday = Carbon::parse($item['next_appointment'])->isToday();
                                                     @endphp
-                                                    <tr class="row_list_patients {{ $isToday ? 'bg-danger text-white' : '' }}">
+                                                    <tr class="row_list_patients {{ $isToday ? 'bg-soft-red' : '' }}">
                                                         <td class="align-middle text-center">{{ $index + 1 }}</td>
                                                         <td class="align-middle text-center">{{ $item['patient']->id }}</td>
                                                         <td class="align-middle text-center patient-name">
@@ -273,4 +273,10 @@
         width: 100%;
         margin-bottom: 5px;
     }
+    .bg-soft-red {
+        background-color: #f28b82 !important; /* Professional soft red */
+        border: 1px solid #d9534f;           /* Subtle darker red border */
+        color: #212529 !important;           /* Dark text for readability */
+    }
+
 </style>
