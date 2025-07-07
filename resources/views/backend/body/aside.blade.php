@@ -1,9 +1,9 @@
 <aside id="sidebar-wrapper">
     <div class="sidebar-brand">
-    <a href="{{ route('dashboard') }}">Doctor System</a>
+    <a href="{{ route('dashboard') }}">Laor-Prornit-System</a>
     </div>
     <div class="sidebar-brand sidebar-brand-sm">
-    <a href="{{ route('dashboard') }}">DS</a>
+    <a href="{{ route('dashboard') }}">LPS</a>
     </div>
     <ul class="sidebar-menu">
         <li class="menu-header">Dashboard</li>
