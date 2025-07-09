@@ -48,7 +48,9 @@ class Api_PatientController extends Controller
                 'telephone' => 'nullable|string|max:20',
                 'date' => 'required|date',
                 'type_patient' => 'nullable|string',
+                'type_payment' => 'required|string|max:255', 
             ]);
+
             $patient = Patient::create($validated);
 
             return response()->json([
@@ -73,6 +75,7 @@ class Api_PatientController extends Controller
         }
     }
 
+
     public function update(Request $request, $id)
     {
         try {
@@ -86,6 +89,7 @@ class Api_PatientController extends Controller
                 'telephone' => 'nullable|string|max:20',
                 'date' => 'required|date',
                 'type_patient' => 'nullable|string|max:255',
+                'type_payment' => 'required|string|max:255', 
             ]);
 
             $patient->update($validated);
