@@ -21,6 +21,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // [patient_controller----------------------------]
     Route::controller(Api_PatientController::class)->group(function(){
-        Route::get('/list-patient','index')->name('index');
+        Route::get('/list-patient','index')->name('index.patient');
+        Route::post('/create-patient','create')->name('create.patient');
+        Route::get('/list-patient/{id}', 'show')->name('patient.show');       
+        Route::put('/list-patient/{id}', 'update')->name('patient.update');   
+        Route::delete('/list-patient/{id}', 'destroy')->name('patient.delete'); 
     });
 // [patient_controller----------------------------]
