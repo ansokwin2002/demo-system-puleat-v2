@@ -320,8 +320,7 @@
                         <td style="width:160px;"><p class="subtotal">$0.00</p></td>
                         <td style="width:120px;">
                             <input style="width:20px;height:20px;cursor:pointer;" 
-                            type="checkbox" 
-                            onclick="this.checked && (this.disabled = true)">
+                            type="checkbox">
 
                         </td>
                     </tr>
@@ -669,7 +668,7 @@
 
                             // Save or send the service data when checked
                             if (isChecked) {
-                                $(this).prop('disabled', true);
+                                // $(this).prop('disabled', true);
                                 // Pass the data to a new page or display it
                                 passServiceDataToTreatmentPage(serviceData);
                             }

@@ -129,7 +129,7 @@
                                                     <a class="nav-link" id="treatment-tab2" data-toggle="tab" href="#treatment" role="tab" aria-controls="treatment" aria-selected="false">Treatment</a>
                                                 </li>
                                                 <!-- <li class="nav-item">
-                                                    <a class="nav-link" id="appointment-tab2" data-toggle="tab" href="#appointment" role="tab" aria-controls="appointment" aria-selected="false">Appointment</a>
+                                                    <a class="nav-link" id="ortho-treatment-tab2" data-toggle="tab" href="#ortho-treatment" role="tab" aria-controls="ortho-treatment" aria-selected="false">Ortho Treatment</a>
                                                 </li> -->
                                             </ul>
                                         </div>
@@ -170,8 +170,8 @@
                                         <div class="tab-pane fade" id="treatment" role="tabpanel" aria-labelledby="treatment-tab2">
                                             {!! $display['treatment'] !!}
                                         </div>
-                                        <!-- <div class="tab-pane fade" id="appointment" role="tabpanel" aria-labelledby="appointment-tab2">
-                                            Appointment imperdiet odio sed neque ultricies, ut dapibus mi maximus. Proin ligula massa, gravida in lacinia efficitur, hendrerit eget mauris. Pellentesque fermentum, sem interdum molestie finibus, nulla diam varius leo, nec varius lectus elit id dolor. Nam malesuada orci non ornare vulputate. Ut ut sollicitudin magna. Vestibulum eget ligula ut ipsum venenatis ultrices. Proin bibendum bibendum augue ut luctus.
+                                        <!-- <div class="tab-pane fade" id="ortho-treatment" role="tabpanel" aria-labelledby="ortho-treatment-tab2">
+                                            ortho-treatment-tab2 imperdiet odio sed neque ultricies, ut dapibus mi maximus. Proin ligula massa, gravida in lacinia efficitur, hendrerit eget mauris. Pellentesque fermentum, sem interdum molestie finibus, nulla diam varius leo, nec varius lectus elit id dolor. Nam malesuada orci non ornare vulputate. Ut ut sollicitudin magna. Vestibulum eget ligula ut ipsum venenatis ultrices. Proin bibendum bibendum augue ut luctus.
                                         </div> -->
                                     </div>
                                 </div>

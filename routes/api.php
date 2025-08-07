@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Api_PatientController;
+use App\Http\Controllers\Api_DashboardController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,3 +29,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::delete('/delete-patient/{id}', 'destroy')->name('patient.delete'); 
     });
 // [patient_controller----------------------------]
+
+// [login_controller---------------------------]
+    Route::controller(Api_DashboardController::class)->group(function(){
+      
+    });
+// [login_controller---------------------------]
