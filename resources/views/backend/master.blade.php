@@ -1597,6 +1597,14 @@
                             return; 
                         }
 
+                        if ($('#treatmentServiceTableBody tr').length > 0) {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Complete Treatment First',
+                                text: 'Please complete the treatment before completing this Treatment Plan.',
+                            });
+                            return; 
+                        }
 
                         $('#serviceTableBody').find('tr').each(function () {
                             const serviceId = $(this).find('input.service-id').val();
