@@ -9,11 +9,14 @@
                             $patients = Patient::all();
                             $selectedPatientId = Request::segment(2); 
                         @endphp
-                        <a href="{{ route('view_invoice_treatment', ['invoice_id' => $invoice_id, 'patient_id' => $selectedPatientId ?? '' ]) }}">
-                            <button class="btn btn-warning" id="preview_invoice_treatment_planning">
-                                <i class="fa fa-print"></i> Print Invoice
-                            </button>
-                        </a>
+                        
+                                            @if ($invoice_id)
+                            <a href="{{ route('view_temp_invoice_treatment', ['invoice_id' => $invoice_id, 'patient_id' => $selectedPatientId ?? '' ]) }}">
+                                <button class="btn btn-warning" id="preview_invoice_treatment_planning">
+                                    <i class="fa fa-print"></i> Print Invoice
+                                </button>
+                            </a>
+                        @endif
                     <button class="btn btn-success" id="completed_save_print_treatment" style="float: right;"><i class="fa-solid fa-circle-check"></i> Completed</button>
                 </div>
                 
@@ -269,9 +272,11 @@
                         <!-- <button class="btn btn-primary disabled" id="save_treatment_planning_{{ $index }}">
                             <i class="fa fa-save"></i> Save Planning
                         </button> -->
-                        <button class="btn btn-warning d-none" id="preview_invoice_treatment_planning_{{ $index }}">
-                            <i class="fa fa-print"></i> Print Invoice
-                        </button>
+                        <a href="{{ route('view_invoice_treatment', ['invoice_id' => $info['invoice_id'] ?? '', 'patient_id' => $info['patient_id'] ?? '' ]) }}">
+                            <button class="btn btn-warning" id="preview_invoice_treatment_planning_{{ $index }}">
+                                <i class="fa fa-print"></i> Print Invoice
+                            </button>
+                        </a>
                         <!-- <button class="btn btn-success disabled" style="float: right;" id="completed_treatment_planning_{{ $index }}">
                             <i class="fa-solid fa-circle-check"></i> Completed
                         </button> -->

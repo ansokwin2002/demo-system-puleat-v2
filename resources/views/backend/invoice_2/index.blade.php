@@ -320,26 +320,11 @@
         </footer>
     </div>
 
-    <div class="container pl-0 pr-0">
+        <div class="container pl-0 pr-0">
         <button class="btn btn-warning mt-2 mb-1" id="printButton" onclick="window.print();" style="width:100%;"><i class="fa fa-print"></i> Print Invoice</button>
-       <a id="backButton" href="#" data-route="{{ url('/view-patient-detail') }}" style="width: 100%;">
-            <button class="btn btn-success" id="printButton" style="width: 100%;">
+       <a id="backButton" href="{{ url('/view-patient-detail/' . $patient_id) }}" style="width: 100%;">
+            <button class="btn btn-success" style="width: 100%;">
                 <i class="fa fa-arrow-left"></i> Back
             </button>
         </a>
     </div>
-
-    <script src="{{ asset('backend/assets/modules/jquery.min.js') }}"></script>
-    <script src="{{ asset('backend/assets/modules/bootstrap/js/bootstrap.min.js') }}"></script>
-</body>
-</html>
-<script>
-    $(document).ready(function () {
-        const urlParams = new URLSearchParams(window.location.search);
-        const patientId = urlParams.get('patient_id');
-        const baseRoute = $('#backButton').data('route');
-        if (patientId && baseRoute) {
-            $('#backButton').attr('href', `${baseRoute}/${patientId}`);
-        }
-    });
-</script>

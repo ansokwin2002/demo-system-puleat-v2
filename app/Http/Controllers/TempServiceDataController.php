@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\CompletedTreatmentData;
 use App\Models\TempServiceData;
 use App\Models\TempTreatmentData;
+use App\Models\Patient;
+use App\Models\Doctor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -187,5 +189,36 @@ class TempServiceDataController extends Controller
             'amount_unpaid' => $tempData['amount_unpaid'],
         ]);
 
+    }
+
+    public function view_invoice($invoice_id, $patient_id)
+    {
+        $services = [];
+        $patient_info = [];
+        $amount_paid = 0;
+        $amount_unpaid = 0;
+
+        $tempTreatment = TempTreatmentData::where('json_data->invoice_id', (int)$invoice_id)
+                                                ->where('json_data->patient_id', (int)$patient_id)
+                                                ->first();
+
+        if ($tempTreatment) {
+            $json = $tempTreatment->json_data;
+
+            $allServices = $json['services'] ?? [];
+            $services = array_filter($allServices, function ($service) {
+                return isset($service['status']) && ($service['status'] === true || $service['status'] === "true");
+            });
+
+            $patient_info = $json['update_customer_info'][0] ?? [];
+            $amount_paid = floatval($json['amount_paid'] ?? 0);
+            $amount_unpaid = floatval($json['amount_unpaid'] ?? 0);
+        }
+
+        $patient = Patient::find($patient_id);
+        $doctor_id = $patient_info['doctor'] ?? null;
+        $doctor = Doctor::find($doctor_id);
+
+        return view('backend.invoice_2.index', compact('services', 'patient_info', 'patient', 'doctor', 'invoice_id','amount_paid', 'amount_unpaid', 'patient_id'));
     }
 }

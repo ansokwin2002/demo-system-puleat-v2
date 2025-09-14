@@ -257,6 +257,8 @@ class PatientController extends Controller
         usort($completedTreatmentInfo, fn($a, $b) => $b['id'] <=> $a['id']);
         $completedTreatmentInfo = array_map(fn($item) => $item['json'], $completedTreatmentInfo);
 
+        Log::info('Completed Treatment Info:', $completedTreatmentInfo);
+
         return view('backend.patient.view_patient_detail', [
             'pageTitle' => $pageTitle,
             'patient' => $patient,

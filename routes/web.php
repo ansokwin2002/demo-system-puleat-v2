@@ -229,6 +229,7 @@ use Illuminate\Support\Facades\Route;
            Route::get('/get-services/{id}','getServices');
            Route::post('/post-treatment/{id}','saveTreatment');
            Route::get('/get-treatment/{id}','getTreatment');
+           Route::get('/view_temp_invoice_treatment/{invoice_id}/{patient_id}','view_invoice')->name('view_temp_invoice_treatment');
         });
     });
 // [temp_service_data---------------------------------------]
@@ -247,7 +248,7 @@ use Illuminate\Support\Facades\Route;
     Route::middleware('auth')->group(function () {
         Route::controller(CompletedTreatmentDataController::class)->group(function(){
            Route::post('/completed-treatment','store');
-           Route::get('/view_invoice_treatment','view_invoice')->name('view_invoice_treatment');
+           Route::get('/view_invoice_treatment/{invoice_id}/{patient_id}','view_invoice')->name('view_invoice_treatment');
         });
     });
 // [completed_save_print_treatment---------------------------------------]

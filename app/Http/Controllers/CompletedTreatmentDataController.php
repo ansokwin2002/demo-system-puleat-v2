@@ -59,45 +59,38 @@ class CompletedTreatmentDataController extends Controller
     }
 
 
-    public function view_invoice()
+    public function view_invoice($invoice_id, $patient_id)
     {
-        $invoice_id = $_GET['invoice_id'];
-        $patient_id = $_GET['patient_id'];
-
         $services = [];
         $patient_info = [];
         $amount_paid = 0;
         $amount_unpaid = 0;
 
-        $tempServiceData = TempTreatmentData::all();
+        $completedTreatment = CompletedTreatmentData::where('json_data->invoice_id', (int)$invoice_id)
+                                                ->where('json_data->patient_id', (int)$patient_id)
+                                                ->first();
 
-        foreach ($tempServiceData as $data) {
-            $json = $data->json_data;
+        Log::info('Completed Treatment Data:', ['completedTreatment' => $completedTreatment]);
 
-            if (!$json) continue;
+        if ($completedTreatment) {
+            $json = $completedTreatment->json_data;
+            Log::info('Extracted JSON Data:', ['json' => $json]);
 
-            if (
-                isset($json['update_customer_info'][0]['patient']) &&
-                (string)$json['update_customer_info'][0]['patient'] === (string)$patient_id
-            ) {
-                // Only include services with status = true
-                $allServices = $json['services'] ?? [];
-                $services = array_filter($allServices, function ($service) {
-                    return isset($service['status']) && $service['status'] === true || $service['status'] === "true";
-                });
+            $allServices = $json['services'] ?? [];
+            $services = array_filter($allServices, function ($service) {
+                return isset($service['status']) && ($service['status'] === true || $service['status'] === "true");
+            });
 
-                $patient_info = $json['update_customer_info'][0] ?? [];
-                $amount_paid = $json['amount_paid'] ?? 0;
-                $amount_unpaid = $json['amount_unpaid'] ?? 0;
-                break;
-            }
+            $patient_info = $json['update_customer_info'][0] ?? [];
+            $amount_paid = $json['amount_paid'] ?? 0;
+            $amount_unpaid = $json['amount_unpaid'] ?? 0;
         }
 
         $patient = Patient::find($patient_id);
         $doctor_id = $patient_info['doctor'] ?? null;
         $doctor = Doctor::find($doctor_id);
 
-        return view('backend.invoice_2.index', compact('services', 'patient_info', 'patient', 'doctor', 'invoice_id','amount_paid', 'amount_unpaid'));
+        return view('backend.invoice_2.index', compact('services', 'patient_info', 'patient', 'doctor', 'invoice_id','amount_paid', 'amount_unpaid', 'patient_id'));
     }
 
 
