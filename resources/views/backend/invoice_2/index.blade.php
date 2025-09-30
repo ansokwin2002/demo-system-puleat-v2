@@ -258,24 +258,30 @@
                     @endforelse
                 </tbody>
 
-
                 @php
                     $total = 0;
                     $totalDiscount = 0;
+                    $afterDiscountTotal = 0;
 
                     foreach ($services as $service) {
-                        $subtotal = floatval($service['subtotal'] ?? 0);
+                        // Use the same calculation logic as in the rows above
+                        $price = floatval($service['price'] ?? 0);
+                        $quantity = intval($service['quantity'] ?? 1);
+                        $rawSubtotal = $price * $quantity;
+
+                        $discountType = $service['discountType'] ?? '';
                         $discountValue = floatval($service['discountValue'] ?? 0);
-                        $discount = 0;
 
-                        if (($service['discountType'] ?? '') === '$') {
-                            $discount = $discountValue;
-                        } elseif (($service['discountType'] ?? '') === '%') {
-                            $discount = $subtotal * $discountValue / 100;
-                        }
+                        $discount = $discountType === '$'
+                            ? $discountValue
+                            : ($rawSubtotal * $discountValue / 100);
 
-                        $total += $subtotal;
+                        $finalTotal = $rawSubtotal - $discount;
+
+                        // Accumulate totals using the same calculations as displayed in rows
+                        $total += $rawSubtotal;
                         $totalDiscount += $discount;
+                        $afterDiscountTotal += $finalTotal;
                     }
 
                     $afterDiscount = $total - $totalDiscount;
