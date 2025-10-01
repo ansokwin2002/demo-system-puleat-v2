@@ -598,9 +598,6 @@
                     processData: false,
                     contentType: false,
                     dataType: "json",
-                    beforeSend: function () {
-                        $('#addNewButton').prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Saving...');
-                    },
                     success: function (response) {
                         if (response && response.id) {
                             fetchDoctorNotebooks(); // Refresh the table data
@@ -621,9 +618,6 @@
                     },
                     error: function (xhr) {
                         console.error("Error occurred:", xhr.responseText);
-                    },
-                    complete: function () {
-                        $('#addNewButton').prop('disabled', false).html('<i class="fa fa-plus"></i> Add New');
                     }
                 });
             });
