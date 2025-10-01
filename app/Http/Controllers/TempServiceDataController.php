@@ -137,8 +137,37 @@ class TempServiceDataController extends Controller
             return response()->json(['error' => 'No data found'], 404);
         }
     
+        $json = $patientData->temp_service_json_data;
+
+        // Get all completed treatment services for this patient
+        $completedTreatmentData = CompletedTreatmentData::where('json_data->patient_id', $id)->get();
+        $completedServiceNames = [];
+
+        foreach ($completedTreatmentData as $completed) {
+            $completedJson = $completed->json_data;
+            $services = $completedJson['services'] ?? [];
+            foreach ($services as $service) {
+                if (!empty($service['name'])) {
+                    $completedServiceNames[] = $service['name'];
+                }
+            }
+        }
+
+        $completedServiceNames = array_unique($completedServiceNames);
+
+        if (isset($json['services']) && is_array($json['services'])) {
+            foreach ($json['services'] as &$service) {
+                if (!empty($service['name']) && in_array($service['name'], $completedServiceNames)) {
+                    $service['service_completed'] = true;
+                } else {
+                    $service['service_completed'] = false;
+                }
+            }
+            unset($service);
+        }
+
         // Return the services in JSON format
-        return response()->json(['data' => $patientData->temp_service_json_data]);
+        return response()->json(['data' => $json]);
     }
     
     public function getTreatment($patientId)

@@ -205,6 +205,7 @@
     //[loading-------------------------------------------]
       
     $(document).ready(function() {
+        let isPlanDirty = false;
 
         // [appointment_date-----------------------------]
             $('#appointmentNotificationModal').modal('show');
@@ -289,6 +290,7 @@
         // [Select_Service---------------------]
             const selectedServices = [];
             $('#serviceSelect').on('change', function() {
+                isPlanDirty = true;
                 const selectedOption = $(this).find('option:selected');
                 const serviceName = selectedOption.data('name-service');
                 const serviceUnit = selectedOption.data('unit-service');
@@ -319,9 +321,7 @@
                         </td>
                         <td style="width:160px;"><p class="subtotal">$0.00</p></td>
                         <td style="width:120px;">
-                            <input style="width:20px;height:20px;cursor:pointer;" 
-                            type="checkbox">
-
+                            <input style="width:20px;height:20px;cursor:pointer;" type="checkbox" class="service-checkbox" data-service-id="${serviceId}">
                         </td>
                     </tr>
                 `;
@@ -333,6 +333,7 @@
                 updateGrandTotal();
                 $('#amount_paid').text('$ 0.00');
                 $('#amount_unpaid').text('$ 0.00');
+                checkTreatmentDataAndToggleButton();
             });
 
             function calculateSubtotal() {
@@ -360,12 +361,7 @@
                 });
             }
 
-            $('#serviceTableBody').on('click', '.remove-row', function() {
-                $(this).closest('tr').remove();
-                updateRowNumbers(); 
-                $('#amount_paid').text('$ 0.00');
-                $('#amount_unpaid').text('$ 0.00');
-            });
+            // Faulty remove-row handler removed. A correct delegated handler exists below.
 
             function updateRowNumbers() {
                 $('#serviceTableBody tr').each(function(index) {
@@ -588,7 +584,7 @@
                         const isDollar = discountType === '$';
                         const rowStyle = service.service_completed === true ? 'style="background-color: #d4edda;"' : '';
                         const serviceRow = `
-                            <tr ${rowStyle}>
+                            <tr ${rowStyle} data-completed="${service.service_completed === true}">
                                 <td></td>
                                 <td style="width:700px;">${service.name}
                                     <button class="btn btn-danger remove-row float-right">
@@ -652,6 +648,8 @@
 
                         // [Checkbox Change Event]
                         $('.service-checkbox').on('change', function() {
+                            isPlanDirty = true;
+                            checkTreatmentDataAndToggleButton();
                             const isChecked = $(this).prop('checked');
                             const serviceId = $(this).data('service-id');
                             const row = $(this).closest('tr');
@@ -674,6 +672,7 @@
                             }
                         });
 
+                        checkTreatmentDataAndToggleButton();
                     },
                     error: function(xhr) {
                         console.error('Error fetching services:', xhr.responseText);
@@ -717,9 +716,11 @@
             }
 
             $('#serviceTableBody').on('click', '.remove-row', function() {
+                isPlanDirty = true;
                 $(this).closest('tr').remove(); 
                 updateRowNumbers();
                 updateGrandTotal();
+                checkTreatmentDataAndToggleButton();
             });
         // [Update Grand Total------------------------]
 
@@ -1348,6 +1349,43 @@
             // [treatment_service---------------------------]
         
             // [fetchAndDisplayTreatmentData---------------------------------]
+
+        // [checkTreatmentDataAndToggleButton---------------------------------]
+            function checkTreatmentDataAndToggleButton() {
+                if (isPlanDirty) {
+                    $('#completed_treatment_planning').prop('disabled', true).attr('title', 'Please save the treatment plan first').removeClass('btn-success').addClass('btn-secondary');
+                    if ($('#completed_treatment_planning').data('bs.tooltip')) {
+                        $('#completed_treatment_planning').tooltip('dispose').tooltip();
+                    }
+                    return;
+                }
+                let totalServicesInTable = $('#serviceTableBody tr').length;
+                if (totalServicesInTable === 0) {
+                    $('#completed_treatment_planning').prop('disabled', true).attr('title', 'Please add and save treatments to the table first').removeClass('btn-success').addClass('btn-secondary');
+                    if ($('#completed_treatment_planning').data('bs.tooltip')) {
+                        $('#completed_treatment_planning').tooltip('dispose').tooltip();
+                    }
+                    return;
+                }
+
+                let allServicesCompleted = true;
+                $('#serviceTableBody tr').each(function() {
+                    if ($(this).data('completed') !== true) {
+                        allServicesCompleted = false;
+                        return false; // break loop
+                    }
+                });
+
+                if (allServicesCompleted) {
+                    $('#completed_treatment_planning').prop('disabled', false).attr('title', 'Click to complete the treatment planning').removeClass('btn-secondary').addClass('btn-success');
+                } else {
+                    $('#completed_treatment_planning').prop('disabled', true).attr('title', 'Please complete all treatments first').removeClass('btn-success').addClass('btn-secondary');
+                }
+                if ($('#completed_treatment_planning').data('bs.tooltip')) {
+                    $('#completed_treatment_planning').tooltip('dispose').tooltip();
+                }
+            }
+        // [checkTreatmentDataAndToggleButton---------------------------------]
                 function fetchAndDisplayTreatmentData(patientId) {
                     $.ajax({
                         url: `/get-treatment/${patientId}`,  // Your route to the backend

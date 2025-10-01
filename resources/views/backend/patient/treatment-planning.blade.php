@@ -19,7 +19,7 @@
                                 <i class="fa fa-print"></i> Print Invoice
                             </button>
                         </a>
-                    <button class="btn btn-success" id="completed_treatment_planning" style="float: right;"><i class="fa-solid fa-circle-check"></i> Completed</button>
+                    <button class="btn btn-success" id="completed_treatment_planning" style="float: right;" disabled title="Please add and save treatments to the table first" data-toggle="tooltip" data-placement="top"><i class="fa-solid fa-circle-check"></i> Completed</button>
                 </div>
                 <div class="card_title">
                     <div class="row">
