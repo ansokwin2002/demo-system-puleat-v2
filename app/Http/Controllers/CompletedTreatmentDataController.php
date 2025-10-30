@@ -17,6 +17,8 @@ class CompletedTreatmentDataController extends Controller
         $request->validate([
             'patient_id' => 'required',
             'grand_total' => 'required|numeric',
+            'amount_paid' => 'nullable|numeric',
+            'amount_unpaid' => 'nullable|numeric',
             'services' => 'required|array',
             'update_customer_info' => 'required|array',
         ]);
@@ -34,6 +36,8 @@ class CompletedTreatmentDataController extends Controller
             'invoice_id' => $invoice_id,
             'patient_id' => $request->patient_id,
             'grand_total' => $request->grand_total,
+            'amount_paid' => $request->amount_paid ?? 0,
+            'amount_unpaid' => $request->amount_unpaid ?? 0,
             'services' => $filteredServices,
             'update_customer_info' => $request->update_customer_info,
             'completed' => true,

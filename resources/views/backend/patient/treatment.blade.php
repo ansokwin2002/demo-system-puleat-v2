@@ -533,6 +533,22 @@
                                                             <strong id="grand_total_{{ $index }}">$ {{ number_format($info['grand_total'], 2) }}</strong>
                                                         </td>
                                                     </tr>
+                                                    <tr>
+                                                        <td colspan="7">
+                                                            <strong><span class="float-right">Amount Paid</span></strong>
+                                                        </td>
+                                                        <td>
+                                                            <span id="amount_paid_{{ $index }}">$ {{ number_format($info['amount_paid'] ?? 0, 2) }}</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="7">
+                                                            <strong><span class="float-right">Unpaid Amount</span></strong>
+                                                        </td>
+                                                        <td>
+                                                            <span id="amount_unpaid_{{ $index }}">$ {{ number_format($info['amount_unpaid'] ?? 0, 2) }}</span>
+                                                        </td>
+                                                    </tr>
                                                 </tbody>
                                             </table>
                                         </div>

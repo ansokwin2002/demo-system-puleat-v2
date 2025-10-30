@@ -1854,6 +1854,20 @@
                             updatedServices.push(serviceData);
                         });
 
+                        // Get payment amounts from the treatment form
+                        let amountPaid = 0;
+                        let amountUnpaid = 0;
+
+                        if ($('#treatment_amount_paid').length) {
+                            let amountPaidText = $('#treatment_amount_paid').text().replace('$', '').trim();
+                            amountPaid = parseFloat(amountPaidText) || 0;
+                        }
+
+                        if ($('#treatment_amount_unpaid').length) {
+                            let amountUnpaidText = $('#treatment_amount_unpaid').text().replace('$', '').trim();
+                            amountUnpaid = parseFloat(amountUnpaidText) || 0;
+                        }
+
                         // AJAX to save treatment data
                         $.ajax({
                             url: '/completed-treatment',
@@ -1861,6 +1875,8 @@
                             data: {
                                 patient_id: patientId,
                                 grand_total: grandTotal,
+                                amount_paid: amountPaid,
+                                amount_unpaid: amountUnpaid,
                                 services: updatedServices,
                                 update_customer_info: update_customer_info,
                                 completed: true,
