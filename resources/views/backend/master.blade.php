@@ -1197,14 +1197,15 @@
             });
 
             function calculateNextAppointment() {
-                var typeService = $('#type_service').find(':selected').data('days');
+                var typeService = $('#type_service').find(':selected').data('months');
                 var selectedDate = $('#date').val();
 
-                // alert('Selected Date: ' + selectedDate + '\nType Service Days: ' + typeService);
-                
+                // alert('Selected Date: ' + selectedDate + '\nType Service Months: ' + typeService);
+
                 if (typeService && selectedDate) {
                     var date = new Date(selectedDate);
-                    date.setDate(date.getDate() + parseInt(typeService));
+                    // Add months using proper calendar calculation
+                    date.setMonth(date.getMonth() + parseInt(typeService));
                     var day = String(date.getDate()).padStart(2, '0');
                     var month = String(date.getMonth() + 1).padStart(2, '0');
                     var year = date.getFullYear();
@@ -1218,6 +1219,9 @@
             $('#date').on('apply.daterangepicker', function () {
                 calculateNextAppointment();
             });
+
+            // Initialize next appointment calculation on page load
+            calculateNextAppointment();
             //-change-by-default
     
         // [next-appointment-date------------------------------------]

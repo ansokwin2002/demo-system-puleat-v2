@@ -182,9 +182,9 @@
                                                             </div>
                                                             <div class="select_customer">
                                                                 <select name="type_service" id="type_service" class="form-control">
-                                                                    <option value="General" data-days="180">General</option>
-                                                                    <option value="Implant" data-days="180">Implant</option>
-                                                                    <option value="Ortho" data-days="30">Ortho</option>
+                                                                    <option value="General" data-months="6">General</option>
+                                                                    <option value="Implant" data-months="6">Implant</option>
+                                                                    <option value="Ortho" data-months="1">Ortho</option>
                                                                 </select>
                                                             </div>
                                                         </div>

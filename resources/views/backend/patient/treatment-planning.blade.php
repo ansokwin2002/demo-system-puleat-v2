@@ -173,9 +173,9 @@
                                                 </div>
                                                 <div class="select_customer">
                                                     <select name="type_service" id="type_service" class="form-control">
-                                                        <option value="General" data-days="180" {{ ($info['type_service'] ?? '') == 'General' ? 'selected' : '' }}>General</option>
-                                                        <option value="Implant" data-days="180" {{ ($info['type_service'] ?? '') == 'Implant' ? 'selected' : '' }}>Implant</option>
-                                                        <option value="Ortho" data-days="30" {{ ($info['type_service'] ?? '') == 'Ortho' ? 'selected' : '' }}>Ortho</option>
+                                                        <option value="General" data-months="6" {{ ($info['type_service'] ?? '') == 'General' ? 'selected' : '' }}>General</option>
+                                                        <option value="Implant" data-months="6" {{ ($info['type_service'] ?? '') == 'Implant' ? 'selected' : '' }}>Implant</option>
+                                                        <option value="Ortho" data-months="1" {{ ($info['type_service'] ?? '') == 'Ortho' ? 'selected' : '' }}>Ortho</option>
                                                     </select>
                                                 </div>
                                             </div>

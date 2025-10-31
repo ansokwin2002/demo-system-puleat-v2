@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Next Appointment Fix</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h2>Test Next Appointment Calculation</h2>
+    
+    <div>
+        <label for="date">Date:</label>
+        <input type="text" id="date" value="2024-01-01">
+    </div>
+    
+    <div>
+        <label for="type_service">Type Service:</label>
+        <select id="type_service">
+            <option value="General" data-months="6" selected>General (6 months)</option>
+            <option value="Implant" data-months="6">Implant (6 months)</option>
+            <option value="Ortho" data-months="1">Ortho (1 month)</option>
+        </select>
+    </div>
+    
+    <div>
+        <label for="next_appointment_date">Next Appointment Date:</label>
+        <input type="text" id="next_appointment_date" readonly>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            function calculateNextAppointment() {
+                var typeService = $('#type_service').find(':selected').data('months');
+                var selectedDate = $('#date').val();
+
+                console.log('Selected Date: ' + selectedDate + '\nType Service Months: ' + typeService);
+
+                if (typeService && selectedDate) {
+                    var date = new Date(selectedDate);
+                    // Add months using proper calendar calculation
+                    date.setMonth(date.getMonth() + parseInt(typeService));
+                    var day = String(date.getDate()).padStart(2, '0');
+                    var month = String(date.getMonth() + 1).padStart(2, '0');
+                    var year = date.getFullYear();
+                    var formattedDate = `${year}-${month}-${day}`;
+                    $('#next_appointment_date').val(formattedDate);
+                }
+            }
+            
+            $('#type_service').on('change', function () {
+                calculateNextAppointment();
+            });
+            
+            $('#date').on('change', function () {
+                calculateNextAppointment();
+            });
+            
+            // Initialize next appointment calculation on page load
+            calculateNextAppointment();
+        });
+    </script>
+</body>
+</html>
