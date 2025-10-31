@@ -480,6 +480,17 @@
                     const patient = $('#patient-select').val();
                     const cashier = $('#cashier-select').val();
                     const type_service = $('#type_service').val();
+
+                    // Validate doctor selection
+                    if (!doctor || doctor === '') {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Doctor Required!',
+                            text: 'Please select a doctor before saving the treatment plan.',
+                            confirmButtonText: 'OK'
+                        });
+                        return; // Stop execution
+                    }
                     const customer_info = {
                         start_date: start_date,
                         next_appointment: next_appointment,

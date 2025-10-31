@@ -56,8 +56,8 @@
                                             @php 
                                                 $doctors = App\Models\Doctor::all();
                                             @endphp
-                                            <select class="form-control " name="doctor_id" id="doctor">
-                                                <!-- <option value="" disabled>Select a Doctor</option> -->
+                                            <select class="form-control" name="doctor_id" id="doctor" required>
+                                                <option value="" disabled {{ empty($info['doctor']) ? 'selected' : '' }}>Select a Doctor</option>
                                                 @foreach ($doctors as $doctor)
                                                         <option value="{{ $doctor->id }}" {{ ($info['doctor'] ?? '') == $doctor->id ? 'selected' : '' }}>
                                                             {{ $doctor->name }}

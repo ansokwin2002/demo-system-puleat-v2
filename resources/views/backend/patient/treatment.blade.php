@@ -38,7 +38,9 @@
                                                 $info = $updateCustomerInfo[0] ?? [];
                                             @endphp
 
-                                            <input type="text" class="form-control datepicker" id="date"  value="{{ $info['start_date'] ?? '' }}">
+                                            <input type="text" class="form-control datepicker" id="date" value="{{ $info['start_date'] ?? '' }}" disabled style="background-color: #f8f9fa; cursor: not-allowed;">
+                                            <!-- Hidden input to ensure value is submitted -->
+                                            <input type="hidden" name="start_date" value="{{ $info['start_date'] ?? '' }}">
                                         </div>
                                     </div>`
                                 </div>
@@ -58,7 +60,7 @@
                                             @php 
                                                 $doctors = App\Models\Doctor::all();
                                             @endphp
-                                            <select class="form-control " name="doctor_id" id="doctor">
+                                            <select class="form-control" name="doctor_id_display" id="doctor" disabled style="background-color: #f8f9fa; cursor: not-allowed;">
                                                 <!-- <option value="" disabled>Select a Doctor</option> -->
                                                 @foreach ($doctors as $doctor)
                                                         <option value="{{ $doctor->id }}" {{ ($info['doctor'] ?? '') == $doctor->id ? 'selected' : '' }}>
@@ -66,6 +68,8 @@
                                                         </option>
                                                 @endforeach
                                             </select>
+                                            <!-- Hidden input to ensure value is submitted -->
+                                            <input type="hidden" name="doctor_id" value="{{ $info['doctor'] ?? '' }}">
                                         </div>
                                     </div>
                                 </div>
@@ -90,7 +94,7 @@
                                                         $selectedPatientId = Request::segment(2); 
                                                     @endphp
 
-                                                    <select id="patient-select" class="form-control select2" style="width: 100%;">
+                                                    <select id="patient-select-display" class="form-control" style="width: 100%; background-color: #f8f9fa; cursor: not-allowed;" disabled>
                                                         <option value="" disabled>Select a Patient</option>
                                                         @foreach ($patients as $patient)
                                                             <option value="{{ $patient->id }}" {{ $patient->id == $selectedPatientId ? 'selected' : '' }}>
@@ -98,6 +102,8 @@
                                                             </option>
                                                         @endforeach
                                                     </select>
+                                                    <!-- Hidden input to ensure value is submitted -->
+                                                    <input type="hidden" name="patient_id" value="{{ $selectedPatientId ?? '' }}">
                                                 </div>
                                             </div>
                                         </div>
@@ -122,7 +128,7 @@
                                                     $cashiers = App\Models\Cashier::all();
                                                 @endphp
 
-                                                <select id="cashier-select" name="cashier_id"  class="form-control select2" style="width: 100%;">
+                                                <select id="cashier-select-display" name="cashier_id_display" class="form-control" style="width: 100%; background-color: #f8f9fa; cursor: not-allowed;" disabled>
                                                     <option value="" disabled>Select a Cashier</option>
                                                     @foreach ($cashiers as $cashier)
                                                         <option value="{{ $cashier->id }}" {{ ($info['cashier'] ?? '') == $cashier->id ? 'selected' : '' }}>
@@ -130,6 +136,8 @@
                                                         </option>
                                                     @endforeach
                                                 </select>
+                                                <!-- Hidden input to ensure value is submitted -->
+                                                <input type="hidden" name="cashier_id" value="{{ $info['cashier'] ?? '' }}">
                                             
                                                 </div>
                                             </div>
@@ -154,7 +162,7 @@
                                                     <i class="fas fa-calendar"></i>
                                                 </div>
                                             </div>
-                                            <input type="text" name="next_appointment_date" id="next_appointment_date" class="form-control datepicker" value="{{ $info['next_appointment'] ?? '' }}">
+                                            <input type="text" name="next_appointment_date" id="next_appointment_date" class="form-control datepicker" value="{{ $info['next_appointment'] ?? '' }}" disabled style="background-color: #f8f9fa; cursor: not-allowed;">
                                         </div>
                                     </div>
                                 </div>
@@ -174,11 +182,13 @@
                                                     <i class="fa fa-heart"></i>
                                                 </div>
                                                 <div class="select_customer">
-                                                    <select name="type_service" id="type_service" class="form-control">
+                                                    <select name="type_service_display" id="type_service" class="form-control" disabled style="background-color: #f8f9fa; cursor: not-allowed;">
                                                         <option value="General" data-months="6" {{ ($info['type_service'] ?? '') == 'General' ? 'selected' : '' }}>General</option>
                                                         <option value="Implant" data-months="6" {{ ($info['type_service'] ?? '') == 'Implant' ? 'selected' : '' }}>Implant</option>
                                                         <option value="Ortho" data-months="1" {{ ($info['type_service'] ?? '') == 'Ortho' ? 'selected' : '' }}>Ortho</option>
                                                     </select>
+                                                    <!-- Hidden input to ensure value is submitted -->
+                                                    <input type="hidden" name="type_service" value="{{ $info['type_service'] ?? 'General' }}">
                                                 </div>
                                             </div>
                                         </div>
