@@ -128,6 +128,9 @@
                                                 <li class="nav-item treatment_service">
                                                     <a class="nav-link" id="treatment-tab2" data-toggle="tab" href="#treatment" role="tab" aria-controls="treatment" aria-selected="false">Treatment</a>
                                                 </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" id="appointment-tab2" data-toggle="tab" href="#appointment" role="tab" aria-controls="appointment" aria-selected="false">Appointment</a>
+                                                </li>
                                                 <!-- <li class="nav-item">
                                                     <a class="nav-link" id="ortho-treatment-tab2" data-toggle="tab" href="#ortho-treatment" role="tab" aria-controls="ortho-treatment" aria-selected="false">Ortho Treatment</a>
                                                 </li> -->
@@ -169,6 +172,24 @@
                                         </div>
                                         <div class="tab-pane fade" id="treatment" role="tabpanel" aria-labelledby="treatment-tab2">
                                             {!! $display['treatment'] !!}
+                                        </div>
+                                        <div class="tab-pane fade" id="appointment" role="tabpanel" aria-labelledby="appointment-tab2">
+                                            <button class="btn btn-primary" data-toggle="modal" data-target="#fire-modal-appointment"><i class="fa fa-plus"></i> Add New Appointment</button>
+                                            <div class="table-responsive mt-3">
+                                                <table class="table table-striped dataTable" id="table_appointments">
+                                                    <thead class="bg-primary">
+                                                        <tr>
+                                                            <th class="text-white align-middle text-center">No.</th>
+                                                            <th class="text-white align-middle text-center">Appointment Date</th>
+                                                            <th class="text-white align-middle text-center">Doctor Name</th>
+                                                            <th class="text-white align-middle">Description</th>
+                                                            <th class="text-white align-middle text-center">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                         <!-- <div class="tab-pane fade" id="ortho-treatment" role="tabpanel" aria-labelledby="ortho-treatment-tab2">
                                             ortho-treatment-tab2 imperdiet odio sed neque ultricies, ut dapibus mi maximus. Proin ligula massa, gravida in lacinia efficitur, hendrerit eget mauris. Pellentesque fermentum, sem interdum molestie finibus, nulla diam varius leo, nec varius lectus elit id dolor. Nam malesuada orci non ornare vulputate. Ut ut sollicitudin magna. Vestibulum eget ligula ut ipsum venenatis ultrices. Proin bibendum bibendum augue ut luctus.
@@ -352,6 +373,106 @@
         </div>
     </div>
 <!-- [Amount Paid-------------------------] -->
+
+<!-- [Model Add Appointment-------------------------] -->
+    <div class="modal fade" id="fire-modal-appointment" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width: 50%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Appointment</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="appointmentForm" method="post">
+                        @csrf
+                        <input type="hidden" name="patient_id" value="{{ $patient->id }}">
+                        <div class="form-group">
+                            <label for="appointment_date">Appointment Date :</label>
+                            <input type="text" name="appointment_date" id="appointment_date" class="form-control datepicker" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="doctor_id">Doctor :</label>
+                            @php 
+                                $doctors = App\Models\Doctor::all();
+                            @endphp
+                            <select class="form-control" name="doctor_id" id="appointment_doctor_id" required>
+                                <option value="">Select Doctor</option>
+                                @foreach ($doctors as $doctor)
+                                    <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="appointment_description">Description :</label>
+                            <textarea name="description" id="appointment_description" class="form-control" rows="4"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary" id="addAppointmentButton">
+                                <i class="fa fa-plus"></i> Add Appointment
+                            </button>
+                            <button type="button" class="btn btn-warning" data-dismiss="modal">
+                                <i class="fa fa-remove"></i> Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- [Model Add Appointment-------------------------] -->
+
+<!-- [Model Edit Appointment-------------------------] -->
+    <div class="modal fade" id="fire-modal-edit-appointment" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width: 50%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Appointment</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editAppointmentForm" method="post">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="appointment_id" id="edit_appointment_id">
+                        <input type="hidden" name="patient_id" value="{{ $patient->id }}">
+                        <div class="form-group">
+                            <label for="edit_appointment_date">Appointment Date :</label>
+                            <input type="date" name="appointment_date" id="edit_appointment_date" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_appointment_doctor_id">Doctor :</label>
+                            @php 
+                                $doctors = App\Models\Doctor::all();
+                            @endphp
+                            <select class="form-control" name="doctor_id" id="edit_appointment_doctor_id" required>
+                                <option value="">Select Doctor</option>
+                                @foreach ($doctors as $doctor)
+                                    <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_appointment_description">Description :</label>
+                            <textarea name="description" id="edit_appointment_description" class="form-control" rows="4"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa fa-save"></i> Update Appointment
+                            </button>
+                            <button type="button" class="btn btn-warning" data-dismiss="modal">
+                                <i class="fa fa-remove"></i> Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- [Model Edit Appointment-------------------------] -->
 
 @endsection
 
@@ -622,6 +743,195 @@
                 });
             });
         // [Add Doctor_Notebook----------------------------]
+
+        // [Appointments Management----------------------------]
+            let appointmentsTable;
+
+            $(document).ready(function () {
+                appointmentsTable = $('#table_appointments').DataTable({
+                    processing: true,
+                    serverSide: false,
+                    order: [],
+                    columns: [
+                        { title: "No.", className: "align-middle text-center" },
+                        { title: "Appointment Date", className: "align-middle text-center" },
+                        { title: "Doctor Name", className: "align-middle text-center" },
+                        { title: "Description", className: "align-middle w-100" },
+                        { title: "Action", className: "align-middle text-center", orderable: false }
+                    ]
+                });
+
+                fetchAppointments();
+            });
+
+            function fetchAppointments() {
+                let patientId = window.location.pathname.split('/').pop();
+                $.ajax({
+                    url: `{{ route('patient.appointments.index', '') }}/${patientId}`,
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        appointmentsTable.clear();
+
+                        data.forEach((appointment, index) => {
+                            appointmentsTable.row.add([
+                                index + 1,
+                                appointment.appointment_date,
+                                appointment.doctor ? appointment.doctor.name : 'N/A',
+                                `<div class="desc-text">${appointment.description || ''}</div>`,
+                                `
+                                <i data-id="${appointment.id}" class="fa fa-trash text-danger delete-appointment" 
+                                data-toggle="tooltip" title="Delete Appointment" style="cursor: pointer;"></i>
+                                &nbsp;
+                                <i data-id="${appointment.id}" 
+                                   data-date="${appointment.appointment_date}" 
+                                   data-doctor="${appointment.doctor_id}" 
+                                   data-description="${appointment.description || ''}" 
+                                   class="fa fa-edit edit-appointment" 
+                                   data-toggle="tooltip" title="Edit Appointment" style="color: gold;cursor: pointer;"></i>
+                                `
+                            ]);
+                        });
+
+                        appointmentsTable.draw();
+                        $('[data-toggle="tooltip"]').tooltip();
+
+                        // Delete functionality
+                        $('.delete-appointment').on('click', function () {
+                            const appointmentId = $(this).data('id');
+                            
+                            Swal.fire({
+                                title: 'Are you sure?',
+                                text: "You won't be able to revert this action!",
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#d33',
+                                cancelButtonColor: '#3085d6',
+                                confirmButtonText: 'Yes, delete it!',
+                                cancelButtonText: 'Cancel'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    $.ajax({
+                                        url: `{{ route('patient.appointments.destroy', '') }}/${appointmentId}`,
+                                        type: "DELETE",
+                                        data: {
+                                            _token: '{{ csrf_token() }}',
+                                        },
+                                        dataType: "json",
+                                        success: function (response) {
+                                            if (response.success) {
+                                                fetchAppointments();
+                                                Swal.fire({
+                                                    title: 'Deleted!',
+                                                    text: 'The appointment has been deleted successfully.',
+                                                    icon: 'success',
+                                                    timer: 1000,
+                                                    showConfirmButton: false
+                                                });
+                                            }
+                                        },
+                                        error: function (xhr) {
+                                            console.error("Error deleting appointment:", xhr.responseText);
+                                            Swal.fire('Error!', 'There was an error deleting the appointment.', 'error');
+                                        }
+                                    });
+                                }
+                            });
+                        });
+
+                        // Edit functionality
+                        $('.edit-appointment').on('click', function () {
+                            const appointmentId = $(this).data('id');
+                            const date = $(this).data('date');
+                            const doctorId = $(this).data('doctor');
+                            const description = $(this).data('description');
+
+                            $('#edit_appointment_id').val(appointmentId);
+                            $('#edit_appointment_date').val(date);
+                            $('#edit_appointment_doctor_id').val(doctorId);
+                            $('#edit_appointment_description').val(description);
+
+                            $('#fire-modal-edit-appointment').modal('show');
+                        });
+                    },
+                    error: function (xhr) {
+                        console.error("Error fetching appointments:", xhr.responseText);
+                    }
+                });
+            }
+
+            // Add Appointment
+            $('#appointmentForm').submit(function (e) {
+                e.preventDefault();
+
+                let formData = new FormData(this);
+
+                $.ajax({
+                    url: "{{ route('patient.appointments.store') }}",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: "json",
+                    success: function (response) {
+                        if (response && response.id) {
+                            fetchAppointments();
+                            $('#appointmentForm')[0].reset();
+                            $('#fire-modal-appointment').modal('hide');
+                            
+                            Swal.fire({
+                                title: 'Success!',
+                                text: 'Appointment has been added successfully.',
+                                icon: 'success',
+                                timer: 1000,
+                                showConfirmButton: false
+                            });
+                        }
+                    },
+                    error: function (xhr) {
+                        console.error("Error occurred:", xhr.responseText);
+                        Swal.fire('Error!', 'There was an error adding the appointment.', 'error');
+                    }
+                });
+            });
+
+            // Update Appointment
+            $('#editAppointmentForm').off('submit').on('submit', function (e) {
+                e.preventDefault();
+
+                const appointmentId = $('#edit_appointment_id').val();
+                const appointmentDate = $('#edit_appointment_date').val();
+                const doctorId = $('#edit_appointment_doctor_id').val();
+                const description = $('#edit_appointment_description').val();
+
+                $.ajax({
+                    url: '{{ route("patient.appointments.update", ":appointmentId") }}'.replace(':appointmentId', appointmentId),
+                    type: "PUT",
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        appointment_date: appointmentDate,
+                        doctor_id: doctorId,
+                        description: description
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        fetchAppointments();
+                        $('#fire-modal-edit-appointment').modal('hide');
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Appointment updated successfully.',
+                            icon: 'success',
+                            timer: 1000,
+                            showConfirmButton: false
+                        });
+                    },
+                    error: function (xhr) {
+                        console.error("Error updating appointment:", xhr.responseText);
+                        Swal.fire('Error!', 'Error updating appointment.', 'error');
+                    }
+                });
+            });
+        // [Appointments Management----------------------------]
 
     });
 </script>

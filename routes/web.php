@@ -11,6 +11,7 @@ use App\Http\Controllers\DoctorNotedBookController;
 use App\Http\Controllers\DoctorReportController;
 use App\Http\Controllers\Invoice\InvoiceController;
 use App\Http\Controllers\Notification\NotificationController;
+use App\Http\Controllers\NewAppointmentController;
 use App\Http\Controllers\Patient\PatientController;
 use App\Http\Controllers\PatientHistory\PatientHistoryController;
 use App\Http\Controllers\PatientSummary\PatientSummaryController;
@@ -96,6 +97,9 @@ use Illuminate\Support\Facades\Route;
             Route::get('/view-patient-detail/{id}','viewPatientDetail')->name('view_patient_detail');
             Route::get('/list-appointment-patient','appointment_patient')->name('appointment_patient');
         });
+        Route::controller(NewAppointmentController::class)->group(function(){
+            Route::get('/new-appointment','index')->name('new_appointment');
+        });
     });
 // [patient_controller----------------------------]
 
@@ -127,6 +131,11 @@ use Illuminate\Support\Facades\Route;
         Route::controller(AppointmentController::class)->group(function(){
             Route::get('/update-appointments','showForm')->name('appointments.form');
             Route::put('/create-appointments/{id}','update')->name('appointments.update');
+            // Patient detail appointment routes
+            Route::get('/patient-appointments/{patientId}','getAppointments')->name('patient.appointments.index');
+            Route::post('/patient-appointments','store')->name('patient.appointments.store');
+            Route::put('/patient-appointments/{id}','updateAppointment')->name('patient.appointments.update');
+            Route::delete('/patient-appointments/{id}','destroy')->name('patient.appointments.destroy');
         });
         Route::controller(NotificationController::class)->group(function(){
             Route::get('/notifications','index')->name('notifications.index');

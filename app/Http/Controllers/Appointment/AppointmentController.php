@@ -57,6 +57,66 @@ class AppointmentController extends Controller
         return redirect()->back();
     }
 
+    // Get appointments for a specific patient
+    public function getAppointments($patientId)
+    {
+        $appointments = Appointment::with('doctor')
+            ->where('patient_id', $patientId)
+            ->orderBy('appointment_date', 'desc')
+            ->get();
 
+        return response()->json($appointments);
+    }
 
+    // Store a new appointment
+    public function store(Request $request)
+    {
+        $request->validate([
+            'patient_id' => 'required|exists:patients,id',
+            'doctor_id' => 'required|exists:doctors,id',
+            'appointment_date' => 'required|date',
+            'description' => 'nullable|string',
+        ]);
+
+        $appointment = Appointment::create([
+            'patient_id' => $request->patient_id,
+            'doctor_id' => $request->doctor_id,
+            'appointment_date' => $request->appointment_date,
+            'description' => $request->description,
+        ]);
+
+        $appointment->load('doctor');
+
+        return response()->json($appointment);
+    }
+
+    // Update an existing appointment
+    public function updateAppointment(Request $request, $id)
+    {
+        $request->validate([
+            'doctor_id' => 'required|exists:doctors,id',
+            'appointment_date' => 'required|date',
+            'description' => 'nullable|string',
+        ]);
+
+        $appointment = Appointment::findOrFail($id);
+        $appointment->update([
+            'doctor_id' => $request->doctor_id,
+            'appointment_date' => $request->appointment_date,
+            'description' => $request->description,
+        ]);
+
+        $appointment->load('doctor');
+
+        return response()->json($appointment);
+    }
+
+    // Delete an appointment
+    public function destroy($id)
+    {
+        $appointment = Appointment::findOrFail($id);
+        $appointment->delete();
+
+        return response()->json(['success' => true]);
+    }
 }
