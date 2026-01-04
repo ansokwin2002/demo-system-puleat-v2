@@ -441,7 +441,7 @@
                         <input type="hidden" name="patient_id" value="{{ $patient->id }}">
                         <div class="form-group">
                             <label for="edit_appointment_date">Appointment Date :</label>
-                            <input type="date" name="appointment_date" id="edit_appointment_date" class="form-control" required>
+                            <input type="text" name="appointment_date" id="edit_appointment_date" class="form-control datepicker" required>
                         </div>
                         <div class="form-group">
                             <label for="edit_appointment_doctor_id">Doctor :</label>
