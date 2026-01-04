@@ -22,6 +22,30 @@
                 <div class="section-header">
                     <h1>Dashboard</h1>
                 </div>
+
+                <!-- [Filter by Year] -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card p-4">
+                            <form action="{{ route('dashboard') }}" method="GET">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <select name="year" class="form-control" onchange="this.form.submit()">
+                                            <option value="">Select Year</option>
+                                            @foreach($years as $yearOption)
+                                                <option value="{{ $yearOption }}" {{ $yearOption == $year ? 'selected' : '' }}>
+                                                    {{ $yearOption }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- [Filter by Year] -->
+
                 <!-- [Bar Chart Patient-------------------------] -->
                     <div class="row mt-4">
                         <div class="col-12">

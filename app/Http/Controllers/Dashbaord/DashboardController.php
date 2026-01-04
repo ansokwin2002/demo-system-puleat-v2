@@ -14,17 +14,20 @@ use Illuminate\Support\Facades\DB;
 class DashboardController extends Controller
 {
     
-   public function dashboard()
+   public function dashboard(Request $request)
     {
         // [Page_title----------------------------------]
             $pageTitle = 'Dashboard | Laor-Prornit-Clinic-Dental';
         // [Page_title----------------------------------]
 
-        // [Patient-----------------------------------------------------]
-            $currentYear = date('Y');
+        // [Year Filter----------------------------------]
+            $selectedYear = $request->input('year', date('Y'));
+            $years = range(2024, 2050);
+        // [Year Filter----------------------------------]
 
+        // [Patient-----------------------------------------------------]
             $monthlyPatientCounts = Patient::select(DB::raw('LPAD(MONTH(date), 2, "0") as month'), DB::raw('COUNT(*) as count'))
-                ->whereYear('date', $currentYear)
+                ->whereYear('date', $selectedYear)
                 ->groupBy(DB::raw('month'))
                 ->orderBy(DB::raw('month'))
                 ->pluck('count', 'month')
@@ -51,7 +54,7 @@ class DashboardController extends Controller
 
             $sumServiceData = array_fill_keys(array_values($months), 0);
 
-            $completedTreatments = CompletedTreatmentData::whereYear('created_at', $currentYear)->get();
+            $completedTreatments = CompletedTreatmentData::whereYear('created_at', $selectedYear)->get();
 
             foreach ($completedTreatments as $treatment) {
                 $jsonData = $treatment->json_data;
@@ -147,7 +150,8 @@ class DashboardController extends Controller
         // [Appointments-----------------------------------------------------]
 
         return view('backend.dashboard', [
-            'year' => $currentYear,
+            'year' => $selectedYear,
+            'years' => $years,
             'monthlyPatientCounts' => $orderedPatientCounts,
             'months' => $months,
             'generalData' => $generalData,
