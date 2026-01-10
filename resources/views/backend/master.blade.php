@@ -361,7 +361,7 @@
                 const tableRow = `
                     <tr>
                         <td></td>
-                        <td style="width:700px;">${serviceName}<button class="btn btn-danger remove-row float-right"><i class="fa fa-trash"></i></button></td>
+                        <td style="width:700px;"><span class="service-name-text">${serviceName}</span> <i class="fa fa-edit edit-service-name" style="cursor:pointer; margin-left: 5px; color: blue;"></i><button class="btn btn-danger remove-row float-right"><i class="fa fa-trash"></i></button></td>
                         <td style="width:120px;"><input type="text" class="form-control unit" value="1" inputmode="numeric" pattern="\d*" title="Please enter a number"></td>
                         <td class="price"><input type="text" class="form-control price" value="${servicePrice}"></td>
                         <td class="d-flex">
@@ -511,7 +511,7 @@
                 // Iterate over each row in the service table to collect data
                 $('#serviceTableBody').find('tr').each(function() {
                     const serviceId = $(this).find('input.service-id').val();  // Assuming you add a hidden input for service ID
-                    const serviceName = $(this).find('td').eq(1).text(); // Get service name (assuming it's in the 2nd column)
+                    const serviceName = $(this).find('.service-name-text').text();
                     const serviceUnit = $(this).find('.unit').val();  // Get updated unit value
                     const servicePrice = $(this).find('.price input').val();  // Get updated price
                     const discountPercent = $(this).find('.discount-percent').val();  // Get discount percent
@@ -658,7 +658,8 @@
                         const serviceRow = `
                             <tr ${rowStyle} data-completed="${service.service_completed === true}">
                                 <td></td>
-                                <td style="width:700px;">${service.name}
+                                <td style="width:700px;">
+                                    <span class="service-name-text">${service.name}</span> <i class="fa fa-edit edit-service-name" style="cursor:pointer; margin-left: 5px; color: blue;"></i>
                                     <button class="btn btn-danger remove-row float-right">
                                         <i class="fa fa-trash"></i>
                                     </button>
@@ -2001,6 +2002,59 @@
             $(`${savedTab}`).tab('show');
             localStorage.removeItem('activeTreatmentTab'); // Optional: clean up
         }
+
+        $('#serviceTableBody').on('click', '.edit-service-name', function() {
+            const td = $(this).closest('td');
+            const span = td.find('.service-name-text');
+            if (td.find('.service-name-input').length > 0) return; // Already in edit mode
+
+            const currentName = span.text();
+            
+            const input = $(`<input type="text" class="form-control service-name-input" value="${currentName}" style="display: inline-block; width: 70%;">`);
+            
+            span.hide();
+            $(this).hide(); // hide edit icon
+            
+            // Add input and save/cancel icons
+            td.prepend(input);
+            $(this).after(`
+                <i class="fa fa-save save-service-name" style="cursor:pointer; color:green; margin-left: 5px;"></i>
+                <i class="fa fa-times cancel-edit-name" style="cursor:pointer; color:red; margin-left: 5px;"></i>
+            `);
+            input.focus();
+            const inputElement = input[0];
+            inputElement.selectionStart = inputElement.selectionEnd = inputElement.value.length;
+        });
+
+        $('#serviceTableBody').on('click', '.save-service-name', function() {
+            const td = $(this).closest('td');
+            const input = td.find('.service-name-input');
+            const newName = input.val();
+            
+            const span = td.find('.service-name-text');
+            span.text(newName);
+            isPlanDirty = true;
+            
+            // Cleanup
+            input.remove();
+            td.find('.cancel-edit-name').remove();
+            td.find('.edit-service-name').show();
+            $(this).remove(); // remove save icon
+            
+            span.show();
+        });
+
+        $('#serviceTableBody').on('click', '.cancel-edit-name', function() {
+            const td = $(this).closest('td');
+            
+            // Cleanup
+            td.find('.service-name-input').remove();
+            td.find('.save-service-name').remove();
+            td.find('.edit-service-name').show();
+            $(this).remove(); // remove cancel icon
+            
+            td.find('.service-name-text').show();
+        });
 
         // [add_service---------------------------------------------------]
             $("#add_service").on("click", function(event) {
