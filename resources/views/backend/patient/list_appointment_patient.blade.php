@@ -63,6 +63,20 @@
                                                         <td class="align-middle text-center">{{ $item['patient']->id }}</td>
                                                         <td class="align-middle text-center patient-name">
                                                             <span class="badge badge-info">{{ $item['patient']->name }}</span>
+                                                            <button type="button" class="btn btn-outline-secondary btn-sm patient-menu-toggle" title="Patient Actions">
+                                                                <i class="fa fa-ellipsis-v"></i>
+                                                            </button>
+                                                            <div class="patient-menu">
+                                                                <button type="button" class="btn btn-info patient-menu-view">
+                                                                    View Patient's Info <i class="fa fa-eye"></i>
+                                                                </button>
+                                                                <button type="button" class="btn btn-danger" onclick="swal('Cannot Delete', 'Patient can only be updated after creation!', 'error');">
+                                                                    Delete Patient's Info <i class="fa fa-trash"></i>
+                                                                </button>
+                                                                <button type="button" class="btn btn-warning patient-menu-edit">
+                                                                    Edit Patient's Info <i class="fa fa-edit"></i>
+                                                                </button>
+                                                            </div>
                                                             <!-- Include hidden edit button with data attributes -->
                                                             <button 
                                                                 type="button" 
@@ -177,22 +191,10 @@
         var selectedPatient = null;
         var contextMenu = $("#contextMenu");
 
-        // Delegate right-click on the patient name to show the context menu
-        $(document).on("contextmenu", ".patient-name", function(e) {
-            e.preventDefault();
-            
-            // Position the context menu as per your original design
-            var rect = this.getBoundingClientRect();
-            contextMenu.css({
-                top: rect.bottom + window.scrollY - 30 + "px",
-                left: rect.left + window.scrollX + "px",
-                display: "block"
-            });
-            
+        function selectPatientFromRow(row) {
             // Get the parent row and then find the inline edit button that contains the data attributes
-            var row = $(this).closest("tr");
-            var inlineEditButton = row.find("button.btn_edit_patient").first();
-            
+            var inlineEditButton = row.find("button.btn_edit_patient[data-id]").first();
+
             if (inlineEditButton.length) {
                 // Update selectedPatient with the latest data from this row
                 selectedPatient = {
@@ -204,48 +206,88 @@
                     telephone: inlineEditButton.data("telephone"),
                     type_patient: inlineEditButton.data("type_patient")
                 };
-            contextMenu.find(".view-patient").attr("data-id", selectedPatient.id);
+                contextMenu.find(".view-patient").attr("data-id", selectedPatient.id);
             }
+            return selectedPatient;
+        }
+
+        function openEditModal(patient) {
+            if (!patient) return;
+            // Populate the edit form fields with the selected patient's data
+            $("#patient-id").val(patient.id);
+            $("#patient-name").val(patient.name);
+            $("#patient-age").val(patient.age);
+            $("#patient-address").val(patient.address);
+            $("#patient-telephone").val(patient.telephone);
+            $("#patient-type_patient").val(patient.type_patient);
+
+            // Set the dropdown value for sex and trigger change if needed
+            $("#patient-sex").val(patient.sex).change();
+
+            // Update the form action URL to include the patient ID
+            var formAction = "{{ route('patient.update', ':id') }}";
+            formAction = formAction.replace(':id', patient.id);
+            $("#editPatientForm").attr("action", formAction);
+
+            // Open the modal for editing
+            $("#fire-modal-patient").modal("show");
+        }
+
+        // Delegate right-click on the patient name to show the context menu (PC)
+        $(document).on("contextmenu", ".patient-name", function(e) {
+            e.preventDefault();
+            $(".patient-menu").removeClass("show");
+
+            // Position the context menu as per your original design
+            var rect = this.getBoundingClientRect();
+            contextMenu.css({
+                top: rect.bottom + window.scrollY - 30 + "px",
+                left: rect.left + window.scrollX + "px",
+                display: "block"
+            });
+
+            selectPatientFromRow($(this).closest("tr"));
         });
 
-        // Hide the context menu when clicking anywhere else
+        // iPad / touch: tap the ellipsis button to open the action box directly in the column
+        $(document).on("click", ".patient-menu-toggle", function(e) {
+            e.stopPropagation();
+            var $cell = $(this).closest(".patient-name");
+            contextMenu.hide();
+            $(".patient-menu").not($cell.find(".patient-menu")).removeClass("show");
+            $cell.find(".patient-menu").toggleClass("show");
+            selectPatientFromRow($cell.closest("tr"));
+        });
+
+        // Hide the menus when clicking anywhere else
         $(document).on("click", function() {
             contextMenu.hide();
+            $(".patient-menu").removeClass("show");
         });
-        
-        // Delegate the click event on the context menu "Edit Patient's Info" button
-        $(document).on("click", "#contextMenu .btn_edit_patient", function() {
-            if (selectedPatient) {
-                // Populate the edit form fields with the selected patient's data
-                $("#patient-id").val(selectedPatient.id);
-                $("#patient-name").val(selectedPatient.name);
-                $("#patient-age").val(selectedPatient.age);
-                $("#patient-address").val(selectedPatient.address);
-                $("#patient-telephone").val(selectedPatient.telephone);
-                $("#patient-type_patient").val(selectedPatient.type_patient);
-                
-                // Set the dropdown value for sex and trigger change if needed
-                $("#patient-sex").val(selectedPatient.sex).change();
-                
-                // Update the form action URL to include the patient ID
-                var formAction = "{{ route('patient.update', ':id') }}";
-                formAction = formAction.replace(':id', selectedPatient.id);
-                $("#editPatientForm").attr("action", formAction);
-                
-                // Open the modal for editing
-                $("#fire-modal-patient").modal("show");
-            }
+
+        // Delegate the click event on the "Edit Patient's Info" button (context menu + cell box)
+        $(document).on("click", "#contextMenu .btn_edit_patient, .patient-menu-edit", function() {
+            openEditModal(selectedPatient);
         });
-        console.log("Bootstrap Modal Function:", typeof $.fn.modal);
-        // When the "View Patient's Info" button is clicked
+
+        // When the "View Patient's Info" button (context menu) is clicked
         $(document).on("click", ".view-patient", function() {
             var patientId = $(this).data("id");
             if (patientId) {
                 // Generate the URL with the patient ID
                 var viewPatientUrl = "{{ route('view_patient_detail', ['id' => ':id']) }}";
                 viewPatientUrl = viewPatientUrl.replace(':id', patientId);
-                
+
                 // Redirect to the patient detail page
+                window.location.href = viewPatientUrl;
+            }
+        });
+
+        // When the "View Patient's Info" button (cell box) is clicked
+        $(document).on("click", ".patient-menu-view", function() {
+            if (selectedPatient) {
+                var viewPatientUrl = "{{ route('view_patient_detail', ['id' => ':id']) }}";
+                viewPatientUrl = viewPatientUrl.replace(':id', selectedPatient.id);
                 window.location.href = viewPatientUrl;
             }
         });
@@ -277,6 +319,43 @@
         background-color: #f28b82 !important; /* Professional soft red */
         border: 1px solid #d9534f;           /* Subtle darker red border */
         color: #212529 !important;           /* Dark text for readability */
+    }
+
+    /* [iPad / touch: action box directly in the Patient's Name column] */
+    .patient-name {
+        position: relative;
+    }
+
+    .patient-menu-toggle {
+        margin-left: 6px;
+        padding: 2px 8px;
+    }
+
+    .patient-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        z-index: 1050;
+        width: 200px;
+        background: white;
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        padding: 10px;
+        border-radius: 5px;
+        text-align: left;
+    }
+
+    .patient-menu.show {
+        display: block;
+    }
+
+    .patient-menu button {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+
+    .patient-menu button:last-child {
+        margin-bottom: 0;
     }
 
 </style>
